@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-labelledby="title desc">
+  <title id="title">Doctor placeholder portrait</title>
+  <desc id="desc">Abstract placeholder portrait for Dr. Sarah Johnson.</desc>
+  <rect width="800" height="800" fill="#e8f3ff"/>
+  <circle cx="400" cy="278" r="118" fill="#f7c7a3"/>
+  <path d="M242 660c24-126 88-192 158-192s134 66 158 192H242z" fill="#ffffff"/>
+  <path d="M300 672h200l-38-162h-124l-38 162z" fill="#d7ecff"/>
+  <path d="M282 260c10-92 68-144 130-144 70 0 116 44 124 126-42-36-98-44-166-12-28 13-58 22-88 30z" fill="#31425f"/>
+  <circle cx="358" cy="284" r="11" fill="#263238"/>
+  <circle cx="442" cy="284" r="11" fill="#263238"/>
+  <path d="M360 344c26 20 54 20 80 0" fill="none" stroke="#9b5f45" stroke-width="12" stroke-linecap="round"/>
+  <rect x="206" y="650" width="388" height="150" fill="#1d72c9"/>
+  <path d="M312 650v150M488 650v150" stroke="#ffffff" stroke-width="18" opacity=".75"/>
+  <circle cx="400" cy="710" r="30" fill="#ffffff"/>
+  <text x="400" y="725" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#1d72c9">S</text>
+</svg>

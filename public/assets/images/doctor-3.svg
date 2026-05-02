@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-labelledby="title desc">
+  <title id="title">Doctor placeholder portrait</title>
+  <desc id="desc">Abstract placeholder portrait for Dr. Emma Williams.</desc>
+  <rect width="800" height="800" fill="#fff2ef"/>
+  <circle cx="400" cy="284" r="114" fill="#f1bd98"/>
+  <path d="M246 664c25-128 89-194 154-194s129 66 154 194H246z" fill="#ffffff"/>
+  <path d="M312 676h176l-34-166H346l-34 166z" fill="#ffe1db"/>
+  <path d="M266 300c4-120 66-190 148-190 80 0 130 62 124 178-48-58-108-70-184-38-30 13-58 28-88 50z" fill="#6b3e31"/>
+  <circle cx="358" cy="290" r="10" fill="#263238"/>
+  <circle cx="442" cy="290" r="10" fill="#263238"/>
+  <path d="M362 346c24 18 52 18 76 0" fill="none" stroke="#9b5f45" stroke-width="12" stroke-linecap="round"/>
+  <rect x="210" y="650" width="380" height="150" fill="#d95f4f"/>
+  <path d="M330 650v150M470 650v150" stroke="#ffffff" stroke-width="18" opacity=".75"/>
+  <circle cx="400" cy="710" r="30" fill="#ffffff"/>
+  <text x="400" y="725" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#d95f4f">E</text>
+</svg>

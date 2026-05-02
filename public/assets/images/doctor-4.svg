@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-labelledby="title desc">
+  <title id="title">Doctor placeholder portrait</title>
+  <desc id="desc">Abstract placeholder portrait for Dr. James Anderson.</desc>
+  <rect width="800" height="800" fill="#f4f1ff"/>
+  <circle cx="400" cy="282" r="116" fill="#d9a07f"/>
+  <path d="M244 664c25-128 90-194 156-194s131 66 156 194H244z" fill="#ffffff"/>
+  <path d="M312 676h176l-34-166H346l-34 166z" fill="#e7e0ff"/>
+  <path d="M280 248c18-86 78-132 144-126 68 6 108 56 116 120-84-42-172-42-260 6z" fill="#3b342d"/>
+  <circle cx="358" cy="288" r="10" fill="#263238"/>
+  <circle cx="442" cy="288" r="10" fill="#263238"/>
+  <path d="M364 344c22 16 50 16 72 0" fill="none" stroke="#7d4e39" stroke-width="12" stroke-linecap="round"/>
+  <rect x="210" y="650" width="380" height="150" fill="#6f5ad7"/>
+  <path d="M330 650v150M470 650v150" stroke="#ffffff" stroke-width="18" opacity=".75"/>
+  <circle cx="400" cy="710" r="30" fill="#ffffff"/>
+  <text x="400" y="725" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#6f5ad7">J</text>
+</svg>

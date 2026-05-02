@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" role="img" aria-labelledby="title desc">
+  <title id="title">Doctor placeholder portrait</title>
+  <desc id="desc">Abstract placeholder portrait for Dr. Michael Chen.</desc>
+  <rect width="800" height="800" fill="#eef8f1"/>
+  <circle cx="400" cy="280" r="116" fill="#e8b28e"/>
+  <path d="M246 664c25-128 88-194 154-194s129 66 154 194H246z" fill="#ffffff"/>
+  <path d="M314 676h172l-30-166H344l-30 166z" fill="#dff3e5"/>
+  <path d="M284 240c24-78 78-122 144-112 60 9 100 60 106 118-58-26-108-30-160-12-30 11-58 12-90 6z" fill="#1f2d35"/>
+  <circle cx="358" cy="286" r="10" fill="#263238"/>
+  <circle cx="442" cy="286" r="10" fill="#263238"/>
+  <path d="M364 342c22 16 50 16 72 0" fill="none" stroke="#8c563f" stroke-width="12" stroke-linecap="round"/>
+  <rect x="210" y="650" width="380" height="150" fill="#16834f"/>
+  <path d="M330 650v150M470 650v150" stroke="#ffffff" stroke-width="18" opacity=".75"/>
+  <circle cx="400" cy="710" r="30" fill="#ffffff"/>
+  <text x="400" y="725" text-anchor="middle" font-family="Arial, sans-serif" font-size="42" font-weight="700" fill="#16834f">M</text>
+</svg>
