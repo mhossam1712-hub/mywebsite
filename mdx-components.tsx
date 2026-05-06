@@ -1,4 +1,5 @@
 import type { MDXComponents } from 'mdx/types';
+import Image from 'next/image';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -16,6 +17,16 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
     ),
     li: ({ children }) => <li className="list-disc leading-7">{children}</li>,
     strong: ({ children }) => <strong className="font-semibold text-cyan-800 dark:text-cyan-200">{children}</strong>,
+    img: ({ src, alt }) => (
+      <Image
+        src={String(src)}
+        alt={alt ?? ''}
+        width={1536}
+        height={1024}
+        sizes="(min-width: 1024px) 768px, 100vw"
+        className="mt-8 h-auto w-full rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700"
+      />
+    ),
     ...components,
   };
 }
