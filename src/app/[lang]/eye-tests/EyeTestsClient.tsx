@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/common/Button';
@@ -98,6 +99,33 @@ const copy = {
       headache: 'Headache or eye strain',
     },
     resultTitle: 'Screening result',
+    score: 'Score',
+    riskScore: 'Risk score',
+    notCompleted: 'Not completed yet',
+    amslerScoreTitle: 'Central vision score',
+    amslerInterpretationReassuring:
+      'Your Amsler answer is reassuring on this online screen. Keep in mind that subtle central vision changes can still need a clinic exam.',
+    amslerInterpretationFollowUp:
+      'Distortion, missing areas, blur, or a difference between eyes can be associated with macular or retinal conditions and should be checked in clinic.',
+    contrastScoreTitle: 'Contrast sensitivity score',
+    contrastInterpretationExcellent:
+      'You selected the faintest contrast row, which is reassuring for this online contrast screen.',
+    contrastInterpretationMild:
+      'You could read a low contrast row, but not the faintest row. This can happen from screen conditions, dry eye, cataract, glasses prescription, or other eye health factors.',
+    contrastInterpretationReduced:
+      'Only higher contrast text was comfortable. Reduced contrast sensitivity can affect night driving and daily visual quality, so a comprehensive eye exam is recommended.',
+    symptomsScoreTitle: 'Symptom triage score',
+    symptomsInterpretationReassuring:
+      'No symptoms were selected. This is reassuring, but annual comprehensive eye exams remain important for prevention and early detection.',
+    symptomsInterpretationMonitor:
+      'Mild symptoms can be caused by dryness, eye strain, refractive error, cataract, or other common conditions. A non-urgent comprehensive eye exam can identify the cause.',
+    symptomsInterpretationFollowUp:
+      'Your selected symptoms suggest that a clinic review is appropriate, especially if symptoms are new, worsening, or affecting daily activities.',
+    symptomsInterpretationUrgent:
+      'Urgent symptoms were selected. Please contact an eye doctor or emergency service now, especially for sudden vision loss, severe pain, new flashes/floaters, or a red painful eye.',
+    bookComprehensiveExam: 'Book a comprehensive eye exam',
+    annualCheckup:
+      'Even if your screening looks reassuring, schedule an annual eye checkup to protect long-term eye health.',
     colorContactTitle: 'Your details',
     colorContactText: 'Enter your contact details to view your color screening result. Your result will be shown immediately on this page.',
     showResults: 'Show my results',
@@ -212,6 +240,33 @@ const copy = {
       headache: 'صداع أو إجهاد العين',
     },
     resultTitle: 'نتيجة الفحص الأولي',
+    score: 'الدرجة',
+    riskScore: 'درجة الخطورة',
+    notCompleted: 'لم يكتمل بعد',
+    amslerScoreTitle: 'درجة الرؤية المركزية',
+    amslerInterpretationReassuring:
+      'إجابتك في شبكة أمسلر مطمئنة في هذا الفحص الإلكتروني. مع ذلك قد تحتاج التغيرات الدقيقة في مركز الإبصار إلى فحص عيادة.',
+    amslerInterpretationFollowUp:
+      'وجود اعوجاج أو مناطق مفقودة أو زغللة أو فرق بين العينين قد يرتبط بمشكلات في مركز الإبصار أو الشبكية ويحتاج إلى فحص في العيادة.',
+    contrastScoreTitle: 'درجة حساسية التباين',
+    contrastInterpretationExcellent:
+      'اخترت أضعف سطر في التباين، وهذا مطمئن في هذا الفحص الإلكتروني.',
+    contrastInterpretationMild:
+      'استطعت قراءة سطر منخفض التباين لكن ليس الأضعف. قد يحدث ذلك بسبب ظروف الشاشة أو جفاف العين أو المياه البيضاء أو مقاس النظارة أو عوامل أخرى.',
+    contrastInterpretationReduced:
+      'كانت القراءة المريحة فقط مع التباين الأعلى. انخفاض حساسية التباين قد يؤثر في القيادة ليلاً وجودة الرؤية اليومية، لذلك يفضل فحص عين شامل.',
+    symptomsScoreTitle: 'درجة فرز الأعراض',
+    symptomsInterpretationReassuring:
+      'لم يتم اختيار أعراض. هذا مطمئن، لكن فحص العين الشامل السنوي يظل مهماً للوقاية والاكتشاف المبكر.',
+    symptomsInterpretationMonitor:
+      'الأعراض البسيطة قد تنتج عن جفاف أو إجهاد أو مقاس نظارة أو مياه بيضاء أو أسباب شائعة أخرى. فحص عين شامل غير عاجل يساعد على تحديد السبب.',
+    symptomsInterpretationFollowUp:
+      'الأعراض المختارة تشير إلى أن مراجعة العيادة مناسبة، خاصة إذا كانت جديدة أو تزداد أو تؤثر على النشاط اليومي.',
+    symptomsInterpretationUrgent:
+      'تم اختيار أعراض عاجلة. يرجى التواصل مع طبيب عيون أو الطوارئ الآن، خاصة مع فقدان مفاجئ للنظر أو ألم شديد أو ومضات/عوائم جديدة أو احمرار مؤلم.',
+    bookComprehensiveExam: 'احجز فحص عين شامل',
+    annualCheckup:
+      'حتى إذا كانت نتيجة الفحص مطمئنة، احرص على فحص سنوي لصحة العين والاكتشاف المبكر.',
     colorContactTitle: 'بياناتك',
     colorContactText: 'أدخل بيانات التواصل لعرض نتيجة فحص الألوان فوراً على هذه الصفحة.',
     showResults: 'عرض النتيجة',
@@ -279,6 +334,8 @@ const contrastRows = [
 ] as const;
 
 const urgentSymptoms = ['suddenLoss', 'pain', 'flashes', 'redness'];
+const followUpSymptoms = ['diabetes'];
+const mildSymptoms = ['night', 'dryness', 'headache'];
 
 function normalizeIshiharaAnswer(value: string) {
   const normalized = value
@@ -305,6 +362,49 @@ function ResultBadge({ level, label }: { level: ResultLevel; label: string }) {
   return (
     <div className={classNames('rounded-lg border px-4 py-3 text-sm font-bold leading-6', classes[level])}>
       {label}
+    </div>
+  );
+}
+
+function ScorePanel({
+  title,
+  scoreLabel,
+  score,
+  level,
+  interpretation,
+  recommendation,
+  appointmentHref,
+  appointmentLabel,
+}: {
+  title: string;
+  scoreLabel: string;
+  score: string;
+  level: ResultLevel;
+  interpretation: string;
+  recommendation: string;
+  appointmentHref: string;
+  appointmentLabel: string;
+}) {
+  return (
+    <div className="mt-7 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-950/55">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div>
+          <p className="text-sm font-black uppercase tracking-[0.12em] text-cyan-800 dark:text-cyan-200">{title}</p>
+          <p className="mt-2 text-2xl font-black text-slate-950 dark:text-white">
+            {scoreLabel}: {score}
+          </p>
+        </div>
+        <ResultBadge level={level} label={interpretation} />
+      </div>
+      <div className="mt-4 rounded-lg border border-cyan-100 bg-white p-4 text-sm font-semibold leading-6 text-slate-700 dark:border-cyan-900/60 dark:bg-slate-900 dark:text-slate-200">
+        <p>{recommendation}</p>
+        <Link
+          href={appointmentHref}
+          className="mt-4 inline-flex rounded-lg bg-cyan-700 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-cyan-800 dark:bg-cyan-600 dark:hover:bg-cyan-500"
+        >
+          {appointmentLabel}
+        </Link>
+      </div>
     </div>
   );
 }
@@ -382,6 +482,65 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
   const hasAmsler = amslerFindings.length > 0;
   const hasSymptoms = symptoms.length > 0;
   const completedCount = [colorCompleted, hasAmsler, Boolean(contrast), hasSymptoms].filter(Boolean).length;
+  const appointmentHref = `/${locale}/appointments`;
+
+  const amslerAbnormalFindings = amslerFindings.filter((finding) => finding !== 'straight');
+  const amslerDeductions = amslerAbnormalFindings.reduce((total, finding) => {
+    if (finding === 'missing') return total + 3;
+    if (finding === 'wavy' || finding === 'blurry') return total + 2;
+    return total + 1;
+  }, 0);
+  const amslerScore = hasAmsler ? Math.max(0, 5 - amslerDeductions) : null;
+  const amslerLevel: ResultLevel = !hasAmsler ? 'neutral' : amslerAbnormalFindings.length > 0 ? 'followUp' : 'reassuring';
+  const amslerInterpretation = !hasAmsler
+    ? t.notCompleted
+    : amslerAbnormalFindings.length > 0
+      ? t.amslerInterpretationFollowUp
+      : t.amslerInterpretationReassuring;
+
+  const contrastScores: Record<string, number> = {
+    high: 1,
+    medium: 2,
+    low: 3,
+    veryLow: 4,
+  };
+  const contrastScore = contrast ? contrastScores[contrast] : null;
+  const contrastLevel: ResultLevel = !contrast
+    ? 'neutral'
+    : contrast === 'veryLow'
+      ? 'reassuring'
+      : contrast === 'low'
+        ? 'monitor'
+        : 'followUp';
+  const contrastInterpretation = !contrast
+    ? t.notCompleted
+    : contrast === 'veryLow'
+      ? t.contrastInterpretationExcellent
+      : contrast === 'low'
+        ? t.contrastInterpretationMild
+        : t.contrastInterpretationReduced;
+
+  const symptomRiskScore = symptoms.reduce((total, symptom) => {
+    if (urgentSymptoms.includes(symptom)) return total + 3;
+    if (followUpSymptoms.includes(symptom)) return total + 2;
+    if (mildSymptoms.includes(symptom)) return total + 1;
+    return total;
+  }, 0);
+  const symptomLevel: ResultLevel = symptoms.some((symptom) => urgentSymptoms.includes(symptom))
+    ? 'urgent'
+    : symptoms.some((symptom) => followUpSymptoms.includes(symptom))
+      ? 'followUp'
+      : symptoms.length > 0
+        ? 'monitor'
+        : 'reassuring';
+  const symptomsInterpretation = symptomLevel === 'urgent'
+    ? t.symptomsInterpretationUrgent
+    : symptomLevel === 'followUp'
+      ? t.symptomsInterpretationFollowUp
+      : symptomLevel === 'monitor'
+        ? t.symptomsInterpretationMonitor
+        : t.symptomsInterpretationReassuring;
+  const comprehensiveExamRecommendation = `${t.bookComprehensiveExam}. ${t.annualCheckup}`;
 
   const resultLevel: ResultLevel = useMemo(() => {
     if (symptoms.some((symptom) => urgentSymptoms.includes(symptom))) return 'urgent';
@@ -405,14 +564,15 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
     const lines = [
       `${t.completed}: ${completedCount}/4`,
       colorCompleted ? `${t.tabs.color}: ${colorScore}/${totalIshiharaScore}; ${colorResultText}; ${t.deficiencyPattern}: ${deficiencyPattern}` : null,
-      hasAmsler ? `${t.tabs.amsler}: ${amslerFindings.map((key) => t.amslerOptions[key as keyof typeof t.amslerOptions]).join(', ')} (${amslerEye})` : null,
-      contrast ? `${t.tabs.contrast}: ${t.contrastRows[contrast as keyof typeof t.contrastRows]}` : null,
-      hasSymptoms ? `${t.tabs.symptoms}: ${symptoms.map((key) => t.symptomsList[key as keyof typeof t.symptomsList]).join(', ')}` : null,
+      hasAmsler ? `${t.tabs.amsler}: ${amslerScore}/5; ${amslerInterpretation}; ${amslerFindings.map((key) => t.amslerOptions[key as keyof typeof t.amslerOptions]).join(', ')} (${amslerEye})` : null,
+      contrast ? `${t.tabs.contrast}: ${contrastScore}/4; ${contrastInterpretation}; ${t.contrastRows[contrast as keyof typeof t.contrastRows]}` : null,
+      `${t.tabs.symptoms}: ${symptomRiskScore}; ${symptomsInterpretation}${hasSymptoms ? `; ${symptoms.map((key) => t.symptomsList[key as keyof typeof t.symptomsList]).join(', ')}` : ''}`,
+      t.annualCheckup,
       resultText,
     ];
 
     return lines.filter(Boolean).join(' | ');
-  }, [amslerEye, amslerFindings, colorCompleted, colorResultText, colorScore, completedCount, contrast, deficiencyPattern, hasAmsler, hasSymptoms, resultText, symptoms, t]);
+  }, [amslerEye, amslerFindings, amslerInterpretation, amslerScore, colorCompleted, colorResultText, colorScore, completedCount, contrast, contrastInterpretation, contrastScore, deficiencyPattern, hasAmsler, hasSymptoms, resultText, symptomRiskScore, symptoms, symptomsInterpretation, t]);
 
   const toggleAmsler = (key: string) => {
     setAmslerFindings((current) => {
@@ -447,8 +607,14 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
           ishiharaAnswers,
           amslerEye,
           amslerFindings,
+          amslerScore,
+          amslerInterpretation,
           contrast,
+          contrastScore,
+          contrastInterpretation,
           symptoms,
+          symptomRiskScore,
+          symptomsInterpretation,
         }),
       });
 
@@ -628,6 +794,19 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                       </div>
                     </div>
                   </div>
+
+                  {hasAmsler && (
+                    <ScorePanel
+                      title={t.amslerScoreTitle}
+                      scoreLabel={t.score}
+                      score={`${amslerScore}/5`}
+                      level={amslerLevel}
+                      interpretation={amslerInterpretation}
+                      recommendation={comprehensiveExamRecommendation}
+                      appointmentHref={appointmentHref}
+                      appointmentLabel={t.bookComprehensiveExam}
+                    />
+                  )}
                 </div>
               )}
 
@@ -713,6 +892,19 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                       </button>
                     ))}
                   </div>
+
+                  {contrast && (
+                    <ScorePanel
+                      title={t.contrastScoreTitle}
+                      scoreLabel={t.score}
+                      score={`${contrastScore}/4`}
+                      level={contrastLevel}
+                      interpretation={contrastInterpretation}
+                      recommendation={comprehensiveExamRecommendation}
+                      appointmentHref={appointmentHref}
+                      appointmentLabel={t.bookComprehensiveExam}
+                    />
+                  )}
                 </div>
               )}
 
@@ -744,6 +936,17 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                       );
                     })}
                   </div>
+
+                  <ScorePanel
+                    title={t.symptomsScoreTitle}
+                    scoreLabel={t.riskScore}
+                    score={`${symptomRiskScore}`}
+                    level={symptomLevel}
+                    interpretation={symptomsInterpretation}
+                    recommendation={symptomLevel === 'urgent' ? t.urgent : comprehensiveExamRecommendation}
+                    appointmentHref={appointmentHref}
+                    appointmentLabel={t.bookComprehensiveExam}
+                  />
                 </div>
               )}
             </div>
