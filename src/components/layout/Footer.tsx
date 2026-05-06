@@ -1,17 +1,17 @@
-'use client';
-
 import React from 'react';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { useLocale } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { CLINIC_BRANCHES, CLINIC_INFO, NAVIGATION_ITEMS } from '@/constants';
 
 const phoneHref = (phone: string) => phone.replace(/\D/g, '');
 
-export const Footer = () => {
-  const t = useTranslations('footer');
-  const navigationT = useTranslations('navigation');
-  const locale = useLocale();
+type FooterProps = {
+  locale: string;
+};
+
+export const Footer = async ({ locale }: FooterProps) => {
+  const t = await getTranslations({ locale, namespace: 'footer' });
+  const navigationT = await getTranslations({ locale, namespace: 'navigation' });
   const currentYear = new Date().getFullYear();
   const isArabic = locale === 'ar';
 

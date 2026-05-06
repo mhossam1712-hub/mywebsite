@@ -27,13 +27,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default function HomePage() {
+export default async function HomePage({ params }: PageProps) {
+  const { lang } = await params;
+
   return (
     <>
-      <HeroSection />
-      <ServicesSection />
-      <DoctorsSection />
-      <TestimonialsSection />
+      <HeroSection locale={lang} />
+      <ServicesSection locale={lang} />
+      <DoctorsSection locale={lang} />
+      <TestimonialsSection locale={lang} />
     </>
   );
 }

@@ -8,13 +8,28 @@ import { Footer } from '@/components/layout/Footer';
 import { CLINIC_BRANCHES, CLINIC_INFO } from '@/constants';
 import { ThemeProvider } from '@/context/ThemeContext';
 import { LOCALES, isValidLocale } from '@/i18n/config';
+import { getSiteUrl } from '@/lib/site-url';
 import { getDirection } from '@/utils';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://abdallaeyeclinic.com';
-const googleVerification = process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION;
-const bingVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
+const siteUrl = getSiteUrl();
+const googleVerification =
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
+  'CCOzpuU40fiYJh7XR2BnGQmMRPnl_EN9hSaFjWhlP2U';
+const bingVerification =
+  process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ||
+  process.env.NEXT_PUBLIC_MSVALIDATE ||
+  '';
 
-export const metadata: Metadata = {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>;
+}): Promise<Metadata> {
+  const { lang } = await params;
+  const isArabic = lang === 'ar';
+  const languageName = isArabic ? 'Arabic' : 'English';
+
+  return {
   metadataBase: new URL(siteUrl),
   title: {
     default: 'Abdalla Eye Clinic - Alexandria, Egypt',
@@ -30,6 +45,14 @@ export const metadata: Metadata = {
     'glaucoma treatment',
     'retina specialist Alexandria',
   ],
+  alternates: {
+    canonical: `/${lang}`,
+    languages: {
+      en: '/en',
+      ar: '/ar',
+      'x-default': '/en',
+    },
+  },
   verification: {
     ...(googleVerification ? { google: googleVerification } : {}),
     ...(bingVerification ? { other: { 'msvalidate.01': bingVerification } } : {}),
@@ -57,7 +80,12 @@ export const metadata: Metadata = {
     title: 'Abdalla Eye Clinic - Alexandria, Egypt',
     description:
       'Comprehensive eye care, LASIK, cataract, glaucoma, and retinal treatment in Alexandria.',
-    images: ['/assets/images/hero-ophthalmologist.jpg'],
+    images: [
+      {
+        url: '/assets/images/hero-ophthalmologist.jpg',
+        alt: 'Abdalla Eye Clinic ophthalmology examination in Alexandria',
+      },
+    ],
   },
   robots: {
     index: true,
@@ -78,7 +106,17 @@ export const metadata: Metadata = {
     shortcut: '/navicon.ico',
     apple: '/assets/images/abdalla-eye-emblem.png',
   },
-};
+  other: {
+    language: languageName,
+    'content-language': lang,
+    'geo.region': 'EG-ALX',
+    'geo.placename': 'Alexandria, Egypt',
+    distribution: 'global',
+    rating: 'general',
+    'image': `${siteUrl}/assets/images/hero-ophthalmologist.jpg`,
+  },
+  };
+}
 
 export function generateStaticParams() {
   return LOCALES.map((lang) => ({ lang }));
@@ -111,7 +149,12 @@ export default async function RootLayout({
     name: isArabic ? 'عيادة عبد الله للعيون' : CLINIC_INFO.name,
     url: siteUrl,
     logo: `${siteUrl}/assets/images/abdalla-eye-logo.png`,
-    image: `${siteUrl}/assets/images/hero-ophthalmologist.jpg`,
+    image: [
+      `${siteUrl}/assets/images/hero-ophthalmologist.jpg`,
+      `${siteUrl}/assets/images/abdalla-eye-logo.png`,
+      `${siteUrl}/assets/images/dr-mohamed-hossam-abdalla-card.jpg`,
+      `${siteUrl}/assets/images/prof-ahmed-hossam-abdalla-card.jpg`,
+    ],
     description: CLINIC_INFO.description,
     medicalSpecialty: 'Ophthalmology',
     telephone: CLINIC_INFO.phone,
@@ -148,7 +191,7 @@ export default async function RootLayout({
           />
           <Header />
           <main className="min-h-screen">{children}</main>
-          <Footer />
+          <Footer locale={lang} />
         </div>
       </NextIntlClientProvider>
     </ThemeProvider>

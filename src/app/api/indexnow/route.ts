@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getBlogPosts } from '@/lib/blog';
+import { getSiteUrl } from '@/lib/site-url';
 import { LOCALES } from '@/i18n/config';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://abdallaeyeclinic.com';
+const siteUrl = getSiteUrl();
 
 const staticRoutes = [
   '',

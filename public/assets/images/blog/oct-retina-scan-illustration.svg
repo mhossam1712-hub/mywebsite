@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">OCT retina scan modern illustration</title>
+  <desc id="desc">Modern medical illustration of OCT retinal layers and digital analysis markers.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fafc"/>
+      <stop offset=".48" stop-color="#e0f2fe"/>
+      <stop offset="1" stop-color="#ecfeff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="45%" r="58%">
+      <stop offset="0" stop-color="#22d3ee" stop-opacity=".38"/>
+      <stop offset="1" stop-color="#22d3ee" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1d4ed8"/>
+      <stop offset="1" stop-color="#22d3ee"/>
+    </linearGradient>
+    <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".98"/>
+      <stop offset="1" stop-color="#dbeafe" stop-opacity=".84"/>
+    </linearGradient>
+    <linearGradient id="iris" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#22d3ee"/>
+      <stop offset="1" stop-color="#1d4ed8"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="28" stdDeviation="28" flood-color="#0f172a" flood-opacity=".22"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <circle cx="930" cy="70" r="240" fill="url(#glow)"/>
+  <circle cx="162" cy="560" r="260" fill="#c084fc" opacity=".12"/>
+  <path d="M0 494C158 424 292 430 448 494s294 78 456-2 232-78 296-38v221H0Z" fill="#1d4ed8" opacity=".10"/>
+  <g filter="url(#shadow)">
+    <rect x="118" y="68" width="964" height="540" rx="58" fill="url(#panel)" opacity=".18"/>
+    <rect x="148" y="88" width="904" height="500" rx="52" fill="white" opacity=".54"/>
+    
+  <g transform="translate(198 116)">
+    <rect x="0" y="0" width="408" height="334" rx="34" fill="#0f172a" opacity=".92"/>
+    <path d="M52 222c54-62 104-66 164-12s110 58 166-10" stroke="#22d3ee" stroke-width="24" stroke-linecap="round" fill="none"/>
+    <path d="M52 268c58-34 116-32 174 6s108 34 156-8" stroke="#c084fc" stroke-width="20" stroke-linecap="round" fill="none" opacity=".9"/>
+    <path d="M52 146h304M52 104h250" stroke="white" stroke-opacity=".2" stroke-width="14" stroke-linecap="round"/>
+    <rect x="490" y="34" width="286" height="248" rx="34" fill="white" opacity=".94"/>
+    <path d="M540 158c58-74 124-74 182 0-58 74-124 74-182 0Z" fill="#22d3ee" opacity=".18" stroke="#22d3ee" stroke-width="10"/>
+    <circle cx="632" cy="158" r="44" fill="#1d4ed8"/>
+    <path d="M524 334h178M524 378h118" stroke="#c084fc" stroke-width="18" stroke-linecap="round"/>
+  </g>
+  </g>
+  <path d="M1044 98c-26 34-26 70 0 106 26-36 26-72 0-106Z" fill="#c084fc" opacity=".68"/>
+  <path d="M112 514c42-54 86-54 128 0-42 54-86 54-128 0Z" fill="#22d3ee" opacity=".22"/>
+</svg>

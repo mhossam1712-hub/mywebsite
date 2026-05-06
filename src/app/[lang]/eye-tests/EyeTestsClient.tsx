@@ -4,7 +4,7 @@ import Image from 'next/image';
 import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/common/Button';
-import { Input, Select, Textarea } from '@/components/common/Input';
+import { Input } from '@/components/common/Input';
 import { classNames } from '@/utils';
 
 type EyeTestsClientProps = {
@@ -17,8 +17,6 @@ type LeadFormData = {
   name: string;
   phone: string;
   email: string;
-  preferredContact: 'phone' | 'email' | 'whatsapp';
-  concern?: string;
 };
 
 type ResultLevel = 'neutral' | 'reassuring' | 'monitor' | 'followUp' | 'urgent';
@@ -49,7 +47,7 @@ const copy = {
     start: 'Start check',
     colorTitle: 'Ishihara color plate screening',
     colorHelp:
-      'Read the number you see on each Ishihara plate. Plate 1 is a control plate; scoring uses plates 2-21, and plates 22-24 help suggest the pattern of red-green color deficiency.',
+      'Read the number you see on each Ishihara plate. Plates that are tracing-only have been removed. Each plate shown is worth one point when answered correctly.',
     colorInstruction: 'Type the number you see, or choose Nothing if you cannot see a number.',
     reset: 'Reset',
     colorScore: 'Ishihara score',
@@ -59,7 +57,7 @@ const copy = {
     previousPlate: 'Previous plate',
     nextPlate: 'Next plate',
     finishPlate: 'Finish color test',
-    colorResultNormal: 'Ishihara result: within expected range for online screening.',
+    colorResultNormal: 'Ishihara result: no signs of color blindness on this online screening.',
     colorResultBorderline: 'Ishihara result: borderline. A clinic retest with calibrated plates is recommended.',
     colorResultDeficient: 'Ishihara result: suggestive of red-green color vision deficiency. Please book a formal color vision test.',
     colorResultIncomplete: 'Complete the Ishihara plates to show your score.',
@@ -100,6 +98,24 @@ const copy = {
       headache: 'Headache or eye strain',
     },
     resultTitle: 'Screening result',
+    colorContactTitle: 'Your details',
+    colorContactText: 'Enter your contact details to view your color screening result. Your result will be shown immediately on this page.',
+    showResults: 'Show my results',
+    finalColorTitle: 'Color vision screening result',
+    interpretationTitle: 'Educational interpretation',
+    recommendationTitle: 'Recommendation',
+    colorInterpretationNormal:
+      'Your answers show no signs of color blindness on this online Ishihara-style screen. This is a screening result only and does not replace a calibrated clinic test.',
+    colorInterpretationBorderline:
+      'A borderline score can happen from screen brightness, viewing distance, fatigue, or a mild color discrimination difference.',
+    colorInterpretationDeficient:
+      'Your answers are suggestive of red-green color vision deficiency. An online screen cannot confirm the exact type or severity, so a formal color vision test is recommended.',
+    colorRecommendationNormal:
+      'Keep routine comprehensive eye exams, especially if you need color recognition for work, driving, or study.',
+    colorRecommendationBorderline:
+      'Repeat the check in good lighting and consider a calibrated clinic color vision test for a reliable result.',
+    colorRecommendationDeficient:
+      'Book a formal color vision assessment with an ophthalmologist or optometrist, particularly if this affects school, work, or daily tasks.',
     resultNeutral: 'Complete at least one check to generate a screening summary.',
     resultReassuring: 'No high-risk answers selected. A routine comprehensive eye exam is still recommended.',
     resultMonitor: 'Some mild changes were selected. Consider booking a non-urgent eye exam.',
@@ -107,15 +123,15 @@ const copy = {
     resultUrgent: 'Urgent symptoms selected. Please contact an eye doctor or emergency service now.',
     completed: 'Completed checks',
     accuracyTitle: 'Reliability note',
-    leadTitle: 'Send results to the clinic',
-    leadText: 'Share your screening summary and contact details so the clinic can advise on the next step.',
+    leadTitle: 'Your details',
+    leadText: 'Enter your details to view the screening result.',
     name: 'Full name',
     phone: 'Phone number',
     email: 'Email address',
     preferredContact: 'Preferred contact',
     concern: 'Anything else you noticed?',
-    submit: 'Send screening results',
-    success: 'Thank you. Your screening request was received.',
+    submit: 'Show results',
+    success: 'Your details were saved for this result view.',
     error: 'Something went wrong. Please call the clinic if the issue continues.',
     required: 'This field is required',
     invalidEmail: 'Enter a valid email address',
@@ -145,7 +161,7 @@ const copy = {
     start: 'ابدأ الفحص',
     colorTitle: 'فحص ألوان إيشيهارا',
     colorHelp:
-      'اكتب الرقم الذي تراه في كل لوحة من لوحات إيشيهارا. اللوحة الأولى لوحة تحكم، ويتم حساب النتيجة من اللوحات 2 إلى 21، وتساعد اللوحات 22 إلى 24 على توضيح نمط ضعف الأحمر والأخضر.',
+      'اكتب الرقم الذي تراه في كل لوحة من لوحات إيشيهارا. تمت إزالة اللوحات التي تعتمد على التتبع. كل لوحة ظاهرة تساوي نقطة واحدة عند الإجابة الصحيحة.',
     colorInstruction: 'اكتب الرقم الذي تراه، أو اختر لا أرى شيئاً إذا لم يظهر رقم.',
     reset: 'إعادة ضبط',
     colorScore: 'درجة إيشيهارا',
@@ -155,7 +171,7 @@ const copy = {
     previousPlate: 'اللوحة السابقة',
     nextPlate: 'اللوحة التالية',
     finishPlate: 'إنهاء فحص الألوان',
-    colorResultNormal: 'نتيجة إيشيهارا: ضمن النطاق المتوقع في الفحص الإلكتروني.',
+    colorResultNormal: 'نتيجة إيشيهارا: لا توجد علامات على عمى الألوان في هذا الفحص الإلكتروني.',
     colorResultBorderline: 'نتيجة إيشيهارا: حدية. يفضل إعادة الفحص في العيادة بلوحات معايرة.',
     colorResultDeficient: 'نتيجة إيشيهارا: قد تشير إلى ضعف في تمييز الأحمر والأخضر. يرجى حجز فحص ألوان رسمي.',
     colorResultIncomplete: 'أكمل لوحات إيشيهارا لعرض النتيجة.',
@@ -196,6 +212,24 @@ const copy = {
       headache: 'صداع أو إجهاد العين',
     },
     resultTitle: 'نتيجة الفحص الأولي',
+    colorContactTitle: 'بياناتك',
+    colorContactText: 'أدخل بيانات التواصل لعرض نتيجة فحص الألوان فوراً على هذه الصفحة.',
+    showResults: 'عرض النتيجة',
+    finalColorTitle: 'نتيجة فحص تمييز الألوان',
+    interpretationTitle: 'تفسير تعليمي',
+    recommendationTitle: 'التوصية',
+    colorInterpretationNormal:
+      'إجاباتك لا تظهر علامات على عمى الألوان في هذا الفحص الإلكتروني بأسلوب إيشيهارا. هذه نتيجة فحص أولي ولا تغني عن اختبار معاير في العيادة.',
+    colorInterpretationBorderline:
+      'النتيجة الحدية قد تحدث بسبب سطوع الشاشة أو المسافة أو الإرهاق أو فرق بسيط في تمييز الألوان.',
+    colorInterpretationDeficient:
+      'إجاباتك قد تشير إلى ضعف في تمييز الأحمر والأخضر. لا يستطيع الفحص الإلكتروني تأكيد النوع أو الشدة بدقة، لذلك يفضل إجراء فحص ألوان رسمي.',
+    colorRecommendationNormal:
+      'حافظ على فحص العين الدوري، خصوصاً إذا كان تمييز الألوان مهماً للعمل أو القيادة أو الدراسة.',
+    colorRecommendationBorderline:
+      'أعد الفحص في إضاءة جيدة، ويفضل إجراء فحص ألوان معاير في العيادة للحصول على نتيجة موثوقة.',
+    colorRecommendationDeficient:
+      'احجز فحص تمييز ألوان رسمي لدى طبيب عيون أو أخصائي بصريات، خاصة إذا أثرت النتيجة على الدراسة أو العمل أو الحياة اليومية.',
     resultNeutral: 'أكمل اختباراً واحداً على الأقل لعرض ملخص الفحص.',
     resultReassuring: 'لم يتم اختيار إجابات عالية الخطورة. يظل فحص العين الشامل الدوري مهماً.',
     resultMonitor: 'تم اختيار بعض التغيرات البسيطة. يفضل حجز فحص غير عاجل.',
@@ -203,15 +237,15 @@ const copy = {
     resultUrgent: 'تم اختيار أعراض عاجلة. يرجى التواصل مع طبيب عيون أو الطوارئ الآن.',
     completed: 'الفحوصات المكتملة',
     accuracyTitle: 'ملاحظة عن الاعتمادية',
-    leadTitle: 'إرسال النتائج للعيادة',
-    leadText: 'أرسل ملخص الفحص وبيانات التواصل ليتمكن فريق العيادة من إرشادك للخطوة التالية.',
+    leadTitle: 'بياناتك',
+    leadText: 'أدخل بياناتك لعرض نتيجة الفحص.',
     name: 'الاسم الكامل',
     phone: 'رقم الهاتف',
     email: 'البريد الإلكتروني',
     preferredContact: 'طريقة التواصل المفضلة',
     concern: 'أي ملاحظات أخرى؟',
-    submit: 'إرسال نتائج الفحص',
-    success: 'شكراً لك. تم استلام طلب الفحص.',
+    submit: 'عرض النتيجة',
+    success: 'تم حفظ البيانات لعرض النتيجة.',
     error: 'حدث خطأ. يرجى الاتصال بالعيادة إذا استمرت المشكلة.',
     required: 'هذا الحقل مطلوب',
     invalidEmail: 'أدخل بريداً إلكترونياً صحيحاً',
@@ -219,34 +253,23 @@ const copy = {
 } as const;
 
 const ishiharaPlates = [
-  { plate: 1, page: 3, answer: '12', score: false },
-  { plate: 2, page: 4, answer: '8', deficientAnswer: '3' },
-  { plate: 3, page: 5, answer: '6', deficientAnswer: '5' },
-  { plate: 4, page: 6, answer: '29', deficientAnswer: '70' },
-  { plate: 5, page: 7, answer: '57', deficientAnswer: '35' },
-  { plate: 6, page: 8, answer: '5', deficientAnswer: '2' },
-  { plate: 7, page: 9, answer: '3', deficientAnswer: '5' },
-  { plate: 8, page: 10, answer: '15', deficientAnswer: '17' },
-  { plate: 9, page: 11, answer: '74', deficientAnswer: '21' },
-  { plate: 10, page: 12, answer: '2', deficientAnswer: 'nothing' },
-  { plate: 11, page: 13, answer: '6', deficientAnswer: 'nothing' },
-  { plate: 12, page: 14, answer: '97', deficientAnswer: 'nothing' },
-  { plate: 13, page: 15, answer: '45', deficientAnswer: 'nothing' },
-  { plate: 14, page: 16, answer: '5', deficientAnswer: 'nothing' },
-  { plate: 15, page: 17, answer: '7', deficientAnswer: 'nothing' },
-  { plate: 16, page: 18, answer: '16', deficientAnswer: 'nothing' },
-  { plate: 17, page: 19, answer: '73', deficientAnswer: 'nothing' },
-  { plate: 18, page: 20, answer: 'nothing', deficientAnswer: '5' },
-  { plate: 19, page: 21, answer: 'nothing', deficientAnswer: '2' },
-  { plate: 20, page: 22, answer: 'nothing', deficientAnswer: '45' },
-  { plate: 21, page: 23, answer: 'nothing', deficientAnswer: '73' },
-  { plate: 22, page: 24, answer: '26', protanAnswer: '6', deutanAnswer: '2', score: false },
-  { plate: 23, page: 25, answer: '42', protanAnswer: '2', deutanAnswer: '4', score: false },
-  { plate: 24, page: 26, answer: '35', protanAnswer: '5', deutanAnswer: '3', score: false },
+  { plate: 1, page: 4, answer: '8', deficientAnswer: '3' },
+  { plate: 2, page: 5, answer: '29', deficientAnswer: '70' },
+  { plate: 3, page: 6, answer: '5', deficientAnswer: '2' },
+  { plate: 4, page: 7, answer: '3', deficientAnswer: '5' },
+  { plate: 5, page: 8, answer: '15', deficientAnswer: '17' },
+  { plate: 6, page: 9, answer: '74', deficientAnswer: '21' },
+  { plate: 7, page: 10, answer: '6', deficientAnswer: 'nothing' },
+  { plate: 8, page: 11, answer: '45', deficientAnswer: 'nothing' },
+  { plate: 9, page: 12, answer: '5', deficientAnswer: 'nothing' },
+  { plate: 10, page: 13, answer: '7', deficientAnswer: 'nothing' },
+  { plate: 11, page: 14, answer: '16', deficientAnswer: 'nothing' },
+  { plate: 12, page: 15, answer: '73', deficientAnswer: 'nothing' },
+  { plate: 13, page: 16, answer: 'nothing', deficientAnswer: '5' },
+  { plate: 14, page: 17, answer: 'nothing', deficientAnswer: '2' },
 ] as const;
 
-const scoredIshiharaPlates = ishiharaPlates.filter((plate) => !('score' in plate && plate.score === false));
-const totalIshiharaScore = scoredIshiharaPlates.length;
+const totalIshiharaScore = ishiharaPlates.length;
 
 const contrastRows = [
   { key: 'high', word: 'VISION', opacity: 0.92 },
@@ -258,7 +281,11 @@ const contrastRows = [
 const urgentSymptoms = ['suddenLoss', 'pain', 'flashes', 'redness'];
 
 function normalizeIshiharaAnswer(value: string) {
-  const normalized = value.trim().toLowerCase();
+  const normalized = value
+    .trim()
+    .toLowerCase()
+    .replace(/[٠-٩]/g, (digit) => String('٠١٢٣٤٥٦٧٨٩'.indexOf(digit)))
+    .replace(/[۰-۹]/g, (digit) => String('۰۱۲۳۴۵۶۷۸۹'.indexOf(digit)));
   if (!normalized || ['none', 'nothing', 'no', 'n/a', 'لا', 'لا ارى', 'لا أرى', 'nothing visible'].includes(normalized)) {
     return 'nothing';
   }
@@ -292,6 +319,7 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
   const [amslerFindings, setAmslerFindings] = useState<string[]>([]);
   const [contrast, setContrast] = useState('');
   const [symptoms, setSymptoms] = useState<string[]>([]);
+  const [showColorResults, setShowColorResults] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({
     type: null,
     message: '',
@@ -301,15 +329,15 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    reset,
   } = useForm<LeadFormData>();
 
   const currentPlate = ishiharaPlates[currentPlateIndex];
-  const colorCompleted = scoredIshiharaPlates.every((plate) => ishiharaAnswers[plate.plate] !== undefined);
-  const colorScore = scoredIshiharaPlates.filter((plate) => {
+  const colorCompleted = ishiharaPlates.every((plate) => ishiharaAnswers[plate.plate] !== undefined);
+  const colorScore = ishiharaPlates.filter((plate) => {
     return normalizeIshiharaAnswer(ishiharaAnswers[plate.plate] ?? '') === plate.answer;
   }).length;
-  const redGreenMatches = scoredIshiharaPlates.filter((plate) => {
+  const colorScoreRatio = totalIshiharaScore > 0 ? colorScore / totalIshiharaScore : 0;
+  const redGreenMatches = ishiharaPlates.filter((plate) => {
     return 'deficientAnswer' in plate && normalizeIshiharaAnswer(ishiharaAnswers[plate.plate] ?? '') === plate.deficientAnswer;
   }).length;
   const protanMatches = ishiharaPlates.filter((plate) => {
@@ -320,11 +348,30 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
   }).length;
   const colorResultText = !colorCompleted
     ? t.colorResultIncomplete
-    : colorScore >= 17
+    : colorScoreRatio >= 0.85
       ? t.colorResultNormal
-      : colorScore >= 14
+      : colorScoreRatio >= 0.7
         ? t.colorResultBorderline
         : t.colorResultDeficient;
+  const colorResultCategory = !colorCompleted
+    ? 'incomplete'
+    : colorScoreRatio >= 0.85
+      ? 'normal'
+      : colorScoreRatio >= 0.7
+        ? 'borderline'
+        : 'deficient';
+  const colorInterpretation =
+    colorResultCategory === 'normal'
+      ? t.colorInterpretationNormal
+      : colorResultCategory === 'borderline'
+        ? t.colorInterpretationBorderline
+        : t.colorInterpretationDeficient;
+  const colorRecommendation =
+    colorResultCategory === 'normal'
+      ? t.colorRecommendationNormal
+      : colorResultCategory === 'borderline'
+        ? t.colorRecommendationBorderline
+        : t.colorRecommendationDeficient;
   const deficiencyPattern = protanMatches > deutanMatches
     ? 'protan tendency'
     : deutanMatches > protanMatches
@@ -339,12 +386,12 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
   const resultLevel: ResultLevel = useMemo(() => {
     if (symptoms.some((symptom) => urgentSymptoms.includes(symptom))) return 'urgent';
     if (amslerFindings.some((finding) => finding !== 'straight')) return 'followUp';
-    if (colorCompleted && colorScore <= 13) return 'followUp';
-    if (colorCompleted && colorScore <= 16) return 'monitor';
+    if (colorCompleted && colorScoreRatio < 0.7) return 'followUp';
+    if (colorCompleted && colorScoreRatio < 0.85) return 'monitor';
     if (contrast === 'high' || contrast === 'medium' || symptoms.length > 0) return 'monitor';
     if (completedCount > 0) return 'reassuring';
     return 'neutral';
-  }, [amslerFindings, colorCompleted, colorScore, completedCount, contrast, symptoms]);
+  }, [amslerFindings, colorCompleted, colorScoreRatio, completedCount, contrast, symptoms]);
 
   const resultText = {
     neutral: t.resultNeutral,
@@ -385,36 +432,35 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
 
   const onSubmit = async (data: LeadFormData) => {
     setSubmitStatus({ type: null, message: '' });
-
-    const response = await fetch('/api/eye-test-leads', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...data,
-        locale,
-        summary,
-        resultLevel,
-        answers: {
-          ishiharaScore: colorScore,
-          ishiharaTotal: totalIshiharaScore,
-          ishiharaAnswers,
-          redGreenMatches,
+    try {
+      const response = await fetch('/api/eye-test-leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...data,
+          locale,
+          colorScore,
+          totalIshiharaScore,
+          colorResultCategory,
           deficiencyPattern,
+          summary,
+          ishiharaAnswers,
           amslerEye,
           amslerFindings,
           contrast,
           symptoms,
-        },
-      }),
-    });
+        }),
+      });
 
-    if (response.ok) {
+      if (!response.ok) {
+        throw new Error('Eye test lead request failed');
+      }
+
+      setShowColorResults(true);
       setSubmitStatus({ type: 'success', message: t.success });
-      reset();
-      return;
+    } catch {
+      setSubmitStatus({ type: 'error', message: t.error });
     }
-
-    setSubmitStatus({ type: 'error', message: t.error });
   };
 
   return (
@@ -423,7 +469,7 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
         <div className="absolute inset-0">
           <Image
             src="/assets/images/hero-ophthalmologist.jpg"
-            alt=""
+            alt="Ophthalmologist performing an eye examination at Abdalla Eye Clinic"
             fill
             priority
             sizes="100vw"
@@ -491,6 +537,8 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                       onClick={() => {
                         setIshiharaAnswers({});
                         setCurrentPlateIndex(0);
+                        setShowColorResults(false);
+                        setSubmitStatus({ type: null, message: '' });
                       }}
                       className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800"
                     >
@@ -498,20 +546,17 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                     </button>
                   </div>
 
-                  <div className="mt-7 grid gap-6 xl:grid-cols-[minmax(0,1fr)_20rem]">
+                  <div className="mt-7 grid gap-6 xl:grid-cols-[minmax(0,1fr)_18rem]">
                     <div className="rounded-lg border border-slate-200 bg-slate-50 p-3 dark:border-slate-700 dark:bg-slate-950/50 sm:p-5">
                       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                         <p className="text-sm font-black text-slate-900 dark:text-white">
-                          {t.plate} {currentPlate.plate} / {ishiharaPlates.length}
-                        </p>
-                        <p className="rounded-lg bg-white px-3 py-1 text-xs font-bold text-slate-600 shadow-sm dark:bg-slate-900 dark:text-slate-300">
-                          {'score' in currentPlate && currentPlate.score === false ? 'control / pattern' : 'scored'}
+                          {t.plate} {currentPlateIndex + 1} / {ishiharaPlates.length}
                         </p>
                       </div>
-                      <div className="relative mx-auto aspect-[595/842] w-full max-w-[44rem] overflow-hidden rounded-lg bg-white shadow-inner">
+                      <div className="relative mx-auto aspect-[595/842] w-full max-w-[56rem] overflow-hidden rounded-lg bg-white shadow-inner">
                         <Image
                           src={`/assets/images/ishihara/ishihara-page-${String(currentPlate.page).padStart(2, '0')}.png`}
-                          alt={`Ishihara color test plate ${currentPlate.plate}`}
+                          alt={`Ishihara color test slide ${currentPlateIndex + 1}`}
                           fill
                           sizes="(min-width: 1280px) 704px, 100vw"
                           className="object-contain"
@@ -528,22 +573,26 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                         id="ishihara-answer"
                         inputMode="numeric"
                         value={ishiharaAnswers[currentPlate.plate] ?? ''}
-                        onChange={(event) =>
+                        onChange={(event) => {
                           setIshiharaAnswers((current) => ({
                             ...current,
                             [currentPlate.plate]: event.target.value,
-                          }))
-                        }
+                          }));
+                          setShowColorResults(false);
+                          setSubmitStatus({ type: null, message: '' });
+                        }}
                         className="mt-2 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-lg font-bold text-slate-950 focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:border-slate-700 dark:bg-slate-900 dark:text-white"
                       />
                       <button
                         type="button"
-                        onClick={() =>
+                        onClick={() => {
                           setIshiharaAnswers((current) => ({
                             ...current,
                             [currentPlate.plate]: 'nothing',
-                          }))
-                        }
+                          }));
+                          setShowColorResults(false);
+                          setSubmitStatus({ type: null, message: '' });
+                        }}
                         className="mt-3 w-full rounded-lg border border-cyan-200 bg-cyan-50 px-4 py-3 text-sm font-bold text-cyan-900 hover:bg-cyan-100 dark:border-cyan-800 dark:bg-cyan-950 dark:text-cyan-100"
                       >
                         {t.nothing}
@@ -700,73 +749,80 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
             </div>
           </section>
 
-          <aside className="h-fit rounded-lg border border-white/80 bg-white p-5 shadow-elegant dark:border-cyan-900/50 dark:bg-slate-900">
-            <h2 className="text-xl font-bold text-slate-950 dark:text-white">{t.resultTitle}</h2>
-            <div className="mt-3">
-              <ResultBadge level={resultLevel} label={resultText} />
-            </div>
-            <div className="mt-4 rounded-lg bg-slate-50 p-4 text-sm leading-6 text-slate-700 dark:bg-slate-950/65 dark:text-slate-200">
-              <p className="font-bold">{t.completed}: {completedCount}/4</p>
-              <p className="mt-2">{summary}</p>
-            </div>
-            <div className="mt-4 rounded-lg border border-cyan-100 bg-white p-4 text-sm leading-6 text-slate-700 dark:border-cyan-900/60 dark:bg-slate-950/50 dark:text-slate-200">
-              <p className="font-black text-slate-950 dark:text-white">{t.colorScore}: {colorScore}/{totalIshiharaScore}</p>
-              <p className="mt-2">{colorResultText}</p>
-              {colorCompleted && (
-                <p className="mt-2">
-                  {t.deficiencyPattern}: {deficiencyPattern}
-                </p>
-              )}
-            </div>
-            <div className="mt-4 rounded-lg border border-cyan-100 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950 dark:border-cyan-800 dark:bg-cyan-950/40 dark:text-cyan-50">
-              <p className="font-bold">{t.accuracyTitle}</p>
-              <p className="mt-1">{t.disclaimer}</p>
-            </div>
+          <aside className="h-fit rounded-lg border border-white/80 bg-white p-5 shadow-elegant dark:border-cyan-900/50 dark:bg-slate-900 lg:p-6">
+            {!colorCompleted && (
+              <>
+                <h2 className="text-xl font-bold text-slate-950 dark:text-white">{t.resultTitle}</h2>
+                <div className="mt-3">
+                  <ResultBadge level="neutral" label={t.colorResultIncomplete} />
+                </div>
+                <div className="mt-4 rounded-lg bg-slate-50 p-4 text-sm leading-6 text-slate-700 dark:bg-slate-950/65 dark:text-slate-200">
+                  <p className="font-bold">{t.plate} {currentPlateIndex + 1} / {ishiharaPlates.length}</p>
+                  <p className="mt-2">{t.colorInstruction}</p>
+                </div>
+                <div className="mt-4 rounded-lg border border-cyan-100 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950 dark:border-cyan-800 dark:bg-cyan-950/40 dark:text-cyan-50">
+                  <p className="font-bold">{t.accuracyTitle}</p>
+                  <p className="mt-1">{t.disclaimer}</p>
+                </div>
+              </>
+            )}
 
-            <div className="mt-6 border-t border-slate-200 pt-6 dark:border-slate-700">
-              <h3 className="text-lg font-bold text-slate-950 dark:text-white">{t.leadTitle}</h3>
-              <p className="mt-1 text-sm leading-6 text-slate-600 dark:text-slate-300">{t.leadText}</p>
+            {colorCompleted && !showColorResults && (
+              <>
+                <h2 className="text-2xl font-black text-slate-950 dark:text-white">{t.colorContactTitle}</h2>
+                <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{t.colorContactText}</p>
+                <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
+                  <Input label={t.name} {...register('name', { required: t.required })} error={errors.name?.message} />
+                  <Input label={t.phone} {...register('phone', { required: t.required })} error={errors.phone?.message} />
+                  <Input
+                    type="email"
+                    label={t.email}
+                    {...register('email', {
+                      required: t.required,
+                      pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: t.invalidEmail },
+                    })}
+                    error={errors.email?.message}
+                  />
+                  {submitStatus.type === 'error' && (
+                    <div className="rounded-lg bg-red-50 p-3 text-sm font-semibold text-red-800 dark:bg-red-900/20 dark:text-red-200">
+                      {submitStatus.message}
+                    </div>
+                  )}
+                  <Button type="submit" fullWidth size="lg" isLoading={isSubmitting}>
+                    {t.showResults}
+                  </Button>
+                </form>
+              </>
+            )}
 
-              <form onSubmit={handleSubmit(onSubmit)} className="mt-5 space-y-4">
-                {submitStatus.type && (
-                  <div
-                    className={classNames(
-                      'rounded-lg p-3 text-sm',
-                      submitStatus.type === 'success'
-                        ? 'bg-green-50 text-green-800 dark:bg-green-900/20 dark:text-green-200'
-                        : 'bg-red-50 text-red-800 dark:bg-red-900/20 dark:text-red-200'
-                    )}
-                  >
-                    {submitStatus.message}
-                  </div>
-                )}
+            {colorCompleted && showColorResults && (
+              <>
+                <div className="rounded-lg border-2 border-cyan-200 bg-cyan-50 p-5 text-cyan-950 shadow-sm dark:border-cyan-700 dark:bg-cyan-950/40 dark:text-cyan-50">
+                  <p className="text-sm font-black uppercase tracking-[0.12em] text-cyan-800 dark:text-cyan-200">
+                    {t.finalColorTitle}
+                  </p>
+                  <p className="mt-3 text-4xl font-black leading-none md:text-5xl">
+                    {colorScore}/{totalIshiharaScore}
+                  </p>
+                  <p className="mt-4 text-lg font-bold leading-7">{colorResultText}</p>
+                  <p className="mt-3 text-sm font-semibold">
+                    {t.deficiencyPattern}: {deficiencyPattern}
+                  </p>
+                </div>
 
-                <Input label={t.name} {...register('name', { required: t.required })} error={errors.name?.message} />
-                <Input label={t.phone} {...register('phone', { required: t.required })} error={errors.phone?.message} />
-                <Input
-                  type="email"
-                  label={t.email}
-                  {...register('email', {
-                    required: t.required,
-                    pattern: { value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, message: t.invalidEmail },
-                  })}
-                  error={errors.email?.message}
-                />
-                <Select
-                  label={t.preferredContact}
-                  options={[
-                    { value: 'phone', label: 'Phone' },
-                    { value: 'whatsapp', label: 'WhatsApp' },
-                    { value: 'email', label: 'Email' },
-                  ]}
-                  {...register('preferredContact')}
-                />
-                <Textarea label={t.concern} rows={3} {...register('concern')} />
-                <Button type="submit" fullWidth size="lg" isLoading={isSubmitting}>
-                  {t.submit}
-                </Button>
-              </form>
-            </div>
+                <div className="mt-4 rounded-lg border border-slate-200 bg-white p-5 text-sm leading-6 text-slate-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+                  <p className="text-base font-black text-slate-950 dark:text-white">{t.interpretationTitle}</p>
+                  <p className="mt-2">{colorInterpretation}</p>
+                  <p className="mt-4 text-base font-black text-slate-950 dark:text-white">{t.recommendationTitle}</p>
+                  <p className="mt-2">{colorRecommendation}</p>
+                </div>
+
+                <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-100">
+                  <p className="font-bold">{t.accuracyTitle}</p>
+                  <p className="mt-1">{t.disclaimer}</p>
+                </div>
+              </>
+            )}
           </aside>
         </div>
       </div>

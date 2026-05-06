@@ -8,9 +8,8 @@ import { Button } from '@/components/common/Button';
 import { Card, CardBody, CardHeader } from '@/components/common/Card';
 import { Input, Select, Textarea } from '@/components/common/Input';
 import { appointmentService } from '@/services/api';
-import { APPOINTMENT_TIME_SLOTS } from '@/constants';
+import { APPOINTMENT_TIME_SLOTS, CLINIC_INFO } from '@/constants';
 import { getLocalizedDoctors, getLocalizedServices } from '@/utils/localized-content';
-import { formatDate } from '@/utils';
 
 interface AppointmentFormData {
   name: string;
@@ -21,6 +20,35 @@ interface AppointmentFormData {
   date: string;
   time: string;
   notes?: string;
+}
+
+function buildWhatsAppAppointmentUrl(data: AppointmentFormData, doctorName: string, serviceName: string, locale: string) {
+  const isArabic = locale === 'ar';
+  const message = isArabic
+    ? [
+        'طلب حجز موعد جديد',
+        `الاسم: ${data.name}`,
+        `الهاتف: ${data.phone}`,
+        `البريد الإلكتروني: ${data.email}`,
+        `الطبيب: ${doctorName}`,
+        `الخدمة: ${serviceName}`,
+        `التاريخ: ${data.date}`,
+        `الوقت: ${data.time}`,
+        data.notes ? `ملاحظات: ${data.notes}` : null,
+      ]
+    : [
+        'New appointment request',
+        `Name: ${data.name}`,
+        `Phone: ${data.phone}`,
+        `Email: ${data.email}`,
+        `Doctor: ${doctorName}`,
+        `Service: ${serviceName}`,
+        `Date: ${data.date}`,
+        `Time: ${data.time}`,
+        data.notes ? `Notes: ${data.notes}` : null,
+      ];
+
+  return `https://wa.me/${CLINIC_INFO.socialMedia.whatsapp}?text=${encodeURIComponent(message.filter(Boolean).join('\n'))}`;
 }
 
 export default function AppointmentsPage() {
@@ -44,11 +72,15 @@ export default function AppointmentsPage() {
     const response = await appointmentService.bookAppointment(data);
 
     if (response.success) {
+      const doctorName = doctors.find((doctor) => doctor.id === data.doctorId)?.name ?? data.doctorId;
+      const serviceName = services.find((service) => service.id === data.serviceId)?.name ?? data.serviceId;
+      const whatsappUrl = buildWhatsAppAppointmentUrl(data, doctorName, serviceName, locale);
       setSubmitStatus({
         type: 'success',
         message: t('appointment.success'),
       });
       reset();
+      window.location.assign(whatsappUrl);
     } else {
       setSubmitStatus({
         type: 'error',

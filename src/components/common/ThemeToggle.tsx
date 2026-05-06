@@ -3,12 +3,21 @@
 import React from 'react';
 import { useTheme } from '@/context/ThemeContext';
 
-export const ThemeToggle = () => {
+type ThemeToggleProps = {
+  onToggle?: () => void;
+};
+
+export const ThemeToggle = ({ onToggle }: ThemeToggleProps) => {
   const { theme, toggleTheme } = useTheme();
+
+  const handleClick = () => {
+    toggleTheme();
+    onToggle?.();
+  };
 
   return (
     <button
-      onClick={toggleTheme}
+      onClick={handleClick}
       className="relative inline-flex h-8 w-16 items-center rounded-full bg-gray-300 transition-colors dark:bg-gray-600"
       aria-label="Toggle dark mode"
     >

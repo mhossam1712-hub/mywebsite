@@ -1,8 +1,9 @@
 import type { MetadataRoute } from 'next';
 import { getBlogPosts } from '@/lib/blog';
 import { LOCALES } from '@/i18n/config';
+import { getSiteUrl } from '@/lib/site-url';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://abdallaeyeclinic.com';
+const siteUrl = getSiteUrl();
 
 const staticRoutes = [
   '',
@@ -16,6 +17,14 @@ const staticRoutes = [
   '/privacy',
   '/services',
   '/terms',
+] as const;
+
+const imageUrls = [
+  '/assets/images/hero-ophthalmologist.jpg',
+  '/assets/images/abdalla-eye-logo.png',
+  '/assets/images/abdalla-eye-emblem.png',
+  '/assets/images/dr-mohamed-hossam-abdalla-card.jpg',
+  '/assets/images/prof-ahmed-hossam-abdalla-card.jpg',
 ] as const;
 
 function absoluteUrl(path: string) {
@@ -40,6 +49,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: now,
         changeFrequency: route === '' ? 'weekly' : 'monthly',
         priority: route === '' ? 1 : route === '/eye-tests' || route === '/services' ? 0.9 : 0.7,
+        images: route === '' || route === '/doctors' ? imageUrls.map(absoluteUrl) : undefined,
         alternates: {
           languages: localizedAlternates(route),
         },
@@ -54,6 +64,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         lastModified: new Date(post.date),
         changeFrequency: 'monthly',
         priority: 0.75,
+        images: [absoluteUrl(post.image ?? '/assets/images/hero-ophthalmologist.jpg')],
         alternates: {
           languages: localizedAlternates(`/blog/${post.slug}`),
         },

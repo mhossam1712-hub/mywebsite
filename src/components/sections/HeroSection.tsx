@@ -1,28 +1,20 @@
-'use client';
-
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { useLocale } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { getSectionText, sectionText } from '@/utils/localized-content';
-import { Button } from '../common/Button';
 
-export const HeroSection = () => {
-  const t = useTranslations('hero');
-  const locale = useLocale();
+type SectionProps = {
+  locale: string;
+};
+
+export const HeroSection = async ({ locale }: SectionProps) => {
+  const t = await getTranslations({ locale, namespace: 'hero' });
   const featureCards = locale === 'ar' ? sectionText.featureCards.ar : sectionText.featureCards.en;
 
   return (
     <section className="section-shell flex min-h-[calc(100svh-4.5rem)] items-center bg-[linear-gradient(135deg,#073b4c_0%,#0f766e_48%,#6d5bd0_100%)] px-3 py-14 text-white transition-colors duration-300 sm:px-4 sm:py-20 md:min-h-[calc(100svh-5rem)] md:py-24">
-      <Image
-        src="/assets/images/logo-no-background.svg"
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="pointer-events-none object-contain object-center opacity-[0.26] mix-blend-screen blur-[0.2px]"
-      />
+      <div className="pointer-events-none absolute inset-0 opacity-20 [background:linear-gradient(120deg,transparent_0_18%,rgba(255,255,255,0.16)_18%_19%,transparent_19%_35%,rgba(255,255,255,0.12)_35%_36%,transparent_36%),radial-gradient(circle_at_50%_42%,rgba(255,255,255,0.16),transparent_16rem)]" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_42%,rgba(255,255,255,0.08),transparent_25rem),linear-gradient(90deg,rgba(7,59,76,0.88),rgba(7,59,76,0.54)_44%,rgba(15,118,110,0.7))]" />
       <div className="hero-aurora pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_18%,rgba(255,255,255,0.24),transparent_20rem),radial-gradient(circle_at_82%_28%,rgba(245,158,11,0.24),transparent_18rem)]" />
       <div className="pointer-events-none absolute left-[8%] top-24 h-24 w-24 rounded-full border border-white/20 bg-white/[0.08] blur-sm" />
@@ -41,10 +33,11 @@ export const HeroSection = () => {
               {t('subtitle')}
             </p>
             <div className="flex justify-center">
-              <Link href={`/${locale}/appointments`}>
-                <Button size="lg" className="hero-primary-cta min-h-14 px-9 text-lg !bg-white !font-extrabold !text-cyan-950 shadow-[0_20px_45px_-24px_rgba(255,255,255,0.75),0_1px_0_rgba(255,255,255,0.95)_inset] hover:!bg-cyan-50 sm:px-12 sm:text-xl">
-                  {t('cta')}
-                </Button>
+              <Link
+                href={`/${locale}/appointments`}
+                className="hero-primary-cta inline-flex min-h-14 items-center justify-center rounded-lg bg-white px-9 py-3 text-lg font-extrabold text-cyan-950 shadow-[0_20px_45px_-24px_rgba(255,255,255,0.75),0_1px_0_rgba(255,255,255,0.95)_inset] transition-colors hover:bg-cyan-50 sm:px-12 sm:text-xl"
+              >
+                {t('cta')}
               </Link>
             </div>
           </div>
@@ -55,6 +48,8 @@ export const HeroSection = () => {
               alt="Ophthalmologist performing an eye examination"
               fill
               priority
+              fetchPriority="high"
+              quality={72}
               sizes="(min-width: 1024px) 40vw, (min-width: 640px) 70vw, 100vw"
               className="object-cover"
             />

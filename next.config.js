@@ -13,7 +13,17 @@ const withMDX = createMDX({
 const nextConfig = {
   reactStrictMode: true,
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/en',
+        permanent: false,
+      },
+    ];
+  },
   images: {
+    qualities: [70, 72, 75],
     remotePatterns: [
       {
         protocol: 'https',

@@ -2,6 +2,15 @@
   "name": "eye-clinic-v24",
   "version": "1.0.0",
   "description": "Professional ophthalmology clinic website",
+  "browserslist": [
+    "Chrome >= 109",
+    "Edge >= 109",
+    "Firefox >= 115",
+    "Safari >= 16.4",
+    "iOS >= 16.4",
+    "not dead",
+    "not op_mini all"
+  ],
   "scripts": {
     "dev": "next dev",
     "build": "next build",

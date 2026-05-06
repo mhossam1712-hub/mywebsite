@@ -224,6 +224,30 @@ h3 {
   transform: scaleX(1);
 }
 
+.journal-prose {
+  @apply text-base leading-8 text-slate-700 dark:text-slate-200 sm:text-lg;
+}
+
+.journal-prose h2 {
+  @apply mt-12 border-t border-slate-300 pt-8 text-2xl font-black leading-tight text-slate-950 dark:border-slate-700 dark:text-white sm:text-3xl;
+}
+
+.journal-prose p {
+  @apply mt-6 leading-8;
+}
+
+.journal-prose ul {
+  @apply mt-6 space-y-3 border-s border-cyan-200 ps-5 dark:border-cyan-800;
+}
+
+.journal-prose li {
+  @apply leading-7;
+}
+
+.journal-prose a {
+  @apply font-bold text-cyan-800 underline decoration-cyan-300 underline-offset-4 hover:text-cyan-950 dark:text-cyan-200 dark:decoration-cyan-700 dark:hover:text-white;
+}
+
 /* RTL Support */
 [dir="rtl"] {
   direction: rtl;

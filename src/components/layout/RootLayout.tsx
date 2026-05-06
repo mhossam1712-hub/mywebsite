@@ -20,7 +20,7 @@ export const ClientLayout = ({ children }: RootLayoutProps) => {
       <body className="bg-white text-gray-900">
         <Header />
         <main className="min-h-screen">{children}</main>
-        <Footer />
+        <Footer locale={locale} />
       </body>
     </html>
   );

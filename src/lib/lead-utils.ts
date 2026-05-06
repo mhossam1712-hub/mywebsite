@@ -30,11 +30,14 @@ export async function saveLead(source: string, payload: LeadPayload) {
     submittedAt: new Date().toISOString(),
     ...payload,
   };
-  const leadDirectory = path.join(process.cwd(), 'data');
+  const leadDirectory =
+    process.env.LEADS_FILE_DIR ||
+    (process.env.VERCEL ? '/tmp/abdalla-eye-clinic-leads' : path.join(process.cwd(), 'data'));
   const leadFile = path.join(leadDirectory, 'leads.jsonl');
 
   await mkdir(leadDirectory, { recursive: true });
   await appendFile(leadFile, `${JSON.stringify(lead)}\n`, 'utf8');
+  console.info('Clinic lead received:', JSON.stringify(lead));
   await forwardLead(lead);
 }
 

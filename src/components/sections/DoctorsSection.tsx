@@ -1,15 +1,15 @@
-'use client';
-
 import React from 'react';
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
-import { useLocale } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { getLocalizedDoctors, getSectionText } from '@/utils/localized-content';
 import { Card, CardBody, CardHeader } from '../common/Card';
 
-export const DoctorsSection = () => {
-  const t = useTranslations('doctors');
-  const locale = useLocale();
+type SectionProps = {
+  locale: string;
+};
+
+export const DoctorsSection = async ({ locale }: SectionProps) => {
+  const t = await getTranslations({ locale, namespace: 'doctors' });
   const doctors = getLocalizedDoctors(locale);
 
   return (

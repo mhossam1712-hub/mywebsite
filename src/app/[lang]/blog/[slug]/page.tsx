@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getArabicBlogContent } from '@/content/arabic-blog';
@@ -42,6 +43,30 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       description: metadata.description,
       type: 'article',
       publishedTime: post.metadata.date,
+      authors: metadata.author ? [metadata.author] : undefined,
+      images: metadata.image
+        ? [
+            {
+              url: metadata.image,
+              width: 1200,
+              height: 675,
+              alt: metadata.imageAlt ?? metadata.title,
+            },
+          ]
+        : undefined,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: metadata.title,
+      description: metadata.description,
+      images: metadata.image
+        ? [
+            {
+              url: metadata.image,
+              alt: metadata.imageAlt ?? metadata.title,
+            },
+          ]
+        : undefined,
     },
   };
 }
@@ -60,24 +85,55 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const arabicContent = isArabic ? getArabicBlogContent(slug) : null;
 
   return (
-    <article className="overflow-hidden bg-white px-4 py-10 dark:bg-gray-950 sm:py-14 md:py-20" dir={isArabic ? 'rtl' : 'ltr'}>
-      <div className="mx-auto max-w-3xl">
-        <Link href={`/${lang}/blog`} className="text-sm font-semibold text-cyan-700 hover:text-cyan-900 dark:text-cyan-300">
+    <article className="overflow-hidden bg-[#f8fafb] px-4 py-10 dark:bg-gray-950 sm:py-14 md:py-20" dir={isArabic ? 'rtl' : 'ltr'}>
+      <div className="mx-auto max-w-5xl">
+        <Link href={`/${lang}/blog`} className="text-sm font-bold text-cyan-700 hover:text-cyan-900 dark:text-cyan-300">
           {isArabic ? 'العودة إلى المدونة' : 'Back to blog'}
         </Link>
 
-        <header className="mt-6 rounded-lg border border-cyan-100 bg-medical-50/80 p-5 shadow-elegant dark:border-cyan-900/60 dark:bg-gray-900/80 sm:p-7">
-          <div className={`flex flex-wrap gap-2 text-xs font-semibold text-cyan-800 dark:text-cyan-200 ${isArabic ? 'justify-end' : ''}`}>
-            <span className="rounded-full bg-white px-3 py-1 shadow-sm dark:bg-cyan-950/70">{metadata.category}</span>
-            <span className="rounded-full bg-white px-3 py-1 shadow-sm dark:bg-cyan-950/70">{metadata.readingTime}</span>
+        <header className="mt-6 border-y border-slate-300 py-8 dark:border-slate-700 sm:py-10">
+          <div className={`flex flex-wrap gap-3 text-xs font-black uppercase tracking-[0.16em] text-cyan-800 dark:text-cyan-200 ${isArabic ? 'justify-end' : ''}`}>
+            <span>{metadata.category}</span>
+            <span className="h-1 w-1 self-center rounded-full bg-slate-400" />
+            <span>{metadata.readingTime}</span>
           </div>
-          <h1 className={`mt-5 text-3xl font-bold leading-tight text-slate-950 dark:text-white sm:text-4xl md:text-5xl ${isArabic ? 'text-right' : ''}`}>
+          <h1 className={`mt-5 max-w-4xl text-4xl font-black leading-tight text-slate-950 dark:text-white sm:text-5xl md:text-6xl ${isArabic ? 'text-right' : ''}`}>
             {metadata.title}
           </h1>
-          <p className={`mt-4 text-base leading-7 text-slate-600 dark:text-gray-300 ${isArabic ? 'text-right' : ''}`}>{metadata.description}</p>
+          <p className={`mt-5 max-w-3xl text-lg leading-8 text-slate-600 dark:text-gray-300 ${isArabic ? 'text-right' : ''}`}>{metadata.description}</p>
+          <div className={`mt-6 flex flex-wrap gap-x-5 gap-y-2 border-t border-slate-300 pt-5 text-sm text-slate-600 dark:border-slate-700 dark:text-gray-300 ${isArabic ? 'justify-end text-right' : ''}`}>
+            <p>
+              <span className="font-black text-slate-950 dark:text-white">{isArabic ? 'الكاتب: ' : 'Author: '}</span>
+              {metadata.author ?? (isArabic ? 'فريق عيادة عبد الله للعيون' : 'Abdalla Eye Clinic Editorial Team')}
+            </p>
+            {metadata.authorTitle && <p>{metadata.authorTitle}</p>}
+            <p>
+              {new Intl.DateTimeFormat(isArabic ? 'ar-EG' : 'en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric',
+              }).format(new Date(metadata.date))}
+            </p>
+          </div>
         </header>
 
-        <div className="mt-8">
+        {metadata.image && (
+          <figure className="mt-8 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <Image
+              src={metadata.image}
+              alt={metadata.imageAlt ?? metadata.title}
+              width={1200}
+              height={675}
+              priority
+              className="aspect-video w-full object-cover"
+            />
+            <figcaption className={`border-t border-slate-200 px-4 py-3 text-sm leading-6 text-slate-600 dark:border-slate-700 dark:text-gray-300 ${isArabic ? 'text-right' : ''}`}>
+              {metadata.imageAlt ?? metadata.description}
+            </figcaption>
+          </figure>
+        )}
+
+        <div className={`journal-prose mt-10 max-w-3xl ${isArabic ? 'ms-auto text-right' : ''}`}>
           {arabicContent ?? <PostContent />}
         </div>
       </div>

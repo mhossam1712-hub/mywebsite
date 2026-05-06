@@ -9,6 +9,10 @@ export interface BlogPostMetadata {
   date: string;
   readingTime: string;
   category: string;
+  author?: string;
+  authorTitle?: string;
+  image?: string;
+  imageAlt?: string;
 }
 
 interface BlogPostModule {

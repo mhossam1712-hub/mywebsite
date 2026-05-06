@@ -1,13 +1,13 @@
-'use client';
-
 import React from 'react';
-import { useTranslations } from 'next-intl';
-import { useLocale } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import { getSectionText, sectionText } from '@/utils/localized-content';
 
-export const TestimonialsSection = () => {
-  const t = useTranslations('testimonials');
-  const locale = useLocale();
+type SectionProps = {
+  locale: string;
+};
+
+export const TestimonialsSection = async ({ locale }: SectionProps) => {
+  const t = await getTranslations({ locale, namespace: 'testimonials' });
   const testimonials = locale === 'ar' ? sectionText.testimonials.ar : sectionText.testimonials.en;
 
   return (
