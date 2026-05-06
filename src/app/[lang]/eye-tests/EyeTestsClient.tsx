@@ -127,9 +127,12 @@ const copy = {
     annualCheckup:
       'Even if your screening looks reassuring, schedule an annual eye checkup to protect long-term eye health.',
     colorContactTitle: 'Your details',
-    colorContactText: 'Enter your contact details to view your color screening result. Your result will be shown immediately on this page.',
+    colorContactText: 'Complete all four checks, then enter your details to view the full screening report. Your report will be shown immediately on this page.',
     showResults: 'Show my results',
     finalColorTitle: 'Color vision screening result',
+    finalReportTitle: 'Your eye screening report',
+    completeAllTests: 'Complete all four checks to unlock your report.',
+    noSymptoms: 'No symptoms noticed',
     interpretationTitle: 'Educational interpretation',
     recommendationTitle: 'Recommendation',
     colorInterpretationNormal:
@@ -268,9 +271,12 @@ const copy = {
     annualCheckup:
       'حتى إذا كانت نتيجة الفحص مطمئنة، احرص على فحص سنوي لصحة العين والاكتشاف المبكر.',
     colorContactTitle: 'بياناتك',
-    colorContactText: 'أدخل بيانات التواصل لعرض نتيجة فحص الألوان فوراً على هذه الصفحة.',
+    colorContactText: 'أكمل الفحوصات الأربعة، ثم أدخل بياناتك لعرض التقرير الكامل فوراً على هذه الصفحة.',
     showResults: 'عرض النتيجة',
     finalColorTitle: 'نتيجة فحص تمييز الألوان',
+    finalReportTitle: 'تقرير فحوصات العين',
+    completeAllTests: 'أكمل الفحوصات الأربعة لفتح التقرير.',
+    noSymptoms: 'لا توجد أعراض ملحوظة',
     interpretationTitle: 'تفسير تعليمي',
     recommendationTitle: 'التوصية',
     colorInterpretationNormal:
@@ -409,6 +415,31 @@ function ScorePanel({
   );
 }
 
+function TestPromptPanel({
+  title,
+  message,
+  accuracyTitle,
+  disclaimer,
+}: {
+  title: string;
+  message: string;
+  accuracyTitle: string;
+  disclaimer: string;
+}) {
+  return (
+    <>
+      <h2 className="text-xl font-bold text-slate-950 dark:text-white">{title}</h2>
+      <div className="mt-3">
+        <ResultBadge level="neutral" label={message} />
+      </div>
+      <div className="mt-4 rounded-lg border border-cyan-100 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950 dark:border-cyan-800 dark:bg-cyan-950/40 dark:text-cyan-50">
+        <p className="font-bold">{accuracyTitle}</p>
+        <p className="mt-1">{disclaimer}</p>
+      </div>
+    </>
+  );
+}
+
 export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
   const isArabic = locale === 'ar';
   const t = isArabic ? copy.ar : copy.en;
@@ -419,6 +450,7 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
   const [amslerFindings, setAmslerFindings] = useState<string[]>([]);
   const [contrast, setContrast] = useState('');
   const [symptoms, setSymptoms] = useState<string[]>([]);
+  const [symptomsReviewed, setSymptomsReviewed] = useState(false);
   const [showColorResults, setShowColorResults] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({
     type: null,
@@ -481,7 +513,9 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
         : 'no clear pattern';
   const hasAmsler = amslerFindings.length > 0;
   const hasSymptoms = symptoms.length > 0;
-  const completedCount = [colorCompleted, hasAmsler, Boolean(contrast), hasSymptoms].filter(Boolean).length;
+  const symptomsCompleted = symptomsReviewed;
+  const completedCount = [colorCompleted, hasAmsler, Boolean(contrast), symptomsCompleted].filter(Boolean).length;
+  const allTestsCompleted = colorCompleted && hasAmsler && Boolean(contrast) && symptomsCompleted;
   const appointmentHref = `/${locale}/appointments`;
 
   const amslerAbnormalFindings = amslerFindings.filter((finding) => finding !== 'straight');
@@ -566,15 +600,17 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
       colorCompleted ? `${t.tabs.color}: ${colorScore}/${totalIshiharaScore}; ${colorResultText}; ${t.deficiencyPattern}: ${deficiencyPattern}` : null,
       hasAmsler ? `${t.tabs.amsler}: ${amslerScore}/5; ${amslerInterpretation}; ${amslerFindings.map((key) => t.amslerOptions[key as keyof typeof t.amslerOptions]).join(', ')} (${amslerEye})` : null,
       contrast ? `${t.tabs.contrast}: ${contrastScore}/4; ${contrastInterpretation}; ${t.contrastRows[contrast as keyof typeof t.contrastRows]}` : null,
-      `${t.tabs.symptoms}: ${symptomRiskScore}; ${symptomsInterpretation}${hasSymptoms ? `; ${symptoms.map((key) => t.symptomsList[key as keyof typeof t.symptomsList]).join(', ')}` : ''}`,
+      symptomsCompleted ? `${t.tabs.symptoms}: ${symptomRiskScore}; ${symptomsInterpretation}${hasSymptoms ? `; ${symptoms.map((key) => t.symptomsList[key as keyof typeof t.symptomsList]).join(', ')}` : `; ${t.noSymptoms}`}` : null,
       t.annualCheckup,
       resultText,
     ];
 
     return lines.filter(Boolean).join(' | ');
-  }, [amslerEye, amslerFindings, amslerInterpretation, amslerScore, colorCompleted, colorResultText, colorScore, completedCount, contrast, contrastInterpretation, contrastScore, deficiencyPattern, hasAmsler, hasSymptoms, resultText, symptomRiskScore, symptoms, symptomsInterpretation, t]);
+  }, [amslerEye, amslerFindings, amslerInterpretation, amslerScore, colorCompleted, colorResultText, colorScore, completedCount, contrast, contrastInterpretation, contrastScore, deficiencyPattern, hasAmsler, hasSymptoms, resultText, symptomRiskScore, symptoms, symptomsCompleted, symptomsInterpretation, t]);
 
   const toggleAmsler = (key: string) => {
+    setShowColorResults(false);
+    setSubmitStatus({ type: null, message: '' });
     setAmslerFindings((current) => {
       if (key === 'straight') return ['straight'];
       const withoutStraight = current.filter((finding) => finding !== 'straight');
@@ -585,6 +621,9 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
   };
 
   const toggleSymptom = (key: string) => {
+    setSymptomsReviewed(true);
+    setShowColorResults(false);
+    setSubmitStatus({ type: null, message: '' });
     setSymptoms((current) =>
       current.includes(key) ? current.filter((symptom) => symptom !== key) : [...current, key]
     );
@@ -613,8 +652,10 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
           contrastScore,
           contrastInterpretation,
           symptoms,
+          symptomsReviewed,
           symptomRiskScore,
           symptomsInterpretation,
+          allTestsCompleted,
         }),
       });
 
@@ -794,19 +835,6 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                       </div>
                     </div>
                   </div>
-
-                  {hasAmsler && (
-                    <ScorePanel
-                      title={t.amslerScoreTitle}
-                      scoreLabel={t.score}
-                      score={`${amslerScore}/5`}
-                      level={amslerLevel}
-                      interpretation={amslerInterpretation}
-                      recommendation={comprehensiveExamRecommendation}
-                      appointmentHref={appointmentHref}
-                      appointmentLabel={t.bookComprehensiveExam}
-                    />
-                  )}
                 </div>
               )}
 
@@ -830,7 +858,11 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                           <button
                             key={value}
                             type="button"
-                            onClick={() => setAmslerEye(value)}
+                            onClick={() => {
+                              setAmslerEye(value);
+                              setShowColorResults(false);
+                              setSubmitStatus({ type: null, message: '' });
+                            }}
                             className={classNames(
                               'rounded-lg border px-3 py-3 text-sm font-bold',
                               amslerEye === value
@@ -874,7 +906,11 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                       <button
                         key={item.key}
                         type="button"
-                        onClick={() => setContrast(item.key)}
+                        onClick={() => {
+                          setContrast(item.key);
+                          setShowColorResults(false);
+                          setSubmitStatus({ type: null, message: '' });
+                        }}
                         className={classNames(
                           'rounded-lg border bg-white px-5 py-6 text-left transition-colors rtl:text-right dark:bg-slate-950',
                           contrast === item.key
@@ -892,19 +928,6 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                       </button>
                     ))}
                   </div>
-
-                  {contrast && (
-                    <ScorePanel
-                      title={t.contrastScoreTitle}
-                      scoreLabel={t.score}
-                      score={`${contrastScore}/4`}
-                      level={contrastLevel}
-                      interpretation={contrastInterpretation}
-                      recommendation={comprehensiveExamRecommendation}
-                      appointmentHref={appointmentHref}
-                      appointmentLabel={t.bookComprehensiveExam}
-                    />
-                  )}
                 </div>
               )}
 
@@ -913,6 +936,23 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                   <h2 className="text-2xl font-bold text-slate-950 dark:text-white">{t.symptomsTitle}</h2>
                   <p className="mt-2 max-w-3xl text-slate-600 dark:text-slate-300">{t.symptomsHelp}</p>
                   <div className="mt-6 grid gap-3 md:grid-cols-2">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSymptoms([]);
+                        setSymptomsReviewed(true);
+                        setShowColorResults(false);
+                        setSubmitStatus({ type: null, message: '' });
+                      }}
+                      className={classNames(
+                        'rounded-lg border px-4 py-4 text-left text-sm font-bold transition-colors rtl:text-right',
+                        symptomsReviewed && symptoms.length === 0
+                          ? 'border-emerald-700 bg-emerald-700 text-white'
+                          : 'border-slate-200 bg-white text-slate-800 hover:bg-slate-50 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100'
+                      )}
+                    >
+                      {t.noSymptoms}
+                    </button>
                     {Object.entries(t.symptomsList).map(([key, label]) => {
                       const isUrgent = urgentSymptoms.includes(key);
                       const active = symptoms.includes(key);
@@ -936,32 +976,24 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                       );
                     })}
                   </div>
-
-                  <ScorePanel
-                    title={t.symptomsScoreTitle}
-                    scoreLabel={t.riskScore}
-                    score={`${symptomRiskScore}`}
-                    level={symptomLevel}
-                    interpretation={symptomsInterpretation}
-                    recommendation={symptomLevel === 'urgent' ? t.urgent : comprehensiveExamRecommendation}
-                    appointmentHref={appointmentHref}
-                    appointmentLabel={t.bookComprehensiveExam}
-                  />
                 </div>
               )}
             </div>
           </section>
 
           <aside className="h-fit rounded-lg border border-white/80 bg-white p-5 shadow-elegant dark:border-cyan-900/50 dark:bg-slate-900 lg:p-6">
-            {!colorCompleted && (
+            {!allTestsCompleted && activeTest === 'color' && (
               <>
-                <h2 className="text-xl font-bold text-slate-950 dark:text-white">{t.resultTitle}</h2>
-                <div className="mt-3">
-                  <ResultBadge level="neutral" label={t.colorResultIncomplete} />
-                </div>
+                <h2 className="text-xl font-bold text-slate-950 dark:text-white">{t.colorScore}</h2>
+                <ResultBadge level={colorCompleted ? (colorResultCategory === 'normal' ? 'reassuring' : colorResultCategory === 'borderline' ? 'monitor' : 'followUp') : 'neutral'} label={colorResultText} />
                 <div className="mt-4 rounded-lg bg-slate-50 p-4 text-sm leading-6 text-slate-700 dark:bg-slate-950/65 dark:text-slate-200">
-                  <p className="font-bold">{t.plate} {currentPlateIndex + 1} / {ishiharaPlates.length}</p>
-                  <p className="mt-2">{t.colorInstruction}</p>
+                  <p className="font-bold">
+                    {t.score}: {colorScore}/{totalIshiharaScore}
+                  </p>
+                  <p className="mt-2">
+                    {colorCompleted ? `${t.deficiencyPattern}: ${deficiencyPattern}` : `${t.plate} ${currentPlateIndex + 1} / ${ishiharaPlates.length}`}
+                  </p>
+                  {!colorCompleted && <p className="mt-2">{t.colorInstruction}</p>}
                 </div>
                 <div className="mt-4 rounded-lg border border-cyan-100 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950 dark:border-cyan-800 dark:bg-cyan-950/40 dark:text-cyan-50">
                   <p className="font-bold">{t.accuracyTitle}</p>
@@ -970,7 +1002,65 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
               </>
             )}
 
-            {colorCompleted && !showColorResults && (
+            {!allTestsCompleted && activeTest === 'amsler' && (
+              hasAmsler ? (
+                <ScorePanel
+                  title={t.amslerScoreTitle}
+                  scoreLabel={t.score}
+                  score={`${amslerScore}/5`}
+                  level={amslerLevel}
+                  interpretation={amslerInterpretation}
+                  recommendation={comprehensiveExamRecommendation}
+                  appointmentHref={appointmentHref}
+                  appointmentLabel={t.bookComprehensiveExam}
+                />
+              ) : (
+                <TestPromptPanel title={t.amslerScoreTitle} message={t.notCompleted} accuracyTitle={t.accuracyTitle} disclaimer={t.disclaimer} />
+              )
+            )}
+
+            {!allTestsCompleted && activeTest === 'contrast' && (
+              contrast ? (
+                <ScorePanel
+                  title={t.contrastScoreTitle}
+                  scoreLabel={t.score}
+                  score={`${contrastScore}/4`}
+                  level={contrastLevel}
+                  interpretation={contrastInterpretation}
+                  recommendation={comprehensiveExamRecommendation}
+                  appointmentHref={appointmentHref}
+                  appointmentLabel={t.bookComprehensiveExam}
+                />
+              ) : (
+                <TestPromptPanel title={t.contrastScoreTitle} message={t.notCompleted} accuracyTitle={t.accuracyTitle} disclaimer={t.disclaimer} />
+              )
+            )}
+
+            {!allTestsCompleted && activeTest === 'symptoms' && (
+              symptomsCompleted ? (
+                <ScorePanel
+                  title={t.symptomsScoreTitle}
+                  scoreLabel={t.riskScore}
+                  score={`${symptomRiskScore}`}
+                  level={symptomLevel}
+                  interpretation={symptomsInterpretation}
+                  recommendation={symptomLevel === 'urgent' ? t.urgent : comprehensiveExamRecommendation}
+                  appointmentHref={appointmentHref}
+                  appointmentLabel={t.bookComprehensiveExam}
+                />
+              ) : (
+                <TestPromptPanel title={t.symptomsScoreTitle} message={t.notCompleted} accuracyTitle={t.accuracyTitle} disclaimer={t.disclaimer} />
+              )
+            )}
+
+            {!allTestsCompleted && (
+              <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700 dark:border-slate-700 dark:bg-slate-950/65 dark:text-slate-200">
+                <p className="font-black">{t.completed}: {completedCount}/4</p>
+                <p className="mt-1">{t.completeAllTests}</p>
+              </div>
+            )}
+
+            {allTestsCompleted && !showColorResults && (
               <>
                 <h2 className="text-2xl font-black text-slate-950 dark:text-white">{t.colorContactTitle}</h2>
                 <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-slate-300">{t.colorContactText}</p>
@@ -998,8 +1088,9 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
               </>
             )}
 
-            {colorCompleted && showColorResults && (
+            {allTestsCompleted && showColorResults && (
               <>
+                <h2 className="text-2xl font-black text-slate-950 dark:text-white">{t.finalReportTitle}</h2>
                 <div className="rounded-lg border-2 border-cyan-200 bg-cyan-50 p-5 text-cyan-950 shadow-sm dark:border-cyan-700 dark:bg-cyan-950/40 dark:text-cyan-50">
                   <p className="text-sm font-black uppercase tracking-[0.12em] text-cyan-800 dark:text-cyan-200">
                     {t.finalColorTitle}
@@ -1020,9 +1111,43 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                   <p className="mt-2">{colorRecommendation}</p>
                 </div>
 
+                <ScorePanel
+                  title={t.amslerScoreTitle}
+                  scoreLabel={t.score}
+                  score={`${amslerScore}/5`}
+                  level={amslerLevel}
+                  interpretation={amslerInterpretation}
+                  recommendation={comprehensiveExamRecommendation}
+                  appointmentHref={appointmentHref}
+                  appointmentLabel={t.bookComprehensiveExam}
+                />
+
+                <ScorePanel
+                  title={t.contrastScoreTitle}
+                  scoreLabel={t.score}
+                  score={`${contrastScore}/4`}
+                  level={contrastLevel}
+                  interpretation={contrastInterpretation}
+                  recommendation={comprehensiveExamRecommendation}
+                  appointmentHref={appointmentHref}
+                  appointmentLabel={t.bookComprehensiveExam}
+                />
+
+                <ScorePanel
+                  title={t.symptomsScoreTitle}
+                  scoreLabel={t.riskScore}
+                  score={`${symptomRiskScore}`}
+                  level={symptomLevel}
+                  interpretation={symptomsInterpretation}
+                  recommendation={symptomLevel === 'urgent' ? t.urgent : comprehensiveExamRecommendation}
+                  appointmentHref={appointmentHref}
+                  appointmentLabel={t.bookComprehensiveExam}
+                />
+
                 <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-950 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-100">
                   <p className="font-bold">{t.accuracyTitle}</p>
                   <p className="mt-1">{t.disclaimer}</p>
+                  <p className="mt-3 font-bold">{t.annualCheckup}</p>
                 </div>
               </>
             )}
