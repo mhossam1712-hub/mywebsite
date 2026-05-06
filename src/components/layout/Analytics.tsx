@@ -1,6 +1,6 @@
 import Script from 'next/script';
 
-const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
+const gaMeasurementId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID || 'G-93E9P6WSJT';
 const gtmId = process.env.NEXT_PUBLIC_GTM_ID;
 const clarityId = process.env.NEXT_PUBLIC_MICROSOFT_CLARITY_ID;
 
