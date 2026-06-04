@@ -74,14 +74,14 @@ export const sectionText = {
   heroImageCaption: { en: 'Clear diagnostics, calmer visits.', ar: 'تشخيص أوضح وزيارات أكثر راحة.' },
   featureCards: {
     en: [
-      { title: 'Advanced Diagnostics', description: 'Modern care with a calm, expert touch.' },
-      { title: 'Precise Surgery', description: 'Modern care with a calm, expert touch.' },
-      { title: 'Patient First', description: 'Modern care with a calm, expert touch.' },
+      { title: 'Advanced Diagnostics', description: 'Modern imaging supports detailed eye assessments.' },
+      { title: 'Precise Surgery', description: 'Careful techniques support safety in eye procedures.' },
+      { title: 'Patient First', description: 'Personal care keeps visits clear and comfortable.' },
     ],
     ar: [
-      { title: 'تشخيص متقدم', description: 'رعاية حديثة بلمسة هادئة وخبرة دقيقة.' },
-      { title: 'جراحة دقيقة', description: 'رعاية حديثة بلمسة هادئة وخبرة دقيقة.' },
-      { title: 'المريض أولاً', description: 'رعاية حديثة بلمسة هادئة وخبرة دقيقة.' },
+      { title: 'تشخيص متقدم', description: 'تصوير حديث يدعم تقييماً أوضح للعين.' },
+      { title: 'جراحة دقيقة', description: 'تقنيات حذرة تدعم السلامة في إجراءات العين.' },
+      { title: 'المريض أولاً', description: 'رعاية شخصية لزيارة مريحة وواضحة.' },
     ],
   },
   testimonials: {
@@ -186,6 +186,10 @@ export function getLocalizedServices(locale: LocaleLike) {
   return SERVICES.map((service) => ({
     ...service,
     ...serviceArabic[service.id as keyof typeof serviceArabic],
+    name: service.nameAr ?? serviceArabic[service.id as keyof typeof serviceArabic]?.name ?? service.name,
+    description:
+      service.descriptionAr ?? serviceArabic[service.id as keyof typeof serviceArabic]?.description ?? service.description,
+    features: service.featuresAr ?? serviceArabic[service.id as keyof typeof serviceArabic]?.features ?? service.features,
   }));
 }
 
@@ -196,6 +200,15 @@ export function getLocalizedDoctors(locale: LocaleLike) {
     ...doctor,
     ...doctorArabic[doctor.id as keyof typeof doctorArabic],
   }));
+}
+
+export function getDoctorImageAlt(doctorId: string, fallbackName: string) {
+  const doctorImageAlt = {
+    'dr-1': 'Prof. Ahmed Hossam Abdalla, Professor of Ophthalmology at Abdalla Eye Clinic Alexandria',
+    'dr-2': 'Dr. Mohamed Hossam Abdalla, Ophthalmologist at Abdalla Eye Clinic Alexandria',
+  } as const;
+
+  return doctorImageAlt[doctorId as keyof typeof doctorImageAlt] ?? fallbackName;
 }
 
 export function getLocalizedFaqs(locale: LocaleLike) {

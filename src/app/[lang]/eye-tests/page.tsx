@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { setRequestLocale } from 'next-intl/server';
+import { MobileBottomActionBar } from '@/components/common/MobileBottomActionBar';
 import { isValidLocale } from '@/i18n/config';
+import { createRouteMetadata } from '@/lib/seo';
 import EyeTestsClient from './EyeTestsClient';
 
 type PageProps = {
@@ -9,29 +11,12 @@ type PageProps = {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { lang } = await params;
-  const isArabic = lang === 'ar';
 
-  return {
-    title: isArabic ? 'اختبارات النظر التفاعلية' : 'Interactive Eye Tests',
-    description: isArabic
-      ? 'فحوصات عيون تفاعلية أولية تشمل لوحات إيشيهارا، شبكة أمسلر، حساسية التباين، وفرز أعراض العيون مع عرض النتيجة للمريض.'
-      : 'Try interactive online eye screening tools with Ishihara color plates, Amsler grid, contrast sensitivity, and symptom triage with visible patient results.',
-    alternates: {
-      canonical: `/${isValidLocale(lang) ? lang : 'en'}/eye-tests`,
-      languages: {
-        en: '/en/eye-tests',
-        ar: '/ar/eye-tests',
-      },
-    },
-    openGraph: {
-      title: isArabic ? 'اختبارات النظر التفاعلية' : 'Interactive Eye Tests',
-      description: isArabic
-        ? 'فحوصات أولية أكثر ملاءمة للموقع مع حجز متابعة عند الحاجة.'
-        : 'Online screening tools designed for safer, more reliable follow-up decisions.',
-      type: 'website',
-      images: ['/assets/images/hero-ophthalmologist.jpg'],
-    },
-  };
+  return createRouteMetadata({
+    lang: isValidLocale(lang) ? lang : 'en',
+    path: '/eye-tests',
+    route: 'eyeTests',
+  });
 }
 
 export default async function EyeTestsPage({ params }: PageProps) {
@@ -41,5 +26,10 @@ export default async function EyeTestsPage({ params }: PageProps) {
     setRequestLocale(lang);
   }
 
-  return <EyeTestsClient locale={lang} />;
+  return (
+    <>
+      <EyeTestsClient locale={lang} />
+      <MobileBottomActionBar locale={lang} />
+    </>
+  );
 }

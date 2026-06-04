@@ -13,11 +13,19 @@ export interface Doctor {
 
 export interface Service {
   id: string;
+  slug?: string;
   name: string;
+  nameAr?: string;
   description: string;
+  descriptionAr?: string;
   icon: string;
   category: 'diagnostic' | 'surgical' | 'preventive' | 'treatment';
   features: string[];
+  featuresAr?: string[];
+  seoTitle?: string;
+  seoTitleAr?: string;
+  seoDescription?: string;
+  seoDescriptionAr?: string;
 }
 
 export interface Appointment {
@@ -77,13 +85,20 @@ export interface ContactForm {
 
 export interface ClinicInfo {
   name: string;
+  nameAr: string;
+  legalName: string;
+  legalNameAr: string;
   description: string;
+  descriptionAr: string;
   phone: string;
   email: string;
   address: string;
+  addressAr: string;
   city: string;
+  cityAr: string;
   postalCode: string;
   country: string;
+  countryAr: string;
   workingHours: WorkingHours;
   socialMedia: SocialLinks;
 }
@@ -106,9 +121,7 @@ export interface TimeSlot {
 
 export interface SocialLinks {
   facebook?: string;
-  twitter?: string;
   instagram?: string;
-  linkedin?: string;
   whatsapp?: string;
 }
 

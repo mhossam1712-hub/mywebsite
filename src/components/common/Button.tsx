@@ -24,11 +24,11 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const baseStyles = 'inline-flex items-center justify-center font-semibold transition-all duration-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm hover:-translate-y-0.5 active:translate-y-0 disabled:hover:translate-y-0';
+    const baseStyles = 'inline-flex items-center justify-center font-semibold rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 shadow-sm motion-safe:md:transition-transform motion-safe:md:duration-200 motion-safe:md:hover:-translate-y-0.5 active:translate-y-0 disabled:hover:translate-y-0';
 
     const variantStyles = {
       primary: 'bg-cyan-700 text-white shadow-glow hover:bg-cyan-800 dark:bg-cyan-600 dark:hover:bg-cyan-500 focus:ring-cyan-500',
-      secondary: 'border border-cyan-200 bg-white/85 text-cyan-900 shadow-elegant backdrop-blur hover:bg-cyan-50 dark:border-cyan-800 dark:bg-cyan-950/40 dark:text-cyan-100 dark:hover:bg-cyan-900/60 focus:ring-cyan-400',
+      secondary: 'border border-cyan-200 bg-white/85 text-cyan-900 shadow-sm md:shadow-elegant md:backdrop-blur hover:bg-cyan-50 dark:border-cyan-800 dark:bg-cyan-950/40 dark:text-cyan-100 dark:hover:bg-cyan-900/60 focus:ring-cyan-400',
       danger: 'bg-rose-600 text-white hover:bg-rose-700 focus:ring-rose-500',
     };
 

@@ -1,4 +1,4 @@
-# Vision Care Clinic - Ophthalmology Website
+# Abdalla Eye Clinic - Ophthalmology Website
 
 A professional, fully-featured ophthalmology clinic website built with **Next.js 14**, **TypeScript**, **Tailwind CSS**, and **next-intl** for multi-language support (English & Arabic).
 
@@ -242,4 +242,4 @@ This project is licensed under the MIT License.
 
 ---
 
-Built with ❤️ for Vision Care Clinic
+Built for Abdalla Eye Clinic

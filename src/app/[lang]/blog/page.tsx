@@ -1,30 +1,117 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import { MobileBottomActionBar } from '@/components/common/MobileBottomActionBar';
 import { getBlogPosts } from '@/lib/blog';
+import { getSiteUrl } from '@/lib/site-url';
+import {
+  absoluteUrl,
+  canonicalUrl,
+  createRouteMetadata,
+  OG_IMAGES,
+  normalizeLocale,
+  serializeStructuredData,
+} from '@/lib/seo';
 import { localizeBlogMetadata } from '@/utils/localized-content';
-
-export const metadata: Metadata = {
-  title: 'Eye Care Blog | Abdalla Eye Clinic',
-  description:
-    'Expert eye care articles from Abdalla Eye Clinic covering LASIK, cataracts, comprehensive eye exams, and healthy vision habits.',
-};
 
 interface BlogIndexPageProps {
   params: Promise<unknown>;
 }
 
+const path = '/blog';
+
+const seoText = {
+  title: {
+    en: 'Eye Care Blog',
+    ar: 'مدونة العناية بالعين',
+  },
+  description: {
+    en: 'Expert eye care articles from Abdalla Eye Clinic covering LASIK, cataracts, comprehensive eye exams, glaucoma, retina care, and healthy vision habits.',
+    ar: 'مقالات طبية من عيادة عبد الله للعيون عن الليزك والمياه البيضاء وفحوصات العين والجلوكوما والشبكية وعادات الحفاظ على صحة النظر.',
+  },
+} as const;
+
+export async function generateMetadata({ params }: BlogIndexPageProps): Promise<Metadata> {
+  const { lang } = (await params) as { lang: string };
+
+  return createRouteMetadata({
+    lang,
+    path,
+    title: seoText.title,
+    description: seoText.description,
+    image: OG_IMAGES.blog.url,
+    imageAlt: OG_IMAGES.blog.alt,
+  });
+}
+
+function schemaImage(image: string | undefined) {
+  if (!image || image.endsWith('.svg')) return OG_IMAGES.blog.url;
+
+  return image;
+}
+
 export default async function BlogIndexPage({ params }: BlogIndexPageProps) {
   const { lang } = (await params) as { lang: string };
+  const locale = normalizeLocale(lang);
+  const siteUrl = getSiteUrl();
   const posts = await getBlogPosts();
-  const localizedPosts = posts.map((post) => localizeBlogMetadata(post, lang));
+  const localizedPosts = posts.map((post) => localizeBlogMetadata(post, locale));
   const [featuredPost, ...secondaryPosts] = localizedPosts;
-  const isArabic = lang === 'ar';
+  const isArabic = locale === 'ar';
   const textAlign = isArabic ? 'text-right' : 'text-left';
   const metaDirection = isArabic ? 'justify-end' : '';
+  const blogUrl = absoluteUrl(siteUrl, canonicalUrl(locale, path));
+  const blogSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    '@id': `${blogUrl}#blog`,
+    name: isArabic ? seoText.title.ar : seoText.title.en,
+    description: isArabic ? seoText.description.ar : seoText.description.en,
+    url: blogUrl,
+    inLanguage: locale,
+    publisher: {
+      '@id': `${siteUrl}/#clinic`,
+    },
+    blogPost: localizedPosts.map((post) => {
+      const postUrl = absoluteUrl(siteUrl, canonicalUrl(locale, `/blog/${post.slug}`));
+
+      return {
+        '@type': 'BlogPosting',
+        '@id': `${postUrl}#blogposting`,
+        headline: post.title,
+        description: post.description,
+        url: postUrl,
+        datePublished: post.date,
+        dateModified: post.date,
+        image: absoluteUrl(siteUrl, schemaImage(post.image)),
+        articleSection: post.category,
+        author: post.author
+          ? {
+              '@type': 'Person',
+              name: post.author,
+              ...(post.authorTitle ? { jobTitle: post.authorTitle } : {}),
+            }
+          : {
+              '@id': `${siteUrl}/#clinic`,
+            },
+        publisher: {
+          '@id': `${siteUrl}/#clinic`,
+        },
+        mainEntityOfPage: {
+          '@type': 'WebPage',
+          '@id': postUrl,
+        },
+      };
+    }),
+  };
 
   return (
+    <>
     <div className="overflow-hidden bg-[#f7fafb] px-4 py-12 dark:bg-gray-950 sm:py-16 md:py-20">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeStructuredData(blogSchema) }}
+      />
       <div className="mx-auto max-w-7xl">
         <div className="border-b border-slate-300 pb-8 dark:border-slate-700 sm:pb-10">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -46,8 +133,8 @@ export default async function BlogIndexPage({ params }: BlogIndexPageProps) {
 
         {featuredPost && (
           <Link
-            href={`/${lang}/blog/${featuredPost.slug}`}
-            className="group my-8 grid overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900 md:grid-cols-[1.05fr_0.95fr]"
+            href={`/${locale}/blog/${featuredPost.slug}`}
+            className="group my-8 grid overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm motion-safe:md:transition-transform motion-safe:md:duration-300 motion-safe:md:hover:-translate-y-1 motion-safe:md:hover:shadow-xl dark:border-slate-800 dark:bg-slate-900 md:grid-cols-[1.05fr_0.95fr]"
           >
             <div className="relative min-h-72 bg-slate-100 dark:bg-slate-800 sm:min-h-80 md:min-h-full">
               {featuredPost.image && (
@@ -57,7 +144,7 @@ export default async function BlogIndexPage({ params }: BlogIndexPageProps) {
                   fill
                   priority
                   sizes="(min-width: 768px) 50vw, 100vw"
-                  className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                  className="object-cover motion-safe:md:transition-transform motion-safe:md:duration-500 motion-safe:md:group-hover:scale-[1.03]"
                 />
               )}
             </div>
@@ -94,8 +181,8 @@ export default async function BlogIndexPage({ params }: BlogIndexPageProps) {
           {secondaryPosts.map((post) => (
             <Link
               key={post.slug}
-              href={`/${lang}/blog/${post.slug}`}
-              className={`group flex min-h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900 ${textAlign}`}
+              href={`/${locale}/blog/${post.slug}`}
+              className={`group flex min-h-full flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm motion-safe:md:transition-transform motion-safe:md:duration-300 motion-safe:md:hover:-translate-y-1 motion-safe:md:hover:shadow-xl dark:border-slate-800 dark:bg-slate-900 ${textAlign}`}
             >
               {post.image && (
                 <div className="relative aspect-video overflow-hidden bg-slate-100 dark:bg-slate-800">
@@ -104,7 +191,7 @@ export default async function BlogIndexPage({ params }: BlogIndexPageProps) {
                     alt={post.imageAlt ?? post.title}
                     fill
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="object-cover transition-transform duration-300 group-hover:scale-[1.04]"
+                    className="object-cover motion-safe:md:transition-transform motion-safe:md:duration-300 motion-safe:md:group-hover:scale-[1.04]"
                   />
                 </div>
               )}
@@ -127,5 +214,7 @@ export default async function BlogIndexPage({ params }: BlogIndexPageProps) {
         </div>
       </div>
     </div>
+    <MobileBottomActionBar locale={locale} />
+    </>
   );
 }

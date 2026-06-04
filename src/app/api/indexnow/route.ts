@@ -10,6 +10,8 @@ const staticRoutes = [
   '/about',
   '/appointments',
   '/blog',
+  '/branches/smouha',
+  '/branches/raml-station',
   '/contact',
   '/doctors',
   '/eye-tests',

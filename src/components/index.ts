@@ -7,7 +7,7 @@ export { ThemeToggle } from './common/ThemeToggle';
 // Layout Components
 export { Header } from './layout/Header';
 export { Footer } from './layout/Footer';
-export { Navigation } from './layout/Navigation';
+export { Breadcrumbs } from './layout/Breadcrumbs';
 
 // Section Components
 export { HeroSection } from './sections/HeroSection';

@@ -1,6 +1,8 @@
 import { access, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
+import { safeAuthErrorMessage, validateBlogWriteRequest } from '@/lib/blog-admin-auth';
 
 export const runtime = 'nodejs';
 
@@ -57,18 +59,36 @@ async function getAvailableSlug(baseSlug: string) {
   return slug;
 }
 
-export async function POST(request: Request) {
-  const body = (await request.json()) as BlogArticleRequest;
+function safeError(error: string, status: number) {
+  return NextResponse.json({ success: false, error }, { status });
+}
+
+export async function POST(request: NextRequest) {
+  const auth = validateBlogWriteRequest(request);
+
+  if (!auth.ok) {
+    return safeError(safeAuthErrorMessage(auth.reason), auth.status);
+  }
+
+  let body: BlogArticleRequest;
+
+  try {
+    body = (await request.json()) as BlogArticleRequest;
+  } catch {
+    return safeError('Invalid request body', 400);
+  }
+
   const title = body.title?.trim() ?? '';
   const description = body.description?.trim() ?? '';
   const category = body.category?.trim() || 'Eye Health';
   const content = body.content?.trim() ?? '';
 
   if (!title || !description || !content) {
-    return NextResponse.json(
-      { error: 'Title, description, and article content are required.' },
-      { status: 400 }
-    );
+    return safeError('Title, description, and article content are required.', 400);
+  }
+
+  if (title.length > 140 || description.length > 320 || category.length > 80 || content.length > 50000) {
+    return safeError('Submitted article is too large.', 413);
   }
 
   const baseSlug = slugify(body.slug?.trim() || title);
@@ -91,6 +111,7 @@ ${content}
   await writeFile(filePath, mdx, 'utf8');
 
   return NextResponse.json({
+    success: true,
     slug,
     filePath: `src/content/blog/${slug}.mdx`,
   });

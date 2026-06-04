@@ -1,20 +1,30 @@
-'use client';
-
-import React from 'react';
+import type { Metadata } from 'next';
 import Image from 'next/image';
-import { useTranslations } from 'next-intl';
-import { getLocalizedDoctors } from '@/utils/localized-content';
-import { Card, CardBody, CardHeader } from '@/components/common/Card';
-import { Button } from '@/components/common/Button';
 import Link from 'next/link';
-import { useLocale } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
+import { Button } from '@/components/common/Button';
+import { Card, CardBody, CardHeader } from '@/components/common/Card';
+import { MobileBottomActionBar } from '@/components/common/MobileBottomActionBar';
+import { createRouteMetadata } from '@/lib/seo';
+import { getDoctorImageAlt, getLocalizedDoctors } from '@/utils/localized-content';
 
-export default function DoctorsPage() {
-  const t = useTranslations('doctors');
-  const locale = useLocale();
-  const doctors = getLocalizedDoctors(locale);
+type PageProps = {
+  params: Promise<{ lang: string }>;
+};
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { lang } = await params;
+
+  return createRouteMetadata({ lang, path: '/doctors', route: 'doctors' });
+}
+
+export default async function DoctorsPage({ params }: PageProps) {
+  const { lang } = await params;
+  const t = await getTranslations({ locale: lang, namespace: 'doctors' });
+  const doctors = getLocalizedDoctors(lang);
 
   return (
+    <>
     <div className="py-12 md:py-24 bg-white dark:bg-gray-800 transition-colors duration-200">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
@@ -29,7 +39,7 @@ export default function DoctorsPage() {
                 <div className="relative w-full aspect-square overflow-hidden rounded-lg mb-4 bg-gray-100">
                   <Image
                     src={doctor.image}
-                    alt={doctor.name}
+                    alt={getDoctorImageAlt(doctor.id, doctor.name)}
                     fill
                     sizes="(min-width: 768px) 384px, calc(100vw - 80px)"
                     className="h-full w-full object-cover object-top"
@@ -44,7 +54,7 @@ export default function DoctorsPage() {
                     <div>
                       <p className="text-gray-600 font-semibold">{t('experience')}:</p>
                       <p className="text-gray-700 dark:text-gray-300">
-                        {locale === 'ar' ? `${doctor.experience} سنة` : `${doctor.experience} years`}
+                        {lang === 'ar' ? `${doctor.experience} سنة` : `${doctor.experience} years`}
                       </p>
                     </div>
                   )}
@@ -54,16 +64,16 @@ export default function DoctorsPage() {
                   </div>
                   <div>
                     <p className="text-gray-600 dark:text-gray-300 font-semibold">
-                      {locale === 'ar' ? 'المؤهل:' : 'Qualification:'}
+                      {lang === 'ar' ? 'المؤهل:' : 'Qualification:'}
                     </p>
                     <p className="text-gray-700 dark:text-gray-300 text-xs">{doctor.qualification}</p>
                   </div>
                   <p className="text-gray-700 italic pt-2">{doctor.bio}</p>
                 </div>
 
-                <Link href={`/${locale}/appointments`} className="block">
+                <Link href={`/${lang}/appointments`} className="block">
                   <Button fullWidth size="sm">
-                    {locale === 'ar' ? 'احجز مع الطبيب' : `Book with ${doctor.name.split(' ')[0]}`}
+                    {lang === 'ar' ? 'احجز مع الطبيب' : `Book with ${doctor.name.split(' ')[0]}`}
                   </Button>
                 </Link>
               </CardBody>
@@ -72,5 +82,7 @@ export default function DoctorsPage() {
         </div>
       </div>
     </div>
+    <MobileBottomActionBar locale={lang} />
+    </>
   );
 }

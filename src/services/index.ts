@@ -1,2 +1,1 @@
-// API Services
-export { apiClient, appointmentService, contactService, doctorService, serviceService, reviewService } from './api';
+export { contactService } from './api';

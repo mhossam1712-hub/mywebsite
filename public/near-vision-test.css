@@ -1,0 +1,499 @@
+:root {
+  /* Abdalla Eye Clinic palette: navy, white, silver, and light blue. */
+  --navy: #082f49;
+  --navy-deep: #061d33;
+  --white: #ffffff;
+  --silver: #d7dee8;
+  --silver-dark: #6b7788;
+  --light-blue: #dff4ff;
+  --cyan: #0e7490;
+  --success: #0f766e;
+  --warning: #b7791f;
+  --danger: #be123c;
+  --shadow: 0 22px 60px rgba(6, 29, 51, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at top left, rgba(223, 244, 255, 0.95), transparent 34rem),
+    linear-gradient(135deg, #f8fbff 0%, #edf3f8 100%);
+  color: var(--navy-deep);
+  font-family: Arial, "Helvetica Neue", sans-serif;
+}
+
+body[dir="rtl"] {
+  font-family: Tahoma, Arial, "Helvetica Neue", sans-serif;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0;
+}
+
+/* Shared medical-card surface styling. */
+.brand-header,
+.contact-strip,
+.screen,
+.disclaimer {
+  border: 1px solid rgba(215, 222, 232, 0.95);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: var(--shadow);
+}
+
+.brand-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 26px;
+  border-radius: 16px 16px 0 0;
+  background: linear-gradient(135deg, var(--navy) 0%, #0b4f6c 64%, #edf7fb 64%);
+  color: var(--white);
+}
+
+.brand-header h1 {
+  margin: 6px 0 0;
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.05;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--light-blue);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+body[dir="rtl"] .eyebrow {
+  letter-spacing: 0;
+}
+
+.site-line {
+  margin: 10px 0 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 700;
+}
+
+.language-toggle,
+.primary-button,
+.secondary-button,
+.cta-button,
+.letter-button {
+  min-height: 48px;
+  border-radius: 10px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.language-toggle {
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--white);
+  padding: 0 18px;
+}
+
+.contact-strip {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 14px 26px;
+  border-top: 0;
+  color: var(--navy);
+  font-weight: 800;
+}
+
+.contact-strip a {
+  color: var(--cyan);
+  text-decoration: none;
+}
+
+.disclaimer {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: #fff8e5;
+  color: #5b4104;
+  line-height: 1.6;
+}
+
+.screen {
+  display: none;
+  margin-top: 14px;
+  padding: clamp(20px, 4vw, 34px);
+  border-radius: 16px;
+}
+
+.screen.is-active {
+  display: block;
+}
+
+.intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 28px;
+  align-items: center;
+}
+
+.screen h2,
+.screen h3 {
+  margin: 0;
+  color: var(--navy);
+}
+
+.screen p {
+  line-height: 1.7;
+}
+
+.instruction-list {
+  display: grid;
+  gap: 10px;
+  margin: 22px 0 0;
+  padding-inline-start: 22px;
+  color: var(--silver-dark);
+  font-weight: 700;
+  line-height: 1.7;
+}
+
+.distance-card {
+  display: grid;
+  place-items: center;
+  min-height: 220px;
+  border: 1px solid #b9e3f8;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--light-blue), var(--white));
+  color: var(--navy);
+}
+
+.distance-number {
+  font-size: 6rem;
+  font-weight: 900;
+  line-height: 0.9;
+}
+
+.distance-unit {
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
+.primary-button,
+.secondary-button,
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  padding: 13px 22px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.primary-button,
+.cta-button {
+  background: var(--navy);
+  color: var(--white);
+}
+
+.primary-button:hover,
+.cta-button:hover {
+  background: #0b4f6c;
+  transform: translateY(-1px);
+}
+
+.secondary-button {
+  border: 1px solid var(--silver);
+  background: var(--white);
+  color: var(--navy);
+}
+
+.secondary-button:hover {
+  border-color: #9fd3eb;
+  background: var(--light-blue);
+}
+
+#startButton {
+  margin-top: 28px;
+}
+
+.progress-panel,
+.answer-header,
+.test-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.progress-panel {
+  margin-bottom: 18px;
+}
+
+.progress-panel .eyebrow {
+  color: var(--cyan);
+}
+
+.line-counter {
+  flex: none;
+  border-radius: 999px;
+  background: var(--light-blue);
+  color: var(--navy);
+  padding: 10px 14px;
+  font-weight: 900;
+}
+
+.chart-card,
+.answer-panel,
+.booking-panel,
+.result-card {
+  border: 1px solid var(--silver);
+  border-radius: 14px;
+  background: var(--white);
+}
+
+.chart-card {
+  min-height: 260px;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  text-align: center;
+}
+
+.chart-label {
+  margin: 0 0 14px;
+  color: var(--silver-dark);
+  font-size: 0.88rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+body[dir="rtl"] .chart-label {
+  letter-spacing: 0;
+}
+
+/* Localized optotypes are rendered at N-notation point sizes in a high-contrast chart area. */
+.optotype-line {
+  display: flex;
+  justify-content: center;
+  gap: 1em;
+  width: 100%;
+  color: var(--navy-deep);
+  font-weight: 600;
+  line-height: 1.2;
+  word-break: keep-all;
+}
+
+.line-meta {
+  margin: 18px 0 0;
+  color: var(--silver-dark);
+  font-weight: 800;
+}
+
+.answer-panel {
+  margin-top: 18px;
+  padding: 20px;
+}
+
+.selected-answer {
+  min-height: 48px;
+  border: 1px dashed #a8c8d9;
+  border-radius: 10px;
+  background: #f8fbff;
+  padding: 10px 12px;
+  color: var(--navy);
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.selected-answer.is-empty {
+  color: #8b97a6;
+  font-family: Arial, sans-serif;
+  font-size: 0.95rem;
+}
+
+.letter-grid {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.letter-button {
+  border: 1px solid #b8d8e8;
+  background: var(--light-blue);
+  color: var(--navy);
+  font-size: 1.45rem;
+}
+
+.letter-button:hover,
+.letter-button:focus {
+  border-color: var(--cyan);
+  background: #caecfb;
+}
+
+.test-actions {
+  margin-top: 20px;
+}
+
+.test-actions .primary-button,
+.test-actions .secondary-button {
+  width: 50%;
+}
+
+.results-summary {
+  color: var(--silver-dark);
+  font-weight: 700;
+}
+
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.result-card {
+  padding: 20px;
+}
+
+.result-card h3 {
+  margin-bottom: 12px;
+}
+
+.result-score {
+  color: var(--navy);
+  font-size: 2rem;
+  font-weight: 900;
+}
+
+.result-category {
+  display: inline-flex;
+  margin: 14px 0;
+  border-radius: 999px;
+  padding: 8px 12px;
+  color: var(--white);
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.result-category.good {
+  background: var(--success);
+}
+
+.result-category.mild {
+  background: var(--warning);
+}
+
+.result-category.poor {
+  background: var(--danger);
+}
+
+.booking-panel {
+  margin-top: 18px;
+  padding: 22px;
+  background: linear-gradient(135deg, var(--navy), #0d5f82);
+  color: var(--white);
+}
+
+.booking-panel h3,
+.booking-panel p {
+  color: var(--white);
+}
+
+.cta-button {
+  margin-top: 12px;
+  background: var(--white);
+  color: var(--navy);
+}
+
+.cta-button:hover {
+  background: var(--light-blue);
+  color: var(--navy);
+}
+
+.restart-button {
+  margin-top: 18px;
+}
+
+/* Mobile layout keeps controls large enough for comfortable tapping. */
+@media (max-width: 760px) {
+  .app-shell {
+    width: min(100% - 20px, 1120px);
+    padding: 10px 0 24px;
+  }
+
+  .brand-header,
+  .contact-strip,
+  .progress-panel,
+  .answer-header,
+  .test-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .brand-header {
+    padding: 22px;
+    background: linear-gradient(135deg, var(--navy) 0%, #0b4f6c 100%);
+  }
+
+  .contact-strip {
+    padding: 14px 18px;
+  }
+
+  .intro-grid,
+  .results-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .distance-card {
+    min-height: 150px;
+  }
+
+  .distance-number {
+    font-size: 4.75rem;
+  }
+
+  .line-counter {
+    width: fit-content;
+  }
+
+  .chart-card {
+    min-height: 220px;
+    padding: 18px 12px;
+  }
+
+  .optotype-line {
+    gap: 0.38em;
+  }
+
+  .letter-grid {
+    grid-template-columns: repeat(4, minmax(48px, 1fr));
+  }
+
+  .test-actions .primary-button,
+  .test-actions .secondary-button,
+  .language-toggle,
+  .cta-button {
+    width: 100%;
+  }
+}

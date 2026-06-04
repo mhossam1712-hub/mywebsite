@@ -6,13 +6,17 @@ import React, { useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/common/Button';
 import { Input } from '@/components/common/Input';
+import { whatsAppHref } from '@/lib/clinic';
 import { classNames } from '@/utils';
 
 type EyeTestsClientProps = {
   locale: string;
 };
 
-type TestKey = 'color' | 'amsler' | 'contrast' | 'symptoms';
+type TestKey = 'color' | 'amsler' | 'contrast' | 'symptoms' | 'near';
+type NearEyeKey = 'left' | 'right';
+type NearLocale = 'en' | 'ar';
+type NearCategory = 'good' | 'mild' | 'poor';
 
 type LeadFormData = {
   name: string;
@@ -27,7 +31,7 @@ const copy = {
     eyebrow: 'Professional online screening',
     title: 'Interactive eye screening checks',
     intro:
-      'These checks are designed for online use: color discrimination, central vision distortion, contrast sensitivity, and symptom triage. They improve screening quality without pretending to replace a calibrated clinic exam.',
+      'These checks are designed for online use: color discrimination, central vision distortion, contrast sensitivity, near vision, and symptom triage. They improve screening quality without pretending to replace a calibrated clinic exam.',
     disclaimer:
       'Online screening is affected by screen brightness, device color, room lighting, and viewing distance. It cannot diagnose disease or replace an ophthalmologist exam.',
     urgent:
@@ -44,13 +48,14 @@ const copy = {
       amsler: 'Central vision',
       contrast: 'Contrast',
       symptoms: 'Symptoms',
+      near: 'Near vision',
     },
     start: 'Start check',
     colorTitle: 'Ishihara color plate screening',
     colorHelp:
       'Read the number you see on each Ishihara plate. Plates that are tracing-only have been removed. Each plate shown is worth one point when answered correctly.',
     colorInstruction: 'Type the number you see, or choose Nothing if you cannot see a number.',
-    reset: 'Reset',
+    reset: 'Start from the beginning',
     colorScore: 'Ishihara score',
     plate: 'Plate',
     answer: 'What number do you see?',
@@ -123,15 +128,40 @@ const copy = {
       'Your selected symptoms suggest that a clinic review is appropriate, especially if symptoms are new, worsening, or affecting daily activities.',
     symptomsInterpretationUrgent:
       'Urgent symptoms were selected. Please contact an eye doctor or emergency service now, especially for sudden vision loss, severe pain, new flashes/floaters, or a red painful eye.',
+    nearTitle: 'Near-vision screening at 40 cm',
+    nearHelp:
+      'Hold your screen about 40 cm away and keep browser zoom at 100%. Test the right eye first, then the left eye, and select the letters you can read in the exact order shown.',
+    nearDistance: 'Test distance: 40 cm from screen',
+    nearStepLeft: 'Cover your right eye and test your left eye.',
+    nearStepRight: 'Cover your left eye and test your right eye.',
+    nearLine: 'Near-vision line',
+    nearSelectedLetters: 'Selected letters',
+    nearSelectLetters: 'Select the letters you can read',
+    nearNoLettersSelected: 'No letters selected yet',
+    nearCannotRead: 'I cannot read this line',
+    nearSubmitLine: 'Submit line',
+    nearClear: 'Clear',
+    nearReset: 'Start from the beginning',
+    nearScoreTitle: 'Near-vision score',
+    nearLeftResultTitle: 'Left eye near-vision result',
+    nearRightResultTitle: 'Right eye near-vision result',
+    nearSmallestLine: 'Smallest line read',
+    nearGoodCategory: 'Good vision',
+    nearMildCategory: 'Mild difficulty',
+    nearPoorCategory: 'Moderate or poor score',
+    nearGoodRecommendation: 'Good vision: recommend routine checkup.',
+    nearMildRecommendation: 'Mild difficulty: recommend eye examination.',
+    nearPoorRecommendation: 'Moderate or poor score: strongly recommend booking an appointment.',
+    nearIncomplete: 'Complete both eyes to show your near-vision score.',
     bookComprehensiveExam: 'Book a comprehensive eye exam',
     annualCheckup:
       'Even if your screening looks reassuring, schedule an annual eye checkup to protect long-term eye health.',
     colorContactTitle: 'Your details',
-    colorContactText: 'Complete all four checks, then enter your details to view the full screening report. Your report will be shown immediately on this page.',
+    colorContactText: 'Complete all five checks, then enter your details to view the full screening report. Your report will be shown immediately on this page.',
     showResults: 'Show my results',
     finalColorTitle: 'Color vision screening result',
     finalReportTitle: 'Your eye screening report',
-    completeAllTests: 'Complete all four checks to unlock your report.',
+    completeAllTests: 'Complete all five checks to unlock your report.',
     noSymptoms: 'No symptoms noticed',
     interpretationTitle: 'Educational interpretation',
     recommendationTitle: 'Recommendation',
@@ -166,12 +196,18 @@ const copy = {
     error: 'Something went wrong. Please call the clinic if the issue continues.',
     required: 'This field is required',
     invalidEmail: 'Enter a valid email address',
+    scoreCtaText:
+      'Scored lower than expected? Protect your vision by scheduling a professional, calibrated eye exam at our Smouha or Raml Station branches.',
+    scoreCtaButton: 'Book an Appointment / احجز موعدك الآن',
+    scoreCtaAria: 'Book a calibrated eye exam on WhatsApp',
+    whatsappBookingMessage:
+      'Hello Abdalla Eye Clinic. I scored lower than expected on the online eye test and would like to schedule a professional, calibrated eye exam at Smouha or Raml Station.',
   },
   ar: {
     eyebrow: 'فحص أولي احترافي على الموقع',
     title: 'فحوصات عيون تفاعلية',
     intro:
-      'هذه الفحوصات مناسبة للاستخدام على الموقع: تمييز الألوان، تشوه الرؤية المركزية، حساسية التباين، وفرز الأعراض. الهدف تحسين جودة الفحص الأولي دون اعتباره بديلاً عن فحص العيادة.',
+      'هذه الفحوصات مناسبة للاستخدام على الموقع: تمييز الألوان، تشوه الرؤية المركزية، حساسية التباين، الرؤية القريبة، وفرز الأعراض. الهدف تحسين جودة الفحص الأولي دون اعتباره بديلاً عن فحص العيادة.',
     disclaimer:
       'يتأثر الفحص على الموقع بسطوع الشاشة وألوان الجهاز وإضاءة الغرفة والمسافة. لا يشخص مرضاً ولا يغني عن فحص طبيب العيون.',
     urgent:
@@ -188,13 +224,14 @@ const copy = {
       amsler: 'الرؤية المركزية',
       contrast: 'التباين',
       symptoms: 'الأعراض',
+      near: 'الرؤية القريبة',
     },
     start: 'ابدأ الفحص',
     colorTitle: 'فحص ألوان إيشيهارا',
     colorHelp:
       'اكتب الرقم الذي تراه في كل لوحة من لوحات إيشيهارا. تمت إزالة اللوحات التي تعتمد على التتبع. كل لوحة ظاهرة تساوي نقطة واحدة عند الإجابة الصحيحة.',
     colorInstruction: 'اكتب الرقم الذي تراه، أو اختر لا أرى شيئاً إذا لم يظهر رقم.',
-    reset: 'إعادة ضبط',
+    reset: 'ابدأ من البداية',
     colorScore: 'درجة إيشيهارا',
     plate: 'لوحة',
     answer: 'ما الرقم الذي تراه؟',
@@ -267,15 +304,40 @@ const copy = {
       'الأعراض المختارة تشير إلى أن مراجعة العيادة مناسبة، خاصة إذا كانت جديدة أو تزداد أو تؤثر على النشاط اليومي.',
     symptomsInterpretationUrgent:
       'تم اختيار أعراض عاجلة. يرجى التواصل مع طبيب عيون أو الطوارئ الآن، خاصة مع فقدان مفاجئ للنظر أو ألم شديد أو ومضات/عوائم جديدة أو احمرار مؤلم.',
+    nearTitle: 'فحص الرؤية القريبة على مسافة 40 سم',
+    nearHelp:
+      'اجعل الشاشة على مسافة 40 سم تقريباً مع ضبط تكبير المتصفح على 100%. اختبر العين اليمنى أولاً ثم العين اليسرى، واختر الحروف التي تستطيع قراءتها بنفس الترتيب الظاهر.',
+    nearDistance: 'مسافة الاختبار: 40 سم من الشاشة',
+    nearStepLeft: 'غط العين اليمنى واختبر العين اليسرى.',
+    nearStepRight: 'غط العين اليسرى واختبر العين اليمنى.',
+    nearLine: 'سطر الرؤية القريبة',
+    nearSelectedLetters: 'الحروف المختارة',
+    nearSelectLetters: 'اختر الحروف العربية التي تستطيع قراءتها',
+    nearNoLettersSelected: 'لم يتم اختيار حروف بعد',
+    nearCannotRead: 'لا أستطيع قراءة هذا السطر',
+    nearSubmitLine: 'تأكيد السطر',
+    nearClear: 'مسح',
+    nearReset: 'ابدأ من البداية',
+    nearScoreTitle: 'درجة الرؤية القريبة',
+    nearLeftResultTitle: 'نتيجة الرؤية القريبة للعين اليسرى',
+    nearRightResultTitle: 'نتيجة الرؤية القريبة للعين اليمنى',
+    nearSmallestLine: 'أصغر سطر تمت قراءته',
+    nearGoodCategory: 'رؤية جيدة',
+    nearMildCategory: 'صعوبة بسيطة',
+    nearPoorCategory: 'نتيجة متوسطة أو ضعيفة',
+    nearGoodRecommendation: 'رؤية جيدة: ننصح بالفحص الدوري.',
+    nearMildRecommendation: 'صعوبة بسيطة: ننصح بإجراء فحص عين.',
+    nearPoorRecommendation: 'نتيجة متوسطة أو ضعيفة: ننصح بشدة بحجز موعد.',
+    nearIncomplete: 'أكمل اختبار العينين لعرض درجة الرؤية القريبة.',
     bookComprehensiveExam: 'احجز فحص عين شامل',
     annualCheckup:
       'حتى إذا كانت نتيجة الفحص مطمئنة، احرص على فحص سنوي لصحة العين والاكتشاف المبكر.',
     colorContactTitle: 'بياناتك',
-    colorContactText: 'أكمل الفحوصات الأربعة، ثم أدخل بياناتك لعرض التقرير الكامل فوراً على هذه الصفحة.',
+    colorContactText: 'أكمل الفحوصات الخمسة، ثم أدخل بياناتك لعرض التقرير الكامل فوراً على هذه الصفحة.',
     showResults: 'عرض النتيجة',
     finalColorTitle: 'نتيجة فحص تمييز الألوان',
     finalReportTitle: 'تقرير فحوصات العين',
-    completeAllTests: 'أكمل الفحوصات الأربعة لفتح التقرير.',
+    completeAllTests: 'أكمل الفحوصات الخمسة لفتح التقرير.',
     noSymptoms: 'لا توجد أعراض ملحوظة',
     interpretationTitle: 'تفسير تعليمي',
     recommendationTitle: 'التوصية',
@@ -310,6 +372,12 @@ const copy = {
     error: 'حدث خطأ. يرجى الاتصال بالعيادة إذا استمرت المشكلة.',
     required: 'هذا الحقل مطلوب',
     invalidEmail: 'أدخل بريداً إلكترونياً صحيحاً',
+    scoreCtaText:
+      'هل كانت نتيجتك أقل من المتوقع؟ احمِ نظرك بحجز فحص عين احترافي ومعاير في فرعي سموحة أو محطة الرمل.',
+    scoreCtaButton: 'Book an Appointment / احجز موعدك الآن',
+    scoreCtaAria: 'احجز فحص عين معاير عبر واتساب',
+    whatsappBookingMessage:
+      'مرحباً عيادة عبد الله للعيون. نتيجتي في فحص العين على الموقع كانت أقل من المتوقع وأرغب في حجز فحص عين احترافي ومعاير في فرع سموحة أو محطة الرمل.',
   },
 } as const;
 
@@ -339,9 +407,145 @@ const contrastRows = [
   { key: 'veryLow', word: 'CLARITY', opacity: 0.25 },
 ] as const;
 
+const nearVisionLines = [
+  {
+    id: 1,
+    acuity: 'N24',
+    fontSize: '24pt',
+    letters: { en: ['C', 'D', 'H', 'K', 'N'], ar: ['ح', 'د', 'ر', 'س', 'ك'] },
+  },
+  {
+    id: 2,
+    acuity: 'N18',
+    fontSize: '18pt',
+    letters: { en: ['O', 'R', 'S', 'V', 'Z'], ar: ['م', 'ن', 'ع', 'ط', 'ف'] },
+  },
+  {
+    id: 3,
+    acuity: 'N14',
+    fontSize: '14pt',
+    letters: { en: ['K', 'N', 'C', 'Z', 'R'], ar: ['ق', 'ل', 'ب', 'ص', 'ح'] },
+  },
+  {
+    id: 4,
+    acuity: 'N10',
+    fontSize: '10pt',
+    letters: { en: ['S', 'V', 'D', 'H', 'O'], ar: ['د', 'ك', 'م', 'س', 'ن'] },
+  },
+  {
+    id: 5,
+    acuity: 'N8',
+    fontSize: '8pt',
+    letters: { en: ['Z', 'C', 'R', 'N', 'K'], ar: ['ع', 'ط', 'ف', 'ق', 'ل'] },
+  },
+  {
+    id: 6,
+    acuity: 'N6',
+    fontSize: '6pt',
+    letters: { en: ['D', 'O', 'S', 'H', 'V'], ar: ['ب', 'ص', 'ح', 'د', 'ر'] },
+  },
+  {
+    id: 7,
+    acuity: 'N5',
+    fontSize: '5pt',
+    letters: { en: ['N', 'K', 'Z', 'C', 'R'], ar: ['س', 'ك', 'م', 'ن', 'ع'] },
+  },
+] as const;
+
+const nearLetterOptions = {
+  en: ['C', 'D', 'H', 'K', 'N', 'O', 'R', 'S', 'V', 'Z'],
+  ar: ['ح', 'د', 'ر', 'س', 'ك', 'م', 'ن', 'ع', 'ط', 'ف', 'ق', 'ل', 'ب', 'ص'],
+} as const;
+const totalNearVisionScore = nearVisionLines.length;
+type NearVisionLine = (typeof nearVisionLines)[number];
+type NearVisionPlateSet = Record<NearEyeKey, Record<NearLocale, Record<number, string[]>>>;
+
 const urgentSymptoms = ['suddenLoss', 'pain', 'flashes', 'redness'];
 const followUpSymptoms = ['diabetes'];
 const mildSymptoms = ['night', 'dryness', 'headache'];
+
+function shuffleNearLetters(letters: readonly string[]) {
+  const shuffled = [...letters];
+
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}
+
+function createNearLineLetters(locale: NearLocale, line: NearVisionLine, previousLetters?: readonly string[]) {
+  const letterCount = line.letters[locale].length;
+  const previous = previousLetters?.join('');
+
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    const candidate = shuffleNearLetters(nearLetterOptions[locale]).slice(0, letterCount);
+    if (!previous || candidate.join('') !== previous) return candidate;
+  }
+
+  const fallback = shuffleNearLetters(nearLetterOptions[locale]).slice(0, letterCount);
+  return fallback.length > 1 ? [...fallback.slice(1), fallback[0]] : fallback;
+}
+
+function createNearVisionPlateSet(): NearVisionPlateSet {
+  const plateSet: NearVisionPlateSet = {
+    left: { en: {}, ar: {} },
+    right: { en: {}, ar: {} },
+  };
+
+  (['en', 'ar'] as NearLocale[]).forEach((locale) => {
+    nearVisionLines.forEach((line) => {
+      const rightLetters = createNearLineLetters(locale, line);
+      const leftLetters = createNearLineLetters(locale, line, rightLetters);
+      plateSet.right[locale][line.id] = rightLetters;
+      plateSet.left[locale][line.id] = leftLetters;
+    });
+  });
+
+  return plateSet;
+}
+
+function getNearLineLetters(line: NearVisionLine, locale: NearLocale, eye: NearEyeKey, plateSet: NearVisionPlateSet) {
+  return plateSet[eye][locale][line.id] ?? line.letters[locale];
+}
+
+function nearAnswerIsCorrect(
+  answer: string[] | undefined,
+  line: NearVisionLine,
+  locale: NearLocale,
+  eye: NearEyeKey,
+  plateSet: NearVisionPlateSet
+) {
+  return Boolean(answer) && answer?.join('') === getNearLineLetters(line, locale, eye, plateSet).join('');
+}
+
+function getNearLastCorrectLineIndex(
+  answers: Record<number, string[]>,
+  locale: NearLocale,
+  eye: NearEyeKey,
+  plateSet: NearVisionPlateSet
+) {
+  let lastCorrectIndex = -1;
+
+  for (let index = 0; index < nearVisionLines.length; index += 1) {
+    const line = nearVisionLines[index];
+    const answer = answers[line.id];
+
+    if (!answer) break;
+    if (!nearAnswerIsCorrect(answer, line, locale, eye, plateSet)) break;
+
+    lastCorrectIndex = index;
+  }
+
+  return lastCorrectIndex;
+}
+
+function getNearCategory(lastCorrectLineIndex: number): NearCategory {
+  if (lastCorrectLineIndex >= 5) return 'good';
+  if (lastCorrectLineIndex >= 3) return 'mild';
+  return 'poor';
+}
 
 function normalizeIshiharaAnswer(value: string) {
   const normalized = value
@@ -440,8 +644,72 @@ function TestPromptPanel({
   );
 }
 
+function ProfessionalExamCta({
+  message,
+  buttonLabel,
+  href,
+  ariaLabel,
+}: {
+  message: string;
+  buttonLabel: string;
+  href: string;
+  ariaLabel: string;
+}) {
+  return (
+    <div className="mt-4 rounded-lg border border-emerald-200 bg-[linear-gradient(135deg,#ecfdf5_0%,#f0fdfa_54%,#eff6ff_100%)] p-4 shadow-sm dark:border-emerald-500/35 dark:bg-[linear-gradient(135deg,rgba(6,78,59,0.45)_0%,rgba(8,47,73,0.5)_100%)] sm:p-5">
+      <p className="text-sm font-bold leading-6 text-slate-900 dark:text-emerald-50 sm:text-base">
+        {message}
+      </p>
+      <a
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={ariaLabel}
+        className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-emerald-600 px-5 py-3 text-center text-sm font-black text-white shadow-sm transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 dark:bg-emerald-500 dark:text-slate-950 dark:hover:bg-emerald-400 dark:focus:ring-offset-slate-950 sm:w-auto"
+      >
+        {buttonLabel}
+      </a>
+    </div>
+  );
+}
+
+function NearVisionResultCard({
+  title,
+  lineLabel,
+  score,
+  category,
+  categoryLabel,
+  recommendation,
+}: {
+  title: string;
+  lineLabel: string;
+  score: string;
+  category: NearCategory;
+  categoryLabel: string;
+  recommendation: string;
+}) {
+  const categoryClasses = {
+    good: 'bg-emerald-700 text-white dark:bg-emerald-500 dark:text-slate-950',
+    mild: 'bg-amber-600 text-white dark:bg-amber-400 dark:text-slate-950',
+    poor: 'bg-rose-700 text-white dark:bg-rose-500 dark:text-white',
+  };
+
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-4 text-sm leading-6 text-slate-700 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-200">
+      <p className="font-black text-slate-950 dark:text-white">{title}</p>
+      <p className="mt-2 text-2xl font-black text-cyan-900 dark:text-cyan-100">{score}</p>
+      <p className="mt-1 font-semibold">{lineLabel}</p>
+      <span className={classNames('mt-3 inline-flex rounded-full px-3 py-1 text-xs font-black', categoryClasses[category])}>
+        {categoryLabel}
+      </span>
+      <p className="mt-2">{recommendation}</p>
+    </div>
+  );
+}
+
 export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
   const isArabic = locale === 'ar';
+  const nearLocale = isArabic ? 'ar' : 'en';
   const t = isArabic ? copy.ar : copy.en;
   const [activeTest, setActiveTest] = useState<TestKey>('color');
   const [currentPlateIndex, setCurrentPlateIndex] = useState(0);
@@ -451,6 +719,17 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
   const [contrast, setContrast] = useState('');
   const [symptoms, setSymptoms] = useState<string[]>([]);
   const [symptomsReviewed, setSymptomsReviewed] = useState(false);
+  const [nearEye, setNearEye] = useState<NearEyeKey>('right');
+  const [nearLineIndex, setNearLineIndex] = useState(0);
+  const [nearAnswers, setNearAnswers] = useState<Record<NearEyeKey, Record<number, string[]>>>({
+    left: {},
+    right: {},
+  });
+  const [nearCompletedEyes, setNearCompletedEyes] = useState<Record<NearEyeKey, boolean>>({
+    left: false,
+    right: false,
+  });
+  const [nearPlateSet, setNearPlateSet] = useState<NearVisionPlateSet>(() => createNearVisionPlateSet());
   const [showColorResults, setShowColorResults] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<{ type: 'success' | 'error' | null; message: string }>({
     type: null,
@@ -464,6 +743,10 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
   } = useForm<LeadFormData>();
 
   const currentPlate = ishiharaPlates[currentPlateIndex];
+  const currentNearLine = nearVisionLines[nearLineIndex];
+  const currentNearLetters = getNearLineLetters(currentNearLine, nearLocale, nearEye, nearPlateSet);
+  const currentNearLetterOptions = nearLetterOptions[nearLocale];
+  const currentNearAnswer = nearAnswers[nearEye][currentNearLine.id] ?? [];
   const colorCompleted = ishiharaPlates.every((plate) => ishiharaAnswers[plate.plate] !== undefined);
   const colorScore = ishiharaPlates.filter((plate) => {
     return normalizeIshiharaAnswer(ishiharaAnswers[plate.plate] ?? '') === plate.answer;
@@ -514,9 +797,31 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
   const hasAmsler = amslerFindings.length > 0;
   const hasSymptoms = symptoms.length > 0;
   const symptomsCompleted = symptomsReviewed;
-  const completedCount = [colorCompleted, hasAmsler, Boolean(contrast), symptomsCompleted].filter(Boolean).length;
-  const allTestsCompleted = colorCompleted && hasAmsler && Boolean(contrast) && symptomsCompleted;
+  const nearCompleted = nearCompletedEyes.left && nearCompletedEyes.right;
+  const nearLeftLastCorrectLineIndex = getNearLastCorrectLineIndex(nearAnswers.left, nearLocale, 'left', nearPlateSet);
+  const nearRightLastCorrectLineIndex = getNearLastCorrectLineIndex(nearAnswers.right, nearLocale, 'right', nearPlateSet);
+  const nearLeftScore = nearLeftLastCorrectLineIndex + 1;
+  const nearRightScore = nearRightLastCorrectLineIndex + 1;
+  const nearLeftCategory = getNearCategory(nearLeftLastCorrectLineIndex);
+  const nearRightCategory = getNearCategory(nearRightLastCorrectLineIndex);
+  const nearLevel: ResultLevel = !nearCompleted
+    ? 'neutral'
+    : nearLeftCategory === 'poor' || nearRightCategory === 'poor'
+      ? 'followUp'
+      : nearLeftCategory === 'mild' || nearRightCategory === 'mild'
+        ? 'monitor'
+        : 'reassuring';
+  const nearInterpretation = !nearCompleted
+    ? t.nearIncomplete
+    : nearLevel === 'reassuring'
+      ? t.nearGoodRecommendation
+      : nearLevel === 'monitor'
+        ? t.nearMildRecommendation
+        : t.nearPoorRecommendation;
+  const completedCount = [colorCompleted, hasAmsler, Boolean(contrast), symptomsCompleted, nearCompleted].filter(Boolean).length;
+  const allTestsCompleted = colorCompleted && hasAmsler && Boolean(contrast) && symptomsCompleted && nearCompleted;
   const appointmentHref = `/${locale}/appointments`;
+  const whatsappBookingHref = whatsAppHref(t.whatsappBookingMessage) ?? appointmentHref;
 
   const amslerAbnormalFindings = amslerFindings.filter((finding) => finding !== 'straight');
   const amslerDeductions = amslerAbnormalFindings.reduce((total, finding) => {
@@ -575,16 +880,34 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
         ? t.symptomsInterpretationMonitor
         : t.symptomsInterpretationReassuring;
   const comprehensiveExamRecommendation = `${t.bookComprehensiveExam}. ${t.annualCheckup}`;
+  const nearScoreText = (lastCorrectLineIndex: number) =>
+    lastCorrectLineIndex >= 0
+      ? `${nearVisionLines[lastCorrectLineIndex].acuity} (${lastCorrectLineIndex + 1}/${totalNearVisionScore})`
+      : `0/${totalNearVisionScore}`;
+  const nearCategoryLabel = (category: NearCategory) => {
+    if (category === 'good') return t.nearGoodCategory;
+    if (category === 'mild') return t.nearMildCategory;
+    return t.nearPoorCategory;
+  };
+  const nearCategoryRecommendation = (category: NearCategory) => {
+    if (category === 'good') return t.nearGoodRecommendation;
+    if (category === 'mild') return t.nearMildRecommendation;
+    return t.nearPoorRecommendation;
+  };
+  const nearLeftScoreText = nearCompletedEyes.left ? nearScoreText(nearLeftLastCorrectLineIndex) : t.notCompleted;
+  const nearRightScoreText = nearCompletedEyes.right ? nearScoreText(nearRightLastCorrectLineIndex) : t.notCompleted;
 
   const resultLevel: ResultLevel = useMemo(() => {
     if (symptoms.some((symptom) => urgentSymptoms.includes(symptom))) return 'urgent';
     if (amslerFindings.some((finding) => finding !== 'straight')) return 'followUp';
     if (colorCompleted && colorScoreRatio < 0.7) return 'followUp';
+    if (nearCompleted && (nearLeftCategory === 'poor' || nearRightCategory === 'poor')) return 'followUp';
     if (colorCompleted && colorScoreRatio < 0.85) return 'monitor';
+    if (nearCompleted && (nearLeftCategory === 'mild' || nearRightCategory === 'mild')) return 'monitor';
     if (contrast === 'high' || contrast === 'medium' || symptoms.length > 0) return 'monitor';
     if (completedCount > 0) return 'reassuring';
     return 'neutral';
-  }, [amslerFindings, colorCompleted, colorScoreRatio, completedCount, contrast, symptoms]);
+  }, [amslerFindings, colorCompleted, colorScoreRatio, completedCount, contrast, nearCompleted, nearLeftCategory, nearRightCategory, symptoms]);
 
   const resultText = {
     neutral: t.resultNeutral,
@@ -596,17 +919,18 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
 
   const summary = useMemo(() => {
     const lines = [
-      `${t.completed}: ${completedCount}/4`,
+      `${t.completed}: ${completedCount}/5`,
       colorCompleted ? `${t.tabs.color}: ${colorScore}/${totalIshiharaScore}; ${colorResultText}; ${t.deficiencyPattern}: ${deficiencyPattern}` : null,
       hasAmsler ? `${t.tabs.amsler}: ${amslerScore}/5; ${amslerInterpretation}; ${amslerFindings.map((key) => t.amslerOptions[key as keyof typeof t.amslerOptions]).join(', ')} (${amslerEye})` : null,
       contrast ? `${t.tabs.contrast}: ${contrastScore}/4; ${contrastInterpretation}; ${t.contrastRows[contrast as keyof typeof t.contrastRows]}` : null,
       symptomsCompleted ? `${t.tabs.symptoms}: ${symptomRiskScore}; ${symptomsInterpretation}${hasSymptoms ? `; ${symptoms.map((key) => t.symptomsList[key as keyof typeof t.symptomsList]).join(', ')}` : `; ${t.noSymptoms}`}` : null,
+      nearCompleted ? `${t.tabs.near}: ${t.rightEye} ${nearRightScoreText}; ${t.leftEye} ${nearLeftScoreText}; ${nearInterpretation}` : null,
       t.annualCheckup,
       resultText,
     ];
 
     return lines.filter(Boolean).join(' | ');
-  }, [amslerEye, amslerFindings, amslerInterpretation, amslerScore, colorCompleted, colorResultText, colorScore, completedCount, contrast, contrastInterpretation, contrastScore, deficiencyPattern, hasAmsler, hasSymptoms, resultText, symptomRiskScore, symptoms, symptomsCompleted, symptomsInterpretation, t]);
+  }, [amslerEye, amslerFindings, amslerInterpretation, amslerScore, colorCompleted, colorResultText, colorScore, completedCount, contrast, contrastInterpretation, contrastScore, deficiencyPattern, hasAmsler, hasSymptoms, nearCompleted, nearInterpretation, nearLeftScoreText, nearRightScoreText, resultText, symptomRiskScore, symptoms, symptomsCompleted, symptomsInterpretation, t]);
 
   const toggleAmsler = (key: string) => {
     setShowColorResults(false);
@@ -628,6 +952,55 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
       current.includes(key) ? current.filter((symptom) => symptom !== key) : [...current, key]
     );
   };
+
+  const updateNearAnswer = (letters: string[]) => {
+    setShowColorResults(false);
+    setSubmitStatus({ type: null, message: '' });
+    setNearAnswers((current) => ({
+      ...current,
+      [nearEye]: {
+        ...current[nearEye],
+        [currentNearLine.id]: letters,
+      },
+    }));
+  };
+
+  const finishNearEye = () => {
+    setNearCompletedEyes((current) => ({
+      ...current,
+      [nearEye]: true,
+    }));
+
+    if (nearEye === 'right') {
+      setNearEye('left');
+      setNearLineIndex(0);
+    }
+  };
+
+  const submitNearLine = () => {
+    const lineIsCorrect = nearAnswerIsCorrect(currentNearAnswer, currentNearLine, nearLocale, nearEye, nearPlateSet);
+
+    if (!lineIsCorrect || nearLineIndex === nearVisionLines.length - 1) {
+      finishNearEye();
+      return;
+    }
+
+    setNearLineIndex((index) => index + 1);
+  };
+
+  const resetNearVision = () => {
+    setNearEye('right');
+    setNearLineIndex(0);
+    setNearAnswers({ left: {}, right: {} });
+    setNearCompletedEyes({ left: false, right: false });
+    setNearPlateSet(createNearVisionPlateSet());
+    setShowColorResults(false);
+    setSubmitStatus({ type: null, message: '' });
+  };
+
+  const nearChartFontFamily = isArabic
+    ? 'Tahoma, Arial, sans-serif'
+    : '"Times New Roman", Georgia, serif';
 
   const onSubmit = async (data: LeadFormData) => {
     setSubmitStatus({ type: null, message: '' });
@@ -655,6 +1028,16 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
           symptomsReviewed,
           symptomRiskScore,
           symptomsInterpretation,
+          nearAnswers,
+          nearCompletedEyes,
+          nearPlateSet,
+          nearLeftScore,
+          nearRightScore,
+          nearLeftScoreText,
+          nearRightScoreText,
+          nearLeftCategory,
+          nearRightCategory,
+          nearInterpretation,
           allTestsCompleted,
         }),
       });
@@ -675,7 +1058,7 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
       <section className="relative overflow-hidden bg-slate-950 text-white">
         <div className="absolute inset-0">
           <Image
-            src="/assets/images/hero-ophthalmologist.jpg"
+            src="/assets/images/hero-ophthalmologist.webp"
             alt="Ophthalmologist performing an eye examination at Abdalla Eye Clinic"
             fill
             priority
@@ -711,7 +1094,7 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
         <div className="grid gap-6 lg:grid-cols-[1fr_25rem]">
           <section className="overflow-hidden rounded-lg border border-white/80 bg-white shadow-elegant dark:border-cyan-900/50 dark:bg-slate-900">
             <div className="border-b border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950/50">
-              <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+              <div className="grid grid-cols-2 gap-2 md:grid-cols-5">
                 {(Object.keys(t.tabs) as TestKey[]).map((key) => (
                   <button
                     key={key}
@@ -762,12 +1145,13 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                       </div>
                       <div className="relative mx-auto aspect-[595/842] w-full max-w-[56rem] overflow-hidden rounded-lg bg-white shadow-inner">
                         <Image
-                          src={`/assets/images/ishihara/ishihara-page-${String(currentPlate.page).padStart(2, '0')}.png`}
+                          key={currentPlate.page}
+                          src={`/assets/images/ishihara/ishihara-page-${String(currentPlate.page).padStart(2, '0')}.webp`}
                           alt={`Ishihara color test slide ${currentPlateIndex + 1}`}
                           fill
                           sizes="(min-width: 1280px) 704px, 100vw"
                           className="object-contain"
-                          priority={currentPlateIndex === 0}
+                          loading="lazy"
                         />
                       </div>
                     </div>
@@ -978,6 +1362,135 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                   </div>
                 </div>
               )}
+
+              {activeTest === 'near' && (
+                <div>
+                  <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                    <div>
+                      <h2 className="text-2xl font-bold text-slate-950 dark:text-white">{t.nearTitle}</h2>
+                      <p className="mt-2 max-w-3xl text-slate-600 dark:text-slate-300">{t.nearHelp}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={resetNearVision}
+                      className="rounded-lg border border-slate-200 px-4 py-2 text-sm font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800"
+                    >
+                      {t.nearReset}
+                    </button>
+                  </div>
+
+                  <div className="mt-5 rounded-lg border border-cyan-100 bg-cyan-50 p-4 text-sm font-bold leading-6 text-cyan-950 dark:border-cyan-800 dark:bg-cyan-950/40 dark:text-cyan-50">
+                    {t.nearDistance}
+                  </div>
+
+                  {nearCompleted ? (
+                    <div className="mt-6 grid gap-4 md:grid-cols-2">
+                      <NearVisionResultCard
+                        title={t.nearRightResultTitle}
+                        lineLabel={t.nearSmallestLine}
+                        score={nearRightScoreText}
+                        category={nearRightCategory}
+                        categoryLabel={nearCategoryLabel(nearRightCategory)}
+                        recommendation={nearCategoryRecommendation(nearRightCategory)}
+                      />
+                      <NearVisionResultCard
+                        title={t.nearLeftResultTitle}
+                        lineLabel={t.nearSmallestLine}
+                        score={nearLeftScoreText}
+                        category={nearLeftCategory}
+                        categoryLabel={nearCategoryLabel(nearLeftCategory)}
+                        recommendation={nearCategoryRecommendation(nearLeftCategory)}
+                      />
+                    </div>
+                  ) : (
+                    <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1fr)_19rem]">
+                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-950/50 sm:p-6">
+                        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-black uppercase tracking-[0.12em] text-cyan-800 dark:text-cyan-200">
+                              {nearEye === 'left' ? t.leftEye : t.rightEye}
+                            </p>
+                            <p className="mt-1 text-sm font-bold text-slate-700 dark:text-slate-200">
+                              {nearEye === 'left' ? t.nearStepLeft : t.nearStepRight}
+                            </p>
+                          </div>
+                          <p className="rounded-full bg-white px-3 py-2 text-sm font-black text-slate-900 shadow-sm dark:bg-slate-900 dark:text-white">
+                            {t.nearLine} {nearLineIndex + 1}/{nearVisionLines.length} · {currentNearLine.acuity}
+                          </p>
+                        </div>
+
+                        <div className="flex min-h-[16rem] items-center justify-center rounded-lg border border-slate-200 bg-white p-5 text-center shadow-inner dark:border-slate-700 dark:bg-slate-900">
+                          <div
+                            dir={isArabic ? 'rtl' : 'ltr'}
+                            className="flex flex-wrap justify-center gap-[1em] font-semibold leading-tight text-slate-950 dark:text-white"
+                            style={{ fontFamily: nearChartFontFamily, fontSize: currentNearLine.fontSize }}
+                            aria-label={`${t.nearLine} ${currentNearLine.acuity}`}
+                          >
+                            {currentNearLetters.map((letter, index) => (
+                              <span key={`${currentNearLine.id}-${letter}-${index}`}>{letter}</span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-950">
+                        <p className="text-sm font-black text-slate-900 dark:text-white">{t.nearSelectLetters}</p>
+                        <div
+                          dir={isArabic ? 'rtl' : 'ltr'}
+                          className={classNames(
+                            'mt-3 min-h-14 rounded-lg border border-dashed border-cyan-200 bg-cyan-50 px-4 py-3 text-2xl font-black text-cyan-950 dark:border-cyan-800 dark:bg-cyan-950/40 dark:text-cyan-50',
+                            currentNearAnswer.length === 0 && 'text-sm leading-8 text-slate-500 dark:text-slate-300'
+                          )}
+                          style={{ fontFamily: currentNearAnswer.length > 0 ? nearChartFontFamily : undefined }}
+                        >
+                          {currentNearAnswer.length > 0 ? currentNearAnswer.join(' ') : t.nearNoLettersSelected}
+                        </div>
+
+                        <div className={classNames('mt-4 grid gap-2', isArabic ? 'grid-cols-4' : 'grid-cols-5')}>
+                          {currentNearLetterOptions.map((letter) => (
+                            <button
+                              key={letter}
+                              type="button"
+                              onClick={() => {
+                                if (currentNearAnswer.length >= currentNearLetters.length) return;
+                                updateNearAnswer([...currentNearAnswer, letter]);
+                              }}
+                              className="min-h-12 rounded-lg border border-cyan-200 bg-cyan-50 text-xl font-black text-cyan-950 transition-colors hover:bg-cyan-100 dark:border-cyan-800 dark:bg-cyan-950 dark:text-cyan-50 dark:hover:bg-cyan-900"
+                              style={{ fontFamily: nearChartFontFamily }}
+                            >
+                              {letter}
+                            </button>
+                          ))}
+                        </div>
+
+                        <div className="mt-4 grid gap-2">
+                          <button
+                            type="button"
+                            onClick={() => updateNearAnswer([])}
+                            className="rounded-lg border border-slate-200 px-4 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-100 dark:hover:bg-slate-800"
+                          >
+                            {t.nearClear}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={submitNearLine}
+                            className="rounded-lg bg-cyan-700 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-cyan-800 dark:bg-cyan-600 dark:hover:bg-cyan-500"
+                          >
+                            {t.nearSubmitLine}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={finishNearEye}
+                            className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm font-bold text-amber-950 hover:bg-amber-100 dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-100"
+                          >
+                            {t.nearCannotRead}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </section>
 
@@ -1053,9 +1566,57 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
               )
             )}
 
+            {!allTestsCompleted && activeTest === 'near' && (
+              nearCompleted ? (
+                <>
+                  <h2 className="text-xl font-bold text-slate-950 dark:text-white">{t.nearScoreTitle}</h2>
+                  <div className="mt-4 grid gap-3">
+                    <NearVisionResultCard
+                      title={t.nearRightResultTitle}
+                      lineLabel={t.nearSmallestLine}
+                      score={nearRightScoreText}
+                      category={nearRightCategory}
+                      categoryLabel={nearCategoryLabel(nearRightCategory)}
+                      recommendation={nearCategoryRecommendation(nearRightCategory)}
+                    />
+                    <NearVisionResultCard
+                      title={t.nearLeftResultTitle}
+                      lineLabel={t.nearSmallestLine}
+                      score={nearLeftScoreText}
+                      category={nearLeftCategory}
+                      categoryLabel={nearCategoryLabel(nearLeftCategory)}
+                      recommendation={nearCategoryRecommendation(nearLeftCategory)}
+                    />
+                  </div>
+                  <Link
+                    href={appointmentHref}
+                    className="mt-4 inline-flex w-full justify-center rounded-lg bg-cyan-700 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-cyan-800 dark:bg-cyan-600 dark:hover:bg-cyan-500"
+                  >
+                    {t.bookComprehensiveExam}
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <TestPromptPanel title={t.nearScoreTitle} message={t.nearIncomplete} accuracyTitle={t.accuracyTitle} disclaimer={t.disclaimer} />
+                  {nearCompletedEyes.right && (
+                    <div className="mt-4">
+                      <NearVisionResultCard
+                        title={t.nearRightResultTitle}
+                        lineLabel={t.nearSmallestLine}
+                        score={nearRightScoreText}
+                        category={nearRightCategory}
+                        categoryLabel={nearCategoryLabel(nearRightCategory)}
+                        recommendation={nearCategoryRecommendation(nearRightCategory)}
+                      />
+                    </div>
+                  )}
+                </>
+              )
+            )}
+
             {!allTestsCompleted && (
               <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 p-4 text-sm leading-6 text-slate-700 dark:border-slate-700 dark:bg-slate-950/65 dark:text-slate-200">
-                <p className="font-black">{t.completed}: {completedCount}/4</p>
+                <p className="font-black">{t.completed}: {completedCount}/5</p>
                 <p className="mt-1">{t.completeAllTests}</p>
               </div>
             )}
@@ -1133,6 +1694,30 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                   appointmentLabel={t.bookComprehensiveExam}
                 />
 
+                <div className="mt-7 rounded-lg border border-slate-200 bg-slate-50 p-4 dark:border-slate-700 dark:bg-slate-950/55">
+                  <p className="text-sm font-black uppercase tracking-[0.12em] text-cyan-800 dark:text-cyan-200">
+                    {t.nearScoreTitle}
+                  </p>
+                  <div className="mt-4 grid gap-3">
+                    <NearVisionResultCard
+                      title={t.nearRightResultTitle}
+                      lineLabel={t.nearSmallestLine}
+                      score={nearRightScoreText}
+                      category={nearRightCategory}
+                      categoryLabel={nearCategoryLabel(nearRightCategory)}
+                      recommendation={nearCategoryRecommendation(nearRightCategory)}
+                    />
+                    <NearVisionResultCard
+                      title={t.nearLeftResultTitle}
+                      lineLabel={t.nearSmallestLine}
+                      score={nearLeftScoreText}
+                      category={nearLeftCategory}
+                      categoryLabel={nearCategoryLabel(nearLeftCategory)}
+                      recommendation={nearCategoryRecommendation(nearLeftCategory)}
+                    />
+                  </div>
+                </div>
+
                 <ScorePanel
                   title={t.symptomsScoreTitle}
                   scoreLabel={t.riskScore}
@@ -1149,6 +1734,13 @@ export default function EyeTestsClient({ locale }: EyeTestsClientProps) {
                   <p className="mt-1">{t.disclaimer}</p>
                   <p className="mt-3 font-bold">{t.annualCheckup}</p>
                 </div>
+
+                <ProfessionalExamCta
+                  message={t.scoreCtaText}
+                  buttonLabel={t.scoreCtaButton}
+                  href={whatsappBookingHref}
+                  ariaLabel={t.scoreCtaAria}
+                />
               </>
             )}
           </aside>

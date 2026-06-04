@@ -2,13 +2,20 @@ import type { Service, Doctor, ClinicInfo, FAQ, TimeSlot } from '@/types';
 
 export const CLINIC_INFO: ClinicInfo = {
   name: 'Abdalla Eye Clinic',
+  nameAr: 'عيادة عبد الله للعيون',
+  legalName: 'Abdalla Eye Clinic',
+  legalNameAr: 'عيادة عبد الله للعيون',
   description: 'Leading ophthalmology clinic providing comprehensive eye care services in Alexandria, Egypt',
-  phone: '01276637774',
+  descriptionAr: 'عيادة عيون متخصصة في الإسكندرية تقدم رعاية شاملة للعين وخدمات تشخيص وعلاج متقدمة.',
+  phone: '+201276637774',
   email: 'm.hossam1712@gmail.com',
   address: 'Smouha & Raml Station',
+  addressAr: 'سموحة ومحطة الرمل',
   city: 'Alexandria',
+  cityAr: 'الإسكندرية',
   postalCode: '21514',
   country: 'Egypt',
+  countryAr: 'مصر',
   workingHours: {
     monday: { open: '12:00', close: '21:00', isClosed: false },
     tuesday: { open: '12:00', close: '21:00', isClosed: false },
@@ -19,10 +26,9 @@ export const CLINIC_INFO: ClinicInfo = {
     sunday: { open: '12:00', close: '21:00', isClosed: false },
   },
   socialMedia: {
-    facebook: 'https://facebook.com/visionclinic',
-    twitter: 'https://twitter.com/visionclinic',
-    instagram: 'https://instagram.com/visionclinic',
-    whatsapp: '201276637774',
+    facebook: 'https://www.facebook.com/Dr.Mohamed.Hossam.Abdalla',
+    instagram: 'https://www.instagram.com/dr_m_hossam_abdalla/',
+    whatsapp: '+201276637774',
   },
 };
 
@@ -33,7 +39,7 @@ export const DOCTORS: Doctor[] = [
     specialty: 'Professor of Ophthalmology',
     qualification: 'Professor of Ophthalmology',
     experience: 0,
-    image: '/assets/images/prof-ahmed-hossam-abdalla-card.jpg',
+    image: '/assets/images/prof-ahmed-hossam-abdalla-card.webp',
     bio: 'Providing expert ophthalmology care at Abdalla Eye Clinic.',
     languages: ['Arabic', 'English'],
   },
@@ -43,7 +49,7 @@ export const DOCTORS: Doctor[] = [
     specialty: 'Ophthalmologist',
     qualification: 'Ophthalmologist',
     experience: 0,
-    image: '/assets/images/dr-mohamed-hossam-abdalla-card.jpg',
+    image: '/assets/images/dr-mohamed-hossam-abdalla-card.webp',
     bio: 'Providing comprehensive eye care at Abdalla Eye Clinic.',
     languages: ['Arabic', 'English'],
   },
@@ -52,8 +58,11 @@ export const DOCTORS: Doctor[] = [
 export const SERVICES: Service[] = [
   {
     id: 'service-1',
+    slug: 'comprehensive-eye-exam',
     name: 'Comprehensive Eye Exam',
+    nameAr: 'فحص العيون الشامل',
     description: 'Complete eye health assessment and vision testing',
+    descriptionAr: 'تقييم كامل لصحة العين وقياس النظر',
     icon: 'eye-exam',
     category: 'diagnostic',
     features: [
@@ -62,11 +71,15 @@ export const SERVICES: Service[] = [
       'Retinal examination',
       'Visual field testing',
     ],
+    featuresAr: ['قياس حدة الإبصار', 'قياس ضغط العين', 'فحص الشبكية', 'اختبار مجال الإبصار'],
   },
   {
     id: 'service-2',
+    slug: 'lasik',
     name: 'LASIK Surgery',
+    nameAr: 'جراحة الليزك',
     description: 'Laser-assisted refractive eye surgery',
+    descriptionAr: 'تصحيح الإبصار بالليزر بدقة وأمان',
     icon: 'lasik',
     category: 'surgical',
     features: [
@@ -75,11 +88,19 @@ export const SERVICES: Service[] = [
       'FDA approved procedure',
       'Lifetime follow-up care',
     ],
+    featuresAr: ['ليزك بدون شفرة', 'تقنية مخصصة حسب قياسات العين', 'إجراء معتمد وآمن', 'متابعة بعد العملية'],
+    seoTitle: 'LASIK Surgery in Alexandria',
+    seoTitleAr: 'جراحة الليزك في الإسكندرية',
+    seoDescription: 'LASIK consultation and laser vision correction assessment at Abdalla Eye Clinic in Alexandria.',
+    seoDescriptionAr: 'استشارة الليزك وتقييم تصحيح الإبصار بالليزر في عيادة عبد الله للعيون في الإسكندرية.',
   },
   {
     id: 'service-3',
+    slug: 'cataract-surgery',
     name: 'Cataract Surgery',
+    nameAr: 'جراحة المياه البيضاء',
     description: 'Advanced intraocular lens implantation',
+    descriptionAr: 'إزالة المياه البيضاء وزراعة عدسات داخل العين',
     icon: 'cataract',
     category: 'surgical',
     features: [
@@ -88,11 +109,19 @@ export const SERVICES: Service[] = [
       'Same-day surgery',
       'Minimal incision technique',
     ],
+    featuresAr: ['تفتيت العدسة بالموجات فوق الصوتية', 'خيارات عدسات متقدمة', 'إجراء في نفس اليوم', 'شق جراحي صغير'],
+    seoTitle: 'Cataract Surgery in Alexandria',
+    seoTitleAr: 'جراحة المياه البيضاء في الإسكندرية',
+    seoDescription: 'Cataract evaluation, phacoemulsification, and IOL lens options at Abdalla Eye Clinic in Alexandria.',
+    seoDescriptionAr: 'تقييم المياه البيضاء وتفتيت العدسة وزراعة العدسات داخل العين في عيادة عبد الله للعيون في الإسكندرية.',
   },
   {
     id: 'service-4',
+    slug: 'glaucoma',
     name: 'Glaucoma Treatment',
+    nameAr: 'علاج الجلوكوما',
     description: 'Medical and surgical glaucoma management',
+    descriptionAr: 'متابعة وعلاج ارتفاع ضغط العين طبياً وجراحياً',
     icon: 'glaucoma',
     category: 'treatment',
     features: [
@@ -101,11 +130,19 @@ export const SERVICES: Service[] = [
       'Laser treatment',
       'Minimally invasive glaucoma surgery',
     ],
+    featuresAr: ['متابعة ضغط العين', 'تنظيم العلاج الدوائي', 'العلاج بالليزر', 'جراحات جلوكوما دقيقة ومحدودة التدخل'],
+    seoTitle: 'Glaucoma Treatment in Alexandria',
+    seoTitleAr: 'علاج الجلوكوما في الإسكندرية',
+    seoDescription: 'Glaucoma screening, eye pressure monitoring, optic nerve follow-up, drops, laser, and surgical care.',
+    seoDescriptionAr: 'فحص الجلوكوما ومتابعة ضغط العين والعصب البصري والقطرات والليزر والجراحة عند الحاجة.',
   },
   {
     id: 'service-5',
+    slug: 'retina',
     name: 'Retinal Treatment',
+    nameAr: 'علاج الشبكية',
     description: 'Treatment for retinal diseases and conditions',
+    descriptionAr: 'تشخيص وعلاج أمراض الشبكية المختلفة',
     icon: 'retina',
     category: 'treatment',
     features: [
@@ -114,11 +151,19 @@ export const SERVICES: Service[] = [
       'Retinal detachment repair',
       'Anti-VEGF injections',
     ],
+    featuresAr: ['علاج اعتلال الشبكية السكري', 'علاج التنكس البقعي', 'إصلاح انفصال الشبكية', 'حقن مضادات عامل النمو'],
+    seoTitle: 'Retina Specialist Care in Alexandria',
+    seoTitleAr: 'رعاية أمراض الشبكية في الإسكندرية',
+    seoDescription: 'Retina evaluation for diabetic retinopathy, flashes, floaters, macular disease, and retinal warning symptoms.',
+    seoDescriptionAr: 'تقييم الشبكية لاعتلال الشبكية السكري والومضات والعوائم وأمراض مركز الإبصار وأعراض الشبكية التحذيرية.',
   },
   {
     id: 'service-6',
+    slug: 'contact-lens-fitting',
     name: 'Contact Lens Fitting',
+    nameAr: 'تركيب العدسات اللاصقة',
     description: 'Professional contact lens prescription and fitting',
+    descriptionAr: 'اختيار وقياس العدسات اللاصقة المناسبة للعين',
     icon: 'contact-lens',
     category: 'preventive',
     features: [
@@ -127,11 +172,15 @@ export const SERVICES: Service[] = [
       'Extended wear lenses',
       'Orthokeratology',
     ],
+    featuresAr: ['تجربة أكثر من نوع عدسات', 'عدسات طبية خاصة', 'عدسات للاستخدام الممتد', 'تقويم القرنية الليلي'],
   },
   {
     id: 'service-7',
+    slug: 'dry-eye',
     name: 'Dry Eye Treatment',
+    nameAr: 'علاج جفاف العين',
     description: 'Comprehensive dry eye syndrome management',
+    descriptionAr: 'خطة شاملة لتشخيص وعلاج جفاف العين',
     icon: 'dry-eye',
     category: 'treatment',
     features: [
@@ -140,11 +189,19 @@ export const SERVICES: Service[] = [
       'Intense pulsed light therapy',
       'Artificial tear consultation',
     ],
+    featuresAr: ['تحليل غدد ميبوميان', 'سدادات القنوات الدمعية', 'العلاج بالنبضات الضوئية', 'اختيار القطرات المرطبة المناسبة'],
+    seoTitle: 'Dry Eye Treatment in Alexandria',
+    seoTitleAr: 'علاج جفاف العين في الإسكندرية',
+    seoDescription: 'Dry eye diagnosis and treatment for burning, irritation, screen-related symptoms, and tear film problems.',
+    seoDescriptionAr: 'تشخيص وعلاج جفاف العين والحرقان والتهيج وأعراض الشاشات ومشكلات طبقة الدموع.',
   },
   {
     id: 'service-8',
+    slug: 'pediatric-eye-care',
     name: 'Pediatric Eye Care',
+    nameAr: 'رعاية عيون الأطفال',
     description: 'Eye care services for children',
+    descriptionAr: 'خدمات فحص وعلاج عيون الأطفال',
     icon: 'pediatric',
     category: 'preventive',
     features: [
@@ -153,6 +210,35 @@ export const SERVICES: Service[] = [
       'Glasses prescription',
       'Strabismus evaluation',
     ],
+    featuresAr: ['علاج كسل العين', 'فحص النظر للأطفال', 'وصف النظارات', 'تقييم الحول'],
+  },
+  {
+    id: 'service-9',
+    slug: 'online-eye-tests',
+    name: 'Online Eye Tests',
+    nameAr: 'اختبارات النظر على الإنترنت',
+    description: 'Interactive online screening tools for color vision, central vision, contrast, near vision, and symptoms',
+    descriptionAr: 'فحوصات تفاعلية أولية على الإنترنت للألوان والرؤية المركزية والتباين والرؤية القريبة والأعراض',
+    icon: 'eye-exam',
+    category: 'diagnostic',
+    features: [
+      'Ishihara color screening',
+      'Amsler grid central vision check',
+      'Contrast sensitivity screening',
+      'Near-vision screening',
+      'Symptom triage report',
+    ],
+    featuresAr: [
+      'فحص أولي لرؤية الألوان بلوحات إيشيهارا',
+      'شبكة أمسلر لفحص الرؤية المركزية',
+      'فحص أولي لحساسية التباين',
+      'فحص الرؤية القريبة',
+      'تقرير فرز الأعراض',
+    ],
+    seoTitle: 'Online Eye Tests',
+    seoTitleAr: 'اختبارات النظر على الإنترنت',
+    seoDescription: 'Try online eye screening checks, then book a calibrated eye exam in Alexandria when results need follow-up.',
+    seoDescriptionAr: 'جرّب فحوصات عيون أولية على الإنترنت ثم احجز فحصاً طبياً معايراً في الإسكندرية عند الحاجة للمتابعة.',
   },
 ];
 
@@ -561,20 +647,113 @@ export const FAQS: FAQ[] = [
 
 export const CLINIC_BRANCHES = [
   {
+    slug: 'smouha',
     name: 'Smouha Branch',
     address: 'Wataneya Medical Center, 14th May Street, above Alexandria Pediatric Center, 4th floor',
     addressAr: 'المركز الطبي الوطنية، شارع 14 مايو، أعلى مركز الإسكندرية للأطفال، الدور الرابع',
-    phone: '03/3856404',
+    phone: '+2033856404',
     hours: '12:00 PM - 9:00 PM',
+    landmarks: ['14th May Street', 'Alexandria Pediatric Center', 'Smouha medical district'],
+    landmarksAr: ['شارع 14 مايو', 'مركز الإسكندرية للأطفال', 'منطقة سموحة الطبية'],
+    mapUrl:
+      'https://www.google.com/maps/search/?api=1&query=Abdalla%20Eye%20Clinic%20Wataneya%20Medical%20Center%2014th%20May%20Street%20Smouha%20Alexandria%20Egypt',
+    googleMapsPlaceUrl:
+      'https://www.google.com/maps/search/?api=1&query=Abdalla%20Eye%20Clinic%20Wataneya%20Medical%20Center%2014th%20May%20Street%20Smouha%20Alexandria%20Egypt',
+    // TODO: Replace with the verified Google Maps Place ID when the branch profile is available.
+    googleMapsPlaceId: null,
+    // TODO: Replace null values with verified branch-level coordinates from Google Business Profile or Google Maps.
+    geo: {
+      latitude: null,
+      longitude: null,
+    },
   },
   {
+    slug: 'raml-station',
     name: 'Raml Station Branch',
     address: '22 Al-Ghorfa Al-Togareya Street, 3rd floor',
     addressAr: '22 شارع الغرفة التجارية، محطة الرمل، الدور الثالث',
-    phone: '03/4805023',
+    phone: '+2034805023',
     hours: '12:00 PM - 9:00 PM',
+    landmarks: ['Raml Station', 'Al-Ghorfa Al-Togareya Street', 'Downtown Alexandria'],
+    landmarksAr: ['محطة الرمل', 'شارع الغرفة التجارية', 'وسط الإسكندرية'],
+    mapUrl:
+      'https://www.google.com/maps/search/?api=1&query=Abdalla%20Eye%20Clinic%2022%20Al-Ghorfa%20Al-Togareya%20Street%20Raml%20Station%20Alexandria%20Egypt',
+    googleMapsPlaceUrl:
+      'https://www.google.com/maps/search/?api=1&query=Abdalla%20Eye%20Clinic%2022%20Al-Ghorfa%20Al-Togareya%20Street%20Raml%20Station%20Alexandria%20Egypt',
+    // TODO: Replace with the verified Google Maps Place ID when the branch profile is available.
+    googleMapsPlaceId: null,
+    // TODO: Replace null values with verified branch-level coordinates from Google Business Profile or Google Maps.
+    geo: {
+      latitude: null,
+      longitude: null,
+    },
   },
 ];
+
+export const BRANCH_FAQS: Record<string, FAQ[]> = {
+  smouha: [
+    {
+      id: 'branch-smouha-parking',
+      question: 'Where is the Smouha branch located?',
+      answer:
+        'The Smouha branch is at Wataneya Medical Center on 14th May Street, above Alexandria Pediatric Center, 4th floor.',
+      questionAr: 'أين يقع فرع سموحة؟',
+      answerAr:
+        'يقع فرع سموحة في المركز الطبي الوطنية بشارع 14 مايو، أعلى مركز الإسكندرية للأطفال، الدور الرابع.',
+      category: 'branch-smouha',
+    },
+    {
+      id: 'branch-smouha-services',
+      question: 'Which services are available at the Smouha branch?',
+      answer:
+        'The Smouha branch supports eye exams, LASIK consultation, cataract assessment, glaucoma follow-up, retina checks, dry eye care, and pediatric eye care.',
+      questionAr: 'ما الخدمات المتاحة في فرع سموحة؟',
+      answerAr:
+        'يوفر فرع سموحة فحوصات العين واستشارات الليزك وتقييم المياه البيضاء ومتابعة الجلوكوما وفحوصات الشبكية وعلاج جفاف العين ورعاية عيون الأطفال.',
+      category: 'branch-smouha',
+    },
+    {
+      id: 'branch-smouha-booking',
+      question: 'How can I book the Smouha branch?',
+      answer:
+        'You can call the branch phone number, contact the clinic on WhatsApp, or book through the online appointment form.',
+      questionAr: 'كيف أحجز في فرع سموحة؟',
+      answerAr:
+        'يمكنك الاتصال برقم الفرع أو التواصل مع العيادة عبر واتساب أو الحجز من خلال نموذج المواعيد على الموقع.',
+      category: 'branch-smouha',
+    },
+  ],
+  'raml-station': [
+    {
+      id: 'branch-raml-location',
+      question: 'Where is the Raml Station branch located?',
+      answer: 'The Raml Station branch is at 22 Al-Ghorfa Al-Togareya Street, 3rd floor, Downtown Alexandria.',
+      questionAr: 'أين يقع فرع محطة الرمل؟',
+      answerAr: 'يقع فرع محطة الرمل في 22 شارع الغرفة التجارية، الدور الثالث، وسط الإسكندرية.',
+      category: 'branch-raml-station',
+    },
+    {
+      id: 'branch-raml-services',
+      question: 'Which services are available at the Raml Station branch?',
+      answer:
+        'The Raml Station branch supports comprehensive eye exams, cataract and glaucoma follow-up, retina assessment, dry eye treatment, and LASIK consultation.',
+      questionAr: 'ما الخدمات المتاحة في فرع محطة الرمل؟',
+      answerAr:
+        'يوفر فرع محطة الرمل فحص العين الشامل ومتابعة المياه البيضاء والجلوكوما وتقييم الشبكية وعلاج جفاف العين واستشارات الليزك.',
+      category: 'branch-raml-station',
+    },
+    {
+      id: 'branch-raml-booking',
+      question: 'How can I book the Raml Station branch?',
+      answer:
+        'You can call the branch phone number, contact the clinic on WhatsApp, or book through the online appointment form.',
+      questionAr: 'كيف أحجز في فرع محطة الرمل؟',
+      answerAr:
+        'يمكنك الاتصال برقم الفرع أو التواصل مع العيادة عبر واتساب أو الحجز من خلال نموذج المواعيد على الموقع.',
+      category: 'branch-raml-station',
+    },
+  ],
+};
 
 export const NAVIGATION_ITEMS = [
   { href: '/', label: 'home' },

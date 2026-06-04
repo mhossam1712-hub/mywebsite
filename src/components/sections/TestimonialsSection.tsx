@@ -6,9 +6,38 @@ type SectionProps = {
   locale: string;
 };
 
+type Testimonial = {
+  id: number;
+  name: string;
+  rating: number;
+  content: string;
+  service: string;
+  permissioned?: boolean;
+};
+
+function StarRating({ rating }: { rating: number }) {
+  const normalizedRating = Math.max(0, Math.min(5, Math.round(rating)));
+
+  return (
+    <div className="mb-3 flex" role="img" aria-label={`${normalizedRating} out of 5`}>
+      {[...Array(normalizedRating)].map((_, i) => (
+        <span key={i} className="text-yellow-400" aria-hidden="true">
+          ⭐
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export const TestimonialsSection = async ({ locale }: SectionProps) => {
   const t = await getTranslations({ locale, namespace: 'testimonials' });
-  const testimonials = locale === 'ar' ? sectionText.testimonials.ar : sectionText.testimonials.en;
+  const testimonials = (locale === 'ar' ? sectionText.testimonials.ar : sectionText.testimonials.en) as Testimonial[];
+  // Patient reviews must be real, permissioned, and publishable before they are shown on the site.
+  const publishableTestimonials = testimonials.filter((testimonial) => testimonial.permissioned === true);
+
+  if (publishableTestimonials.length === 0) {
+    return null;
+  }
 
   return (
     <section className="bg-medical-50 px-3 py-12 transition-colors duration-300 dark:bg-gray-950 sm:px-4 sm:py-16 md:py-24">
@@ -20,7 +49,7 @@ export const TestimonialsSection = async ({ locale }: SectionProps) => {
         </div>
 
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-          {testimonials.map((testimonial) => (
+          {publishableTestimonials.map((testimonial) => (
             <div
               key={testimonial.id}
               className="rounded-lg border border-white/80 bg-white/92 p-6 shadow-elegant backdrop-blur transition-all duration-200 hover:-translate-y-1 hover:shadow-elegant-lg dark:border-white/10 dark:bg-gray-900/85"
@@ -34,13 +63,7 @@ export const TestimonialsSection = async ({ locale }: SectionProps) => {
                   <p className="text-sm text-slate-600 dark:text-gray-400">{testimonial.service}</p>
                 </div>
               </div>
-              <div className="flex mb-3">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <span key={i} className="text-yellow-400">
-                    ⭐
-                  </span>
-                ))}
-              </div>
+              <StarRating rating={testimonial.rating} />
               <p className="text-slate-700 dark:text-gray-300">{testimonial.content}</p>
             </div>
           ))}

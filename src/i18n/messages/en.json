@@ -19,6 +19,9 @@
   "services": {
     "title": "Our Services",
     "subtitle": "Comprehensive eye care solutions for all ages",
+    "book_this_service": "Book this service",
+    "service_faqs_title": "Service FAQs",
+    "service_faqs_subtitle": "Common questions patients ask before booking eye care services at Abdalla Eye Clinic.",
     "comprehensive_exam": "Comprehensive Eye Exam",
     "lasik": "LASIK Surgery",
     "cataract": "Cataract Surgery",
@@ -36,11 +39,11 @@
     "languages": "Languages"
   },
   "about": {
-    "title": "About Vision Care Clinic",
+    "title": "About Abdalla Eye Clinic",
     "mission": "Our Mission",
-    "mission_text": "To provide exceptional eye care services with compassion and expertise, ensuring every patient achieves optimal vision and eye health.",
+    "mission_text": "At Abdalla Eye Clinic, our mission is to deliver exceptional ophthalmology care with clinical precision, compassion, and clear guidance, helping every patient protect their vision and long-term eye health.",
     "vision": "Our Vision",
-    "vision_text": "To be the leading ophthalmology clinic known for innovative treatments, patient care, and advancing eye health in our community.",
+    "vision_text": "Our vision is to be Alexandria's trusted destination for premium eye care, combining advanced diagnostics, refined treatment planning, and a patient experience built on confidence and continuity.",
     "values": "Our Values",
     "values_list": ["Patient First", "Excellence", "Innovation", "Compassion", "Integrity"]
   },
@@ -51,10 +54,13 @@
     "name": "Full Name",
     "email": "Email Address",
     "phone": "Phone Number",
+    "branch": "Branch",
     "service": "Select Service",
     "doctor": "Preferred Doctor",
     "date": "Preferred Date",
     "time": "Preferred Time",
+    "message": "Message",
+    "message_placeholder": "Tell us anything we should know before confirming your appointment.",
     "notes": "Additional Notes",
     "notes_placeholder": "Any additional notes or concerns?",
     "submit": "Book Appointment",
@@ -66,12 +72,16 @@
     "email_required": "Email is required",
     "email_invalid": "Invalid email address",
     "phone_required": "Phone number is required",
+    "phone_invalid": "Please enter a valid phone number",
+    "branch_required": "Please select a branch",
     "doctor_required": "Please select a doctor",
     "service_required": "Please select a service",
     "date_required": "Date is required",
+    "date_invalid": "Please choose today or a future date",
     "time_required": "Time is required",
     "subject_required": "Subject is required",
-    "message_required": "Message is required"
+    "message_required": "Message is required",
+    "message_too_long": "Message is too long"
   },
   "contact": {
     "title": "Get in Touch",

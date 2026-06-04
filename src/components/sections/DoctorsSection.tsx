@@ -1,7 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { getTranslations } from 'next-intl/server';
-import { getLocalizedDoctors, getSectionText } from '@/utils/localized-content';
+import { getDoctorImageAlt, getLocalizedDoctors, getSectionText } from '@/utils/localized-content';
 import { Card, CardBody, CardHeader } from '../common/Card';
 
 type SectionProps = {
@@ -28,7 +28,7 @@ export const DoctorsSection = async ({ locale }: SectionProps) => {
                 <div className="relative mb-4 aspect-[4/3] w-full overflow-hidden rounded-lg bg-gray-100">
                   <Image
                     src={doctor.image}
-                    alt={doctor.name}
+                    alt={getDoctorImageAlt(doctor.id, doctor.name)}
                     fill
                     sizes="(min-width: 768px) 384px, calc(100vw - 72px)"
                     className="h-full w-full object-cover object-top"

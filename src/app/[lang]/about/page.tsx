@@ -72,12 +72,12 @@ export default function AboutPage() {
         ],
       }
     : {
-        title: 'Why Patients Choose Abdalla Eye Clinic?',
+        title: 'Why Patients Choose Abdalla Eye Clinic',
         subtitle: 'Trusted Eyecare You Deserve.',
         statements: [
-          { title: 'Your Vision, Our Priority', description: 'Thoughtful care centered around what matters most to you.' },
-          { title: 'See the Difference', description: 'A calmer, clearer experience with Abdalla Eye Clinic.' },
-          { title: 'Expert Eye Care', description: 'Clinical precision delivered with a personal touch.' },
+          { title: 'Your Vision, Our Priority', description: 'Thoughtful ophthalmology care centered around what matters most to you.' },
+          { title: 'See the Difference', description: 'A calmer, clearer clinic experience shaped by attentive guidance.' },
+          { title: 'Expert Eye Care', description: 'Clinical precision, advanced insight, and personal attention at every visit.' },
         ],
       };
 
@@ -88,7 +88,7 @@ export default function AboutPage() {
         <div className="text-center mb-16">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{t('title')}</h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-            {CLINIC_INFO.description}
+            {isArabic ? CLINIC_INFO.descriptionAr : CLINIC_INFO.description}
           </p>
         </div>
 
@@ -152,7 +152,7 @@ export default function AboutPage() {
             {patientPromise.statements.map((statement, index) => (
               <div
                 key={statement.title}
-                className="group relative overflow-hidden rounded-lg border border-cyan-100 bg-white p-6 text-center shadow-[0_18px_42px_-28px_rgba(15,23,42,0.45)] transition-all duration-300 hover:-translate-y-1 hover:border-cyan-200 hover:shadow-elegant-lg dark:border-white/10 dark:bg-gray-950/70 dark:hover:border-cyan-800"
+                className="group relative overflow-hidden rounded-lg border border-cyan-100 bg-white p-6 text-center shadow-sm motion-safe:md:transition-transform motion-safe:md:duration-300 motion-safe:md:hover:-translate-y-1 md:shadow-[0_18px_42px_-28px_rgba(15,23,42,0.45)] md:hover:border-cyan-200 md:hover:shadow-elegant-lg dark:border-white/10 dark:bg-gray-950/70 dark:md:hover:border-cyan-800"
               >
                 <div className="absolute inset-x-0 top-0 h-1 bg-cyan-700 dark:bg-cyan-400" />
                 <div className="mx-auto mb-5 flex h-11 w-11 items-center justify-center rounded-full bg-cyan-50 text-lg font-black text-cyan-800 ring-1 ring-cyan-100 transition-colors group-hover:bg-cyan-700 group-hover:text-white dark:bg-cyan-950/70 dark:text-cyan-200 dark:ring-cyan-800">

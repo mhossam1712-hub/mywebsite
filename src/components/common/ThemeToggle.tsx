@@ -19,7 +19,7 @@ export const ThemeToggle = ({ onToggle }: ThemeToggleProps) => {
     <button
       onClick={handleClick}
       className="relative inline-flex h-8 w-16 items-center rounded-full bg-gray-300 transition-colors dark:bg-gray-600"
-      aria-label="Toggle dark mode"
+      aria-label="Toggle dark and light mode"
     >
       <span
         className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
