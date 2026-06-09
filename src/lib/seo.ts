@@ -5,7 +5,7 @@ import type { FAQ } from '@/types';
 import { getLocalizedDoctors, getLocalizedServices } from '@/utils/localized-content';
 
 const TITLE_SEPARATOR = '|';
-const CANONICAL_SITE_URL = 'https://www.abdallaeyeclinic.com';
+export const CANONICAL_SITE_URL = 'https://www.abdallaeyeclinic.com';
 
 type Locale = 'en' | 'ar';
 type LocalizedText = {
@@ -337,6 +337,12 @@ function localizedOptionalText(text: LocalizedText | string | undefined, lang: s
 export function canonicalUrl(lang: string, path = '') {
   const localizedPath = localizedPathname(path);
 
+  // The /en page IS the homepage — its canonical points to the root URL so
+  // link equity consolidates at / rather than being split between / and /en.
+  if (normalizeLocale(lang) === 'en' && localizedPath === '') {
+    return '/';
+  }
+
   return `/${normalizeLocale(lang)}${localizedPath}`;
 }
 
@@ -469,6 +475,7 @@ function createBaseMetadata({
   const resolvedImageAlt = imageAlt ?? fullTitle;
 
   return {
+    metadataBase: new URL(CANONICAL_SITE_URL),
     title: fullTitle,
     description,
     alternates: canonicalAlternates(lang, path),
@@ -552,6 +559,7 @@ export function createArticleMetadata({
   const siteName = clinicNameForLocale(lang);
 
   return {
+    metadataBase: new URL(CANONICAL_SITE_URL),
     title: fullTitle,
     description,
     alternates: canonicalAlternates(lang, path),

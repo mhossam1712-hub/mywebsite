@@ -23,9 +23,10 @@ const metadataBase = new URL('https://www.abdallaeyeclinic.com');
 const googleVerification =
   process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
   'CCOzpuU40fiYJh7XR2BnGQmMRPnl_EN9hSaFjWhlP2U';
+// Replace the empty string with your Bing Webmaster Tools code once you
+// retrieve it from bing.com/webmasters → Add site → Verify → XML meta tag.
 const bingVerification =
   process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ||
-  process.env.NEXT_PUBLIC_MSVALIDATE ||
   '';
 
 export async function generateMetadata({

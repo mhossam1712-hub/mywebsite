@@ -3,6 +3,9 @@ import { getBlogPosts } from '@/lib/blog';
 
 const siteUrl = 'https://www.abdallaeyeclinic.com';
 const locales = ['en', 'ar'] as const;
+const mainPageChangeFrequency = 'weekly' as const;
+const mainPagePriority = 0.8;
+const blogPostPriority = 0.5;
 
 type ChangeFrequency = NonNullable<MetadataRoute.Sitemap[number]['changeFrequency']>;
 
@@ -13,27 +16,33 @@ type SitemapPage = {
   lastModified?: Date;
 };
 
-const staticPages = [
-  { path: '', changeFrequency: 'monthly', priority: 1.0 },
-  { path: '/services', changeFrequency: 'monthly', priority: 0.9 },
-  { path: '/services/lasik', changeFrequency: 'monthly', priority: 0.9 },
-  { path: '/services/cataract-surgery', changeFrequency: 'monthly', priority: 0.9 },
-  { path: '/services/glaucoma', changeFrequency: 'monthly', priority: 0.9 },
-  { path: '/services/retina', changeFrequency: 'monthly', priority: 0.9 },
-  { path: '/services/dry-eye', changeFrequency: 'monthly', priority: 0.9 },
-  { path: '/services/online-eye-tests', changeFrequency: 'monthly', priority: 0.9 },
-  { path: '/doctors', changeFrequency: 'monthly', priority: 0.8 },
-  { path: '/eye-tests', changeFrequency: 'monthly', priority: 0.7 },
-  { path: '/about', changeFrequency: 'monthly', priority: 0.7 },
-  { path: '/blog', changeFrequency: 'weekly', priority: 0.6 },
-  { path: '/contact', changeFrequency: 'monthly', priority: 0.8 },
-  { path: '/appointments', changeFrequency: 'weekly', priority: 0.9 },
-  { path: '/faqs', changeFrequency: 'monthly', priority: 0.7 },
-  { path: '/branches/smouha', changeFrequency: 'monthly', priority: 0.7 },
-  { path: '/branches/raml-station', changeFrequency: 'monthly', priority: 0.7 },
-  { path: '/privacy', changeFrequency: 'yearly', priority: 0.6 },
-  { path: '/terms', changeFrequency: 'yearly', priority: 0.6 },
-] satisfies SitemapPage[];
+const mainPagePaths = [
+  '',
+  '/services',
+  '/services/lasik',
+  '/services/cataract-surgery',
+  '/services/glaucoma',
+  '/services/retina',
+  '/services/dry-eye',
+  '/services/online-eye-tests',
+  '/doctors',
+  '/eye-tests',
+  '/about',
+  '/blog',
+  '/contact',
+  '/appointments',
+  '/faqs',
+  '/branches/smouha',
+  '/branches/raml-station',
+  '/privacy',
+  '/terms',
+] as const;
+
+const mainPages = mainPagePaths.map((path) => ({
+  path,
+  changeFrequency: mainPageChangeFrequency,
+  priority: mainPagePriority,
+})) satisfies SitemapPage[];
 
 function localizedUrl(locale: (typeof locales)[number], path: string) {
   return `${siteUrl}/${locale}${path}`;
@@ -44,6 +53,18 @@ function languageAlternates(path: string) {
     en: localizedUrl('en', path),
     ar: localizedUrl('ar', path),
     'x-default': localizedUrl('en', path),
+  };
+}
+
+function homepageEntry(): MetadataRoute.Sitemap[number] {
+  return {
+    url: siteUrl,
+    lastModified: new Date(),
+    changeFrequency: mainPageChangeFrequency,
+    priority: mainPagePriority,
+    alternates: {
+      languages: languageAlternates(''),
+    },
   };
 }
 
@@ -65,10 +86,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogPosts = await getBlogPosts();
   const blogPostPages = blogPosts.map((post) => ({
     path: `/blog/${post.slug}`,
-    changeFrequency: 'monthly',
-    priority: 0.6,
+    changeFrequency: mainPageChangeFrequency,
+    priority: blogPostPriority,
     lastModified: new Date(post.date),
   })) satisfies SitemapPage[];
 
-  return [...staticPages, ...blogPostPages].flatMap(localizedEntries);
+  return [
+    homepageEntry(),
+    ...mainPages.flatMap(localizedEntries),
+    ...blogPostPages.flatMap(localizedEntries),
+  ];
 }

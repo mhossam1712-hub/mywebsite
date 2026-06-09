@@ -659,6 +659,8 @@ export const CLINIC_BRANCHES = [
       'https://www.google.com/maps/search/?api=1&query=Abdalla%20Eye%20Clinic%20Wataneya%20Medical%20Center%2014th%20May%20Street%20Smouha%20Alexandria%20Egypt',
     googleMapsPlaceUrl:
       'https://www.google.com/maps/search/?api=1&query=Abdalla%20Eye%20Clinic%20Wataneya%20Medical%20Center%2014th%20May%20Street%20Smouha%20Alexandria%20Egypt',
+    googleMapsDirectionsUrl:
+      'https://www.google.com/maps/dir/?api=1&destination=Abdalla%20Eye%20Clinic%20Wataneya%20Medical%20Center%2014th%20May%20Street%20Smouha%20Alexandria%20Egypt',
     // TODO: Replace with the verified Google Maps Place ID when the branch profile is available.
     googleMapsPlaceId: null,
     // TODO: Replace null values with verified branch-level coordinates from Google Business Profile or Google Maps.
@@ -680,6 +682,8 @@ export const CLINIC_BRANCHES = [
       'https://www.google.com/maps/search/?api=1&query=Abdalla%20Eye%20Clinic%2022%20Al-Ghorfa%20Al-Togareya%20Street%20Raml%20Station%20Alexandria%20Egypt',
     googleMapsPlaceUrl:
       'https://www.google.com/maps/search/?api=1&query=Abdalla%20Eye%20Clinic%2022%20Al-Ghorfa%20Al-Togareya%20Street%20Raml%20Station%20Alexandria%20Egypt',
+    googleMapsDirectionsUrl:
+      'https://www.google.com/maps/dir/?api=1&destination=Abdalla%20Eye%20Clinic%2022%20Al-Ghorfa%20Al-Togareya%20Street%20Raml%20Station%20Alexandria%20Egypt',
     // TODO: Replace with the verified Google Maps Place ID when the branch profile is available.
     googleMapsPlaceId: null,
     // TODO: Replace null values with verified branch-level coordinates from Google Business Profile or Google Maps.

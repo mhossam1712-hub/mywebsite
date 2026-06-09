@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { CLINIC_BRANCHES, CLINIC_INFO, NAVIGATION_ITEMS } from '@/constants';
-import { branchAreaName, clinicDisplayName, clinicLocation, phoneHref, whatsAppHref } from '@/lib/clinic';
+import { branchAreaName, branchDirectionsHref, clinicDisplayName, clinicLocation, phoneHref, whatsAppHref } from '@/lib/clinic';
 import {
   allServicesLabel,
   getDedicatedServiceLinks,
@@ -96,15 +96,29 @@ export const Footer = async ({ locale }: FooterProps) => {
                   {CLINIC_INFO.email}
                 </a>
               </li>
-              {CLINIC_BRANCHES.map((branch) => (
-                <li key={`${branch.name}-address`} className="leading-6">
-                  📍{' '}
-                  <Link href={`/${locale}/branches/${branch.slug}`} className="transition-colors hover:text-white">
-                    {branchAreaName(branch, locale)}
-                  </Link>
-                  : {isArabic ? branch.addressAr : branch.address}
-                </li>
-              ))}
+              {CLINIC_BRANCHES.map((branch) => {
+                const areaName = branchAreaName(branch, locale);
+                const address = isArabic ? branch.addressAr : branch.address;
+
+                return (
+                  <li key={`${branch.name}-address`} className="leading-6">
+                    📍{' '}
+                    <a
+                      href={branchDirectionsHref(branch)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={
+                        isArabic
+                          ? `افتح اتجاهات خرائط جوجل إلى فرع ${areaName}`
+                          : `Open Google Maps directions to the ${areaName} clinic`
+                      }
+                      className="transition-colors hover:text-white"
+                    >
+                      <span className="font-semibold">{areaName}</span>: {address}
+                    </a>
+                  </li>
+                );
+              })}
               <li>{clinicLocation(locale)}</li>
             </ul>
           </div>

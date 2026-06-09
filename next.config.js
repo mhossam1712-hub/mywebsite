@@ -25,6 +25,23 @@ const localizedLegacyEyeTestSources = [
   '/:lang(en|ar)/near-vision-test.html',
 ];
 
+const oldBrokenUrlSources = [
+  '/Contact',
+  '/FAQs',
+  '/en/Contact',
+  '/en/FAQs',
+  '/ar/Contact',
+  '/ar/FAQs',
+];
+
+function oldBrokenUrlRedirects() {
+  return oldBrokenUrlSources.map((source) => ({
+    source,
+    destination: canonicalOrigin,
+    statusCode: 301,
+  }));
+}
+
 function legacyEyeTestRedirects() {
   return [
     ...localizedLegacyEyeTestSources.map((source) => ({
@@ -57,33 +74,6 @@ function legacyEyeTestRedirects() {
 function canonicalRedirects() {
   return [
     {
-      source: '/',
-      has: [
-        {
-          type: 'host',
-          value: apexHost,
-        },
-      ],
-      destination: `${canonicalOrigin}/en`,
-      permanent: true,
-    },
-    {
-      source: '/',
-      has: [
-        {
-          type: 'host',
-          value: wwwHost,
-        },
-        {
-          type: 'header',
-          key: 'x-forwarded-proto',
-          value: 'http',
-        },
-      ],
-      destination: `${canonicalOrigin}/en`,
-      permanent: true,
-    },
-    {
       source: '/:path*',
       has: [
         {
@@ -92,7 +82,7 @@ function canonicalRedirects() {
         },
       ],
       destination: `${canonicalOrigin}/:path*`,
-      permanent: true,
+      statusCode: 301,
     },
     {
       source: '/:path*',
@@ -108,7 +98,7 @@ function canonicalRedirects() {
         },
       ],
       destination: `${canonicalOrigin}/:path*`,
-      permanent: true,
+      statusCode: 301,
     },
   ];
 }
@@ -118,12 +108,13 @@ const nextConfig = {
   pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
   async redirects() {
     return [
+      ...oldBrokenUrlRedirects(),
       ...canonicalRedirects(),
       ...legacyEyeTestRedirects(),
       {
         source: '/',
         destination: `${canonicalOrigin}/en`,
-        permanent: true,
+        statusCode: 301,
       },
     ];
   },

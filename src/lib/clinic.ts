@@ -4,6 +4,10 @@ type ClinicBranch = {
   slug: string;
   name: string;
   phone: string;
+  address?: string;
+  mapUrl?: string;
+  googleMapsPlaceUrl?: string;
+  googleMapsDirectionsUrl?: string;
 };
 
 export function phoneHref(phone: string) {
@@ -37,6 +41,16 @@ export function branchDisplayName(branch: Pick<ClinicBranch, 'slug' | 'name'>, l
   return locale === 'ar'
     ? `${CLINIC_INFO.nameAr} - ${areaName}`
     : `${areaName} Clinic`;
+}
+
+export function branchDirectionsHref(branch: Pick<ClinicBranch, 'name'> & Partial<ClinicBranch>) {
+  if (branch.googleMapsDirectionsUrl) return branch.googleMapsDirectionsUrl;
+
+  const destination = branch.address
+    ? `${branch.name}, ${branch.address}, ${CLINIC_INFO.city}, ${CLINIC_INFO.country}`
+    : branch.name;
+
+  return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(destination)}`;
 }
 
 export function branchAppointmentName(branch: Pick<ClinicBranch, 'slug' | 'name'>, locale: string) {

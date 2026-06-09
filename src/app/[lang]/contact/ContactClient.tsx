@@ -9,7 +9,7 @@ import { Card, CardBody, CardHeader } from '@/components/common/Card';
 import { Input, Select, Textarea } from '@/components/common/Input';
 import { ServiceIcon } from '@/components/common/ServiceIcon';
 import { CLINIC_BRANCHES, CLINIC_INFO } from '@/constants';
-import { branchDisplayName, phoneHref, whatsAppHref } from '@/lib/clinic';
+import { branchDirectionsHref, branchDisplayName, phoneHref, whatsAppHref } from '@/lib/clinic';
 import {
   getDedicatedServiceLinks,
   serviceDetailsLabel,
@@ -133,7 +133,14 @@ export default function ContactClient({ locale }: ContactClientProps) {
                     >
                       {branchDisplayName(branch, locale)}
                     </Link>
-                    <p className="mt-1 text-sm leading-6">{isArabic ? branch.addressAr : branch.address}</p>
+                    <a
+                      href={branchDirectionsHref(branch)}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-1 block text-sm leading-6 text-cyan-700 transition-colors hover:text-cyan-900 dark:text-cyan-300 dark:hover:text-cyan-100"
+                    >
+                      {isArabic ? branch.addressAr : branch.address}
+                    </a>
                   </div>
                 ))}
               </div>

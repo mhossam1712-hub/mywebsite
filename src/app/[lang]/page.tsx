@@ -3,6 +3,9 @@ import { HeroSection } from '@/components/sections/HeroSection';
 import { ServicesSection } from '@/components/sections/ServicesSection';
 import { DoctorsSection } from '@/components/sections/DoctorsSection';
 import { TestimonialsSection } from '@/components/sections/TestimonialsSection';
+import { WhyChooseSection } from '@/components/sections/WhyChooseSection';
+import { HomepageReviewsSection } from '@/components/sections/HomepageReviewsSection';
+import { LocationsSection } from '@/components/sections/LocationsSection';
 import { createRouteMetadata } from '@/lib/seo';
 
 type PageProps = {
@@ -24,6 +27,9 @@ export default async function HomePage({ params }: PageProps) {
       <ServicesSection locale={lang} />
       <DoctorsSection locale={lang} />
       <TestimonialsSection locale={lang} />
+      <WhyChooseSection locale={lang} />
+      <HomepageReviewsSection locale={lang} />
+      <LocationsSection locale={lang} />
     </>
   );
 }

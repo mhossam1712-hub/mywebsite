@@ -6,7 +6,7 @@ import { MobileBottomActionBar } from '@/components/common/MobileBottomActionBar
 import { ServiceIcon } from '@/components/common/ServiceIcon';
 import { BRANCH_FAQS, CLINIC_BRANCHES, CLINIC_INFO } from '@/constants';
 import { LOCALES } from '@/i18n/config';
-import { branchAreaName, clinicLocation, phoneHref, whatsAppHref } from '@/lib/clinic';
+import { branchAreaName, branchDirectionsHref, clinicLocation, phoneHref, whatsAppHref } from '@/lib/clinic';
 import {
   allServicesLabel,
   getDedicatedServiceLinks,
@@ -169,6 +169,7 @@ export default async function BranchLandingPage({ params }: PageProps) {
   const description = isArabic ? copy.description.ar : copy.description.en;
   const areaName = branchAreaName(branch, lang);
   const address = isArabic ? branch.addressAr : branch.address;
+  const directionsHref = branchDirectionsHref(branch);
   const landmarks = isArabic ? branch.landmarksAr : branch.landmarks;
   const whatsappUrl = whatsAppHref();
   const services = getDedicatedServiceLinks(lang);
@@ -230,7 +231,16 @@ export default async function BranchLandingPage({ params }: PageProps) {
                     <dt className="text-sm font-black uppercase tracking-[0.14em] text-cyan-800 dark:text-cyan-200">
                       {text.address}
                     </dt>
-                    <dd className="mt-2 text-gray-800 dark:text-gray-200">{address}</dd>
+                    <dd className="mt-2">
+                      <a
+                        href={directionsHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-cyan-800 transition-colors hover:text-cyan-950 dark:text-cyan-200 dark:hover:text-white"
+                      >
+                        {address}
+                      </a>
+                    </dd>
                     <dd className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                       {clinicLocation(lang)}
                     </dd>
@@ -255,7 +265,7 @@ export default async function BranchLandingPage({ params }: PageProps) {
                   <div>
                     <p>{text.mapPlaceholder}</p>
                     <a
-                      href={branch.mapUrl}
+                      href={directionsHref}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-3 inline-flex rounded-lg bg-cyan-700 px-4 py-2 text-white transition-colors hover:bg-cyan-800"

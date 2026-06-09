@@ -5,7 +5,8 @@ import { getTranslations } from 'next-intl/server';
 import { Button } from '@/components/common/Button';
 import { Card, CardBody, CardHeader } from '@/components/common/Card';
 import { MobileBottomActionBar } from '@/components/common/MobileBottomActionBar';
-import { createRouteMetadata } from '@/lib/seo';
+import { createRouteMetadata, serializeStructuredData } from '@/lib/seo';
+import { buildPhysiciansPageSchema } from '@/lib/schema';
 import { getDoctorImageAlt, getLocalizedDoctors } from '@/utils/localized-content';
 
 type PageProps = {
@@ -22,10 +23,15 @@ export default async function DoctorsPage({ params }: PageProps) {
   const { lang } = await params;
   const t = await getTranslations({ locale: lang, namespace: 'doctors' });
   const doctors = getLocalizedDoctors(lang);
+  const physiciansSchema = buildPhysiciansPageSchema(lang);
 
   return (
     <>
     <div className="py-12 md:py-24 bg-white dark:bg-gray-800 transition-colors duration-200">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: serializeStructuredData(physiciansSchema) }}
+      />
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">{t('title')}</h1>
