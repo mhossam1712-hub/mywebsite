@@ -8,8 +8,8 @@ import {
   absoluteUrl,
   canonicalUrl,
   createRouteMetadata,
-  OG_IMAGES,
   normalizeLocale,
+  ogImageUrl,
   serializeStructuredData,
 } from '@/lib/seo';
 import { localizeBlogMetadata } from '@/utils/localized-content';
@@ -39,13 +39,11 @@ export async function generateMetadata({ params }: BlogIndexPageProps): Promise<
     path,
     title: seoText.title,
     description: seoText.description,
-    image: OG_IMAGES.blog.url,
-    imageAlt: OG_IMAGES.blog.alt,
   });
 }
 
-function schemaImage(image: string | undefined) {
-  if (!image || image.endsWith('.svg')) return OG_IMAGES.blog.url;
+function schemaImage(image: string | undefined, title: string) {
+  if (!image || image.endsWith('.svg')) return ogImageUrl(title);
 
   return image;
 }
@@ -83,7 +81,7 @@ export default async function BlogIndexPage({ params }: BlogIndexPageProps) {
         url: postUrl,
         datePublished: post.date,
         dateModified: post.date,
-        image: absoluteUrl(siteUrl, schemaImage(post.image)),
+        image: absoluteUrl(siteUrl, schemaImage(post.image, post.title)),
         articleSection: post.category,
         author: post.author
           ? {
@@ -190,6 +188,7 @@ export default async function BlogIndexPage({ params }: BlogIndexPageProps) {
                     src={post.image}
                     alt={post.imageAlt ?? post.title}
                     fill
+                    loading="lazy"
                     sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                     className="object-cover motion-safe:md:transition-transform motion-safe:md:duration-300 motion-safe:md:group-hover:scale-[1.04]"
                   />

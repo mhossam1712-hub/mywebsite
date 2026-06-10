@@ -78,6 +78,10 @@ export const SERVICE_OG_IMAGES = {
 } as const satisfies Record<string, LocalizedOgImage>;
 
 export const DEFAULT_OG_IMAGE = OG_IMAGES.home.url;
+
+export function ogImageUrl(title: string): string {
+  return `/api/og?title=${encodeURIComponent(title)}`;
+}
 type RouteSeoKey =
   | 'home'
   | 'eyeTests'
@@ -296,10 +300,6 @@ const routeSeoText: Record<RouteSeoKey, RouteSeoText> = {
   },
 };
 
-const routeOgImages: Partial<Record<RouteSeoKey, LocalizedOgImage>> = {
-  home: OG_IMAGES.home,
-  blog: OG_IMAGES.blog,
-};
 
 const dayNames = {
   monday: 'Monday',
@@ -466,12 +466,13 @@ function createBaseMetadata({
   path,
   title,
   description,
-  image = DEFAULT_OG_IMAGE,
+  image,
   imageAlt,
   appendBrand = true,
 }: PageMetadataInput): Metadata {
   const fullTitle = appendBrand ? titleWithBrand(title, lang) : title;
   const siteName = clinicNameForLocale(lang);
+  const resolvedImage = image ?? ogImageUrl(fullTitle);
   const resolvedImageAlt = imageAlt ?? fullTitle;
 
   return {
@@ -489,7 +490,7 @@ function createBaseMetadata({
       type: 'website',
       images: [
         {
-          url: image,
+          url: resolvedImage,
           width: OG_IMAGE_DIMENSIONS.width,
           height: OG_IMAGE_DIMENSIONS.height,
           alt: resolvedImageAlt,
@@ -502,7 +503,7 @@ function createBaseMetadata({
       description,
       images: [
         {
-          url: image,
+          url: resolvedImage,
           alt: resolvedImageAlt,
         },
       ],
@@ -528,15 +529,14 @@ export function createRouteMetadata({
   imageAlt?: LocalizedText | string;
 }): Metadata {
   const text = resolveRouteText({ lang, route, title, description });
-  const routeOgImage = route ? routeOgImages[route] : undefined;
 
   return createBaseMetadata({
     lang,
     path,
     title: text.title,
     description: text.description,
-    image: image ?? routeOgImage?.url ?? DEFAULT_OG_IMAGE,
-    imageAlt: localizedOptionalText(imageAlt, lang) ?? localizedOptionalText(routeOgImage?.alt, lang),
+    image,
+    imageAlt: localizedOptionalText(imageAlt, lang),
     appendBrand: text.appendBrand,
   });
 }
@@ -546,7 +546,7 @@ export function createArticleMetadata({
   path,
   title,
   description,
-  image = DEFAULT_OG_IMAGE,
+  image,
   imageAlt,
   publishedTime,
   authors,
@@ -557,6 +557,7 @@ export function createArticleMetadata({
 }): Metadata {
   const fullTitle = titleWithBrand(title, lang);
   const siteName = clinicNameForLocale(lang);
+  const resolvedImage = image ?? ogImageUrl(fullTitle);
 
   return {
     metadataBase: new URL(CANONICAL_SITE_URL),
@@ -575,7 +576,7 @@ export function createArticleMetadata({
       authors,
       images: [
         {
-          url: image,
+          url: resolvedImage,
           width: OG_IMAGE_DIMENSIONS.width,
           height: OG_IMAGE_DIMENSIONS.height,
           alt: imageAlt ?? fullTitle,
@@ -588,7 +589,7 @@ export function createArticleMetadata({
       description,
       images: [
         {
-          url: image,
+          url: resolvedImage,
           alt: imageAlt ?? fullTitle,
         },
       ],
@@ -602,7 +603,7 @@ export function createNoindexRouteMetadata({
   route,
   title,
   description,
-  image = DEFAULT_OG_IMAGE,
+  image,
   imageAlt,
 }: {
   lang: string;
@@ -631,8 +632,8 @@ export function createRootMetadata({
   const locale = normalizeLocale(lang);
   const title = titleWithBrand(localizedText(rootSeoText.title, locale), locale);
   const description = localizedText(rootSeoText.description, locale);
-  const image = OG_IMAGES.home.url;
-  const imageAlt = localizedText(OG_IMAGES.home.alt, locale);
+  const image = ogImageUrl(title);
+  const imageAlt = title;
 
   return {
     metadataBase: new URL(CANONICAL_SITE_URL),

@@ -12,7 +12,6 @@ import {
   canonicalUrl,
   createRouteMetadata,
   normalizeLocale,
-  SERVICE_OG_IMAGES,
   serializeStructuredData,
 } from '@/lib/seo';
 import type { FAQ } from '@/types';
@@ -236,8 +235,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     path,
     title: seoText.title,
     description: seoText.description,
-    image: SERVICE_OG_IMAGES.retina.url,
-    imageAlt: SERVICE_OG_IMAGES.retina.alt,
   });
 }
 

@@ -3,17 +3,19 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { MobileBottomActionBar } from '@/components/common/MobileBottomActionBar';
+import { RelatedServices } from '@/components/sections/RelatedServices';
 import { getArabicBlogContent } from '@/content/arabic-blog';
 import type { BlogPostMetadata } from '@/lib/blog';
 import { getBlogPost, getBlogSlugs } from '@/lib/blog';
+import { getRelatedServiceSlugs } from '@/lib/internalLinks';
 import { LOCALES } from '@/i18n/config';
 import { getSiteUrl } from '@/lib/site-url';
 import {
   absoluteUrl,
   canonicalUrl,
   createArticleMetadata,
-  OG_IMAGES,
   normalizeLocale,
+  ogImageUrl,
   serializeStructuredData,
 } from '@/lib/seo';
 import { localizeBlogMetadata } from '@/utils/localized-content';
@@ -48,15 +50,15 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     path: `/blog/${post.metadata.slug}`,
     title: metadata.title,
     description: metadata.description,
-    image: openGraphImage(metadata.image),
+    image: openGraphImage(metadata.image, metadata.title),
     imageAlt: metadata.imageAlt,
     publishedTime: post.metadata.date,
     authors: metadata.author ? [metadata.author] : undefined,
   });
 }
 
-function openGraphImage(image: string | undefined) {
-  if (!image || image.endsWith('.svg')) return OG_IMAGES.blog.url;
+function openGraphImage(image: string | undefined, title: string) {
+  if (!image || image.endsWith('.svg')) return ogImageUrl(title);
 
   return image;
 }
@@ -96,7 +98,7 @@ function buildArticleStructuredData({
     '@id': `${url}#${type === 'Article' ? 'article' : 'blogposting'}`,
     headline: metadata.title,
     description: metadata.description,
-    image: absoluteUrl(siteUrl, openGraphImage(metadata.image)),
+    image: absoluteUrl(siteUrl, openGraphImage(metadata.image, metadata.title)),
     datePublished: metadata.date,
     dateModified: metadata.date,
     author: blogAuthorSchema(metadata, siteUrl),
@@ -131,6 +133,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const siteUrl = getSiteUrl();
   const path = `/blog/${post.metadata.slug}`;
   const arabicContent = isArabic ? getArabicBlogContent(slug) : null;
+  const relatedServiceSlugs = getRelatedServiceSlugs(post.metadata.category);
   const articleSchema = buildArticleStructuredData({
     type: 'Article',
     metadata,
@@ -206,6 +209,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
         <div className={`journal-prose mt-10 max-w-3xl ${isArabic ? 'ms-auto text-right' : ''}`}>
           {arabicContent ?? <PostContent />}
+        </div>
+
+        <div className="max-w-3xl">
+          <RelatedServices slugs={relatedServiceSlugs} locale={locale} />
         </div>
       </div>
     </article>

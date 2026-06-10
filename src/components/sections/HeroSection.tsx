@@ -49,6 +49,7 @@ export const HeroSection = async ({ locale }: SectionProps) => {
               fill
               priority
               fetchPriority="high"
+              loading="eager"
               quality={72}
               sizes="(min-width: 1024px) 40vw, (min-width: 640px) 70vw, 100vw"
               className="object-cover"

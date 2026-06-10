@@ -47,6 +47,7 @@ export default async function DoctorsPage({ params }: PageProps) {
                     src={doctor.image}
                     alt={getDoctorImageAlt(doctor.id, doctor.name)}
                     fill
+                    loading="lazy"
                     sizes="(min-width: 768px) 384px, calc(100vw - 80px)"
                     className="h-full w-full object-cover object-top"
                   />

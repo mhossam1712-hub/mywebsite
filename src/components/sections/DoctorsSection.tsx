@@ -30,6 +30,7 @@ export const DoctorsSection = async ({ locale }: SectionProps) => {
                     src={doctor.image}
                     alt={getDoctorImageAlt(doctor.id, doctor.name)}
                     fill
+                    loading="lazy"
                     sizes="(min-width: 768px) 384px, calc(100vw - 72px)"
                     className="h-full w-full object-cover object-top"
                   />

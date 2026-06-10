@@ -27,7 +27,7 @@ const googleVerification =
 // retrieve it from bing.com/webmasters → Add site → Verify → XML meta tag.
 const bingVerification =
   process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ||
-  '';
+  'BING_CODE_HERE';
 
 export async function generateMetadata({
   params,
@@ -78,6 +78,10 @@ export default async function RootLayout({
     <html lang={lang} dir={direction} suppressHydrationWarning data-scroll-behavior="smooth">
       <head>
         <meta httpEquiv="content-language" content="en, ar" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://www.googletagmanager.com" />
+        <link rel="preconnect" href="https://www.clarity.ms" />
       </head>
       <body className="bg-medical-50 text-slate-900 antialiased transition-colors duration-300 dark:bg-gray-950 dark:text-gray-100">
         <ThemeProvider>

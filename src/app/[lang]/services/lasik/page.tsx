@@ -12,7 +12,6 @@ import {
   canonicalUrl,
   createRouteMetadata,
   normalizeLocale,
-  SERVICE_OG_IMAGES,
   serializeStructuredData,
 } from '@/lib/seo';
 import { getLocalizedFaqs } from '@/utils/localized-content';
@@ -128,8 +127,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     path,
     title: seoText.title,
     description: seoText.description,
-    image: SERVICE_OG_IMAGES.lasik.url,
-    imageAlt: SERVICE_OG_IMAGES.lasik.alt,
   });
 }
 
