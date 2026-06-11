@@ -139,7 +139,7 @@ export const Header = async ({ locale }: HeaderProps) => {
         />
       </div>
       <div className="hidden border-t border-cyan-100 bg-cyan-50/80 dark:border-cyan-900/70 dark:bg-slate-900/80 lg:block">
-        <nav className="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto px-4 py-2" aria-label={serviceNavLabel}>
+        <nav className="mx-auto flex max-w-7xl items-center gap-2 overflow-x-auto scrollbar-hide px-4 py-2" aria-label={serviceNavLabel}>
           <span className="shrink-0 text-xs font-black uppercase tracking-[0.14em] text-cyan-900 dark:text-cyan-100">
             {serviceHeading}
           </span>

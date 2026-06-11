@@ -117,7 +117,7 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
             subtitle={t('appointment.form_subtitle')}
           />
           <CardBody>
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
               {submitStatus.type && (
                 <div
                   className={`p-4 rounded-lg transition-colors duration-200 ${
@@ -132,6 +132,7 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
 
               <Input
                 label={t('appointment.name')}
+                autoComplete="name"
                 {...register('name', {
                   required: t('validation.name_required'),
                 })}
@@ -139,7 +140,10 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
               />
 
               <Input
+                type="tel"
                 label={t('appointment.phone')}
+                autoComplete="tel"
+                inputMode="tel"
                 {...register('phone', {
                   required: t('validation.phone_required'),
                   validate: (value) => value.replace(/\D/g, '').length >= 7 || t('validation.phone_invalid'),

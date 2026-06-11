@@ -35,7 +35,7 @@ export const ServicesSection = async ({ locale }: SectionProps) => {
             <p className="shrink-0 text-xs font-black uppercase tracking-[0.14em] text-cyan-900 dark:text-cyan-100">
               {serviceLinksHeading(locale)}
             </p>
-            <div className="flex gap-2 overflow-x-auto pb-1 md:flex-wrap md:overflow-visible md:pb-0">
+            <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-1 md:flex-wrap md:overflow-visible md:pb-0">
               {serviceLinks.map((service) => (
                 <Link
                   key={service.slug}

@@ -20,7 +20,10 @@ body {
   @apply bg-medical-50 dark:bg-gray-950 text-slate-900 dark:text-gray-100;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
   font-feature-settings: "rlig" 1, "calt" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
+  min-height: 100dvh;
 }
 
 @media (min-width: 768px) {
@@ -37,8 +40,23 @@ body {
 }
 
 button,
-a {
+a,
+input,
+select,
+textarea,
+summary,
+[role="button"] {
   -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+input,
+select,
+textarea,
+summary,
+[role="button"] {
+  touch-action: manipulation;
 }
 
 p,
@@ -231,9 +249,11 @@ h3 {
   transition: opacity 180ms ease, transform 180ms ease;
 }
 
-.nav-link-creative:hover::after {
-  opacity: 0.55;
-  transform: scaleX(1);
+@media (hover: hover) and (pointer: fine) {
+  .nav-link-creative:hover::after {
+    opacity: 0.55;
+    transform: scaleX(1);
+  }
 }
 
 .journal-prose {
@@ -308,6 +328,21 @@ h3 {
 [dir="rtl"] .mr-8 {
   margin-right: 0;
   margin-left: 2rem;
+}
+
+/* Fix select dropdown arrow for class-based dark mode — @tailwindcss/forms uses
+   prefers-color-scheme which doesn't apply when dark mode is toggled via .dark class */
+.dark select {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+}
+
+/* Hide scrollbar utility — for nav strips and horizontal scrollers */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 /* Scrollbar Styling */

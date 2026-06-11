@@ -80,7 +80,7 @@ export function MobileMenu({
       </summary>
       <div
         id="mobile-navigation"
-        className="absolute inset-x-0 top-full z-[105] max-h-[calc(100dvh-72px)] overflow-y-auto border-t border-cyan-100 bg-white/[0.98] px-3 py-4 shadow-md dark:border-cyan-800/45 dark:bg-slate-950/[0.98] sm:px-4"
+        className="absolute inset-x-0 top-full z-[105] max-h-[calc(100dvh-72px)] overflow-y-auto overscroll-contain border-t border-cyan-100 bg-white/[0.98] px-3 py-4 shadow-md dark:border-cyan-800/45 dark:bg-slate-950/[0.98] sm:px-4"
       >
         <nav className="flex flex-col gap-2 md:flex-row md:gap-2">
           {navItems.map((item) => {

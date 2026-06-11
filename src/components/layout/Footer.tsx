@@ -144,7 +144,7 @@ export const Footer = async ({ locale }: FooterProps) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit Abdalla Eye Clinic on Facebook"
-                className="hover:text-blue-400"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full font-bold hover:text-blue-400"
               >
                 f
               </a>
@@ -155,7 +155,7 @@ export const Footer = async ({ locale }: FooterProps) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Visit Abdalla Eye Clinic on Instagram"
-                className="hover:text-pink-400"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full hover:text-pink-400"
               >
                 📷
               </a>
@@ -166,7 +166,7 @@ export const Footer = async ({ locale }: FooterProps) => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Contact Abdalla Eye Clinic on WhatsApp"
-                className="hover:text-green-400"
+                className="inline-flex h-11 w-11 items-center justify-center rounded-full hover:text-green-400"
               >
                 💬
               </a>

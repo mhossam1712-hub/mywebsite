@@ -132,13 +132,13 @@ export function LocationsSection({ locale }: Props) {
                       href={directionsUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-10 items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-2 text-sm font-bold text-cyan-900 transition-colors hover:bg-cyan-50 dark:border-cyan-800 dark:bg-cyan-950/50 dark:text-cyan-50 dark:hover:bg-cyan-900"
+                      className="inline-flex min-h-11 items-center justify-center rounded-lg border border-cyan-200 bg-white px-4 py-2 text-sm font-bold text-cyan-900 transition-colors hover:bg-cyan-50 dark:border-cyan-800 dark:bg-cyan-950/50 dark:text-cyan-50 dark:hover:bg-cyan-900"
                     >
                       {t.directions}
                     </a>
                     <Link
                       href={`/${locale}/appointments`}
-                      className="inline-flex min-h-10 items-center justify-center rounded-lg bg-cyan-800 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-cyan-700 dark:bg-cyan-700 dark:hover:bg-cyan-600"
+                      className="inline-flex min-h-11 items-center justify-center rounded-lg bg-cyan-800 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-cyan-700 dark:bg-cyan-700 dark:hover:bg-cyan-600"
                     >
                       {t.appointment}
                     </Link>
