@@ -150,9 +150,13 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
   return (
     <div className="py-12 md:py-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <div className="max-w-2xl mx-auto px-4">
+        <h1 className="mb-6 text-3xl font-bold text-slate-950 dark:text-white md:text-4xl">
+          {isArabic
+            ? 'احجز موعدك في عيادة عبدالله للعيون'
+            : 'Book an Appointment at Abdalla Eye Clinic'}
+        </h1>
         <Card>
           <CardHeader
-            title={t('appointment.form_title')}
             subtitle={t('appointment.form_subtitle')}
           />
           <CardBody>
