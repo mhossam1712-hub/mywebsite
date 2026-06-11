@@ -139,3 +139,10 @@ export interface PaginatedResponse<T> {
   limit: number;
   hasMore: boolean;
 }
+
+
+declare global {
+  interface Window {
+    gtag: (...args: unknown[]) => void;
+  }
+}

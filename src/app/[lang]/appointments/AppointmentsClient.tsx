@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/common/Button';
@@ -85,6 +85,15 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
       const serviceName = services.find((service) => service.id === data.serviceId)?.name ?? data.serviceId;
       const appointmentMessage = buildAppointmentMessage(data, branchName, serviceName, locale);
       const appointmentUrl = buildAppointmentUrl(appointmentMessage);
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'appointment_booked', {
+          event_category: 'booking',
+          event_label: 'appointment_form',
+          service: serviceName,
+          branch: branchName,
+        });
+        window.gtag('event', 'conversion', { send_to: `AW-18201356226/${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL ?? '6GE6CJq5-rwcEMLPiudD'}` });
+      }
       setSubmitStatus({
         type: 'success',
         message: t('appointment.success'),
