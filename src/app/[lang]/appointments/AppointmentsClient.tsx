@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/common/Button';
 import { Card, CardBody, CardHeader } from '@/components/common/Card';
+import { GoogleReviewButton } from '@/components/common/GoogleReviewButton';
 import { Input, Select, Textarea } from '@/components/common/Input';
 import { APPOINTMENT_TIME_SLOTS, CLINIC_BRANCHES } from '@/constants';
 import { appointmentEmailFallbackHref, branchAppointmentName, whatsAppHref } from '@/lib/clinic';
@@ -99,7 +100,7 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
         message: t('appointment.success'),
       });
       reset();
-      window.location.assign(appointmentUrl);
+      window.open(appointmentUrl, '_blank', 'noopener,noreferrer');
     } catch {
       setSubmitStatus({
         type: 'error',
@@ -107,6 +108,44 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
       });
     }
   };
+
+  const isArabic = locale === 'ar';
+
+  if (submitStatus.type === 'success') {
+    return (
+      <div className="py-12 md:py-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+        <div className="max-w-2xl mx-auto px-4">
+          <Card>
+            <CardBody>
+              <div className="flex flex-col items-center gap-6 py-6 text-center">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+                  <svg className="h-8 w-8 text-green-600 dark:text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+                    {isArabic ? 'شكراً لك!' : 'Booking received!'}
+                  </h2>
+                  <p className="mt-2 text-slate-600 dark:text-gray-300">
+                    {submitStatus.message}
+                  </p>
+                </div>
+                <div className="w-full rounded-lg border border-cyan-100 bg-cyan-50/60 p-5 dark:border-cyan-900/60 dark:bg-cyan-950/20">
+                  <p className="mb-4 text-sm font-semibold text-slate-800 dark:text-slate-200">
+                    {isArabic
+                      ? 'نتطلع لسماع رأيك! هل يمكنك مشاركة تجربتك على Google؟'
+                      : "Thank you for booking! We'd love to hear about your experience."}
+                  </p>
+                  <GoogleReviewButton locale={locale} size="md" />
+                </div>
+              </div>
+            </CardBody>
+          </Card>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="py-12 md:py-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
@@ -118,14 +157,8 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
           />
           <CardBody>
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" noValidate>
-              {submitStatus.type && (
-                <div
-                  className={`p-4 rounded-lg transition-colors duration-200 ${
-                    submitStatus.type === 'success'
-                      ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200'
-                      : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200'
-                  }`}
-                >
+              {submitStatus.type === 'error' && (
+                <div className="p-4 rounded-lg transition-colors duration-200 bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200">
                   {submitStatus.message}
                 </div>
               )}

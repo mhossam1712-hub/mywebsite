@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/common/Button';
 import { Card, CardBody, CardHeader } from '@/components/common/Card';
+import { GoogleReviewButton } from '@/components/common/GoogleReviewButton';
 import { Input, Select, Textarea } from '@/components/common/Input';
 import { ServiceIcon } from '@/components/common/ServiceIcon';
 import { CLINIC_BRANCHES, CLINIC_INFO } from '@/constants';
@@ -184,6 +185,22 @@ export default function ContactClient({ locale }: ContactClientProps) {
         </section>
 
         <div className="max-w-2xl mx-auto">
+          <div className="mb-8 rounded-lg border border-cyan-100 bg-white p-5 shadow-sm dark:border-cyan-900/60 dark:bg-slate-900/70 sm:p-6">
+            <div className={`flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between ${isArabic ? 'sm:flex-row-reverse text-right' : ''}`}>
+              <div>
+                <h2 className="text-lg font-bold text-slate-950 dark:text-white">
+                  {isArabic ? 'شاركنا رأيك على Google' : 'Share your experience on Google'}
+                </h2>
+                <p className="mt-1 text-sm text-slate-600 dark:text-gray-300">
+                  {isArabic
+                    ? 'تقييمك يساعدنا على تحسين خدماتنا ويفيد المرضى الآخرين'
+                    : 'Your review helps us improve and helps other patients find us'}
+                </p>
+              </div>
+              <GoogleReviewButton locale={locale} size="sm" className="shrink-0 self-start sm:self-center" />
+            </div>
+          </div>
+
           <Card>
             <CardHeader title={t('contact.form_title')} />
             <CardBody>

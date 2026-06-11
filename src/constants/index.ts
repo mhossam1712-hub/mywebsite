@@ -29,6 +29,7 @@ export const CLINIC_INFO: ClinicInfo = {
     facebook: 'https://www.facebook.com/Dr.Mohamed.Hossam.Abdalla',
     instagram: 'https://www.instagram.com/dr_m_hossam_abdalla/',
     whatsapp: '+201276637774',
+    googleReview: 'https://g.page/r/CYTId-ZSu7-hEBM/review',
   },
 };
 

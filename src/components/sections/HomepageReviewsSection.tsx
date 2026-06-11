@@ -3,6 +3,7 @@
 // specific patient outcomes on this page.
 
 import React from 'react';
+import { GoogleReviewButton } from '@/components/common/GoogleReviewButton';
 import { CANONICAL_SITE_URL, serializeStructuredData } from '@/lib/seo';
 import { sectionText } from '@/utils/localized-content';
 
@@ -121,6 +122,15 @@ export function HomepageReviewsSection({ locale }: Props) {
               </blockquote>
             </figure>
           ))}
+        </div>
+
+        <div className="mt-10 flex flex-col items-center gap-3 text-center sm:mt-12">
+          <p className="text-base text-slate-600 dark:text-gray-300">
+            {isArabic
+              ? 'هل زرت عيادتنا؟ شاركنا تجربتك على Google'
+              : 'Visited our clinic? Share your experience on Google'}
+          </p>
+          <GoogleReviewButton locale={locale} />
         </div>
       </div>
     </section>

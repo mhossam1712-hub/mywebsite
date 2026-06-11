@@ -123,6 +123,7 @@ export interface SocialLinks {
   facebook?: string;
   instagram?: string;
   whatsapp?: string;
+  googleReview?: string;
 }
 
 export interface ApiResponse<T> {
