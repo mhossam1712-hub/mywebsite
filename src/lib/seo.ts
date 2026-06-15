@@ -178,7 +178,7 @@ const routeSeoText: Record<RouteSeoKey, RouteSeoText> = {
     },
     description: {
       en: 'Expert eye care in Alexandria, Egypt. LASIK surgery, cataract treatment, glaucoma, retina & dry eye specialists. Book your appointment today — Smouha & Raml Station.',
-      ar: 'عيادة عيون في الإسكندرية تقدم فحوصات شاملة، ليزك، مياه بيضاء، علاج الجلوكوما، الشبكية، وجفاف العين.',
+      ar: 'عيادة عيون متخصصة في الإسكندرية تقدم فحوصات شاملة للنظر، الليزك، جراحة المياه البيضاء، علاج الجلوكوما، أمراض الشبكية، جفاف العين، وعيون الأطفال. احجز موعدك اليوم.',
     },
     appendBrand: false,
   },
