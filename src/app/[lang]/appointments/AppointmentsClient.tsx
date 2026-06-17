@@ -152,7 +152,7 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
       <div className="max-w-2xl mx-auto px-4">
         <h1 className="mb-6 text-3xl font-bold text-slate-950 dark:text-white md:text-4xl">
           {isArabic
-            ? 'احجز موعدك في عيادة عبدالله للعيون'
+            ? 'احجز موعدك في عيادة عبد الله للعيون'
             : 'Book an Appointment at Abdalla Eye Clinic'}
         </h1>
         <Card>
