@@ -24,21 +24,14 @@ const localizedLegacyEyeTestSources = [
   '/:lang(en|ar)/near-vision-test.html',
 ];
 
-const oldBrokenUrlSources = [
-  '/Contact',
-  '/FAQs',
-  '/en/Contact',
-  '/en/FAQs',
-  '/ar/Contact',
-  '/ar/FAQs',
-];
-
+// Next.js path matching is case-insensitive, so locale-prefixed variants like
+// /en/Contact would shadow the real /en/contact page. Only keep un-localized
+// legacy entries and send them to the correct canonical page.
 function oldBrokenUrlRedirects() {
-  return oldBrokenUrlSources.map((source) => ({
-    source,
-    destination: canonicalOrigin,
-    statusCode: 301,
-  }));
+  return [
+    { source: '/Contact', destination: '/en/contact', statusCode: 301 },
+    { source: '/FAQs', destination: '/en/faqs', statusCode: 301 },
+  ];
 }
 
 function legacyEyeTestRedirects() {
