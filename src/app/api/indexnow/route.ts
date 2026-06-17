@@ -1,20 +1,20 @@
 import { NextResponse } from 'next/server';
 
 const indexNowPayload = {
-  host: 'www.abdallaeyeclinic.com',
+  host: 'abdallaeyeclinic.com',
   key: 'c39fca90b8c641cdbce65f86b5cc31c9',
-  keyLocation: 'https://www.abdallaeyeclinic.com/c39fca90b8c641cdbce65f86b5cc31c9.txt',
+  keyLocation: 'https://abdallaeyeclinic.com/c39fca90b8c641cdbce65f86b5cc31c9.txt',
   urlList: [
-    'https://www.abdallaeyeclinic.com/',
-    'https://www.abdallaeyeclinic.com/en',
-    'https://www.abdallaeyeclinic.com/en/services',
-    'https://www.abdallaeyeclinic.com/en/appointments',
-    'https://www.abdallaeyeclinic.com/en/doctors',
-    'https://www.abdallaeyeclinic.com/en/eye-tests',
-    'https://www.abdallaeyeclinic.com/en/contact',
-    'https://www.abdallaeyeclinic.com/en/about',
-    'https://www.abdallaeyeclinic.com/en/blog',
-    'https://www.abdallaeyeclinic.com/ar',
+    'https://abdallaeyeclinic.com/',
+    'https://abdallaeyeclinic.com/en',
+    'https://abdallaeyeclinic.com/en/services',
+    'https://abdallaeyeclinic.com/en/appointments',
+    'https://abdallaeyeclinic.com/en/doctors',
+    'https://abdallaeyeclinic.com/en/eye-tests',
+    'https://abdallaeyeclinic.com/en/contact',
+    'https://abdallaeyeclinic.com/en/about',
+    'https://abdallaeyeclinic.com/en/blog',
+    'https://abdallaeyeclinic.com/ar',
   ],
 };
 

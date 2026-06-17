@@ -1,7 +1,7 @@
 import type { MetadataRoute } from 'next';
 import { getBlogPosts } from '@/lib/blog';
 
-const siteUrl = 'https://www.abdallaeyeclinic.com';
+const siteUrl = 'https://abdallaeyeclinic.com';
 const locales = ['en', 'ar'] as const;
 const mainPageChangeFrequency = 'weekly' as const;
 const mainPagePriority = 0.8;

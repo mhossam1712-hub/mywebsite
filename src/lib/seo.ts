@@ -5,7 +5,7 @@ import type { FAQ } from '@/types';
 import { getLocalizedDoctors, getLocalizedServices } from '@/utils/localized-content';
 
 const TITLE_SEPARATOR = '|';
-export const CANONICAL_SITE_URL = 'https://www.abdallaeyeclinic.com';
+export const CANONICAL_SITE_URL = 'https://abdallaeyeclinic.com';
 
 type Locale = 'en' | 'ar';
 type LocalizedText = {

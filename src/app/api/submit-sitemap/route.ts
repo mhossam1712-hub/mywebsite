@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-const SITEMAP_URL = 'https://www.abdallaeyeclinic.com/sitemap.xml';
+const SITEMAP_URL = 'https://abdallaeyeclinic.com/sitemap.xml';
 
 const PING_ENDPOINTS = [
   { name: 'google', url: `https://www.google.com/ping?sitemap=${encodeURIComponent(SITEMAP_URL)}` },

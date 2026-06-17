@@ -19,7 +19,7 @@ import { getDirection } from '@/utils';
 import '../../styles/globals.css';
 
 const siteUrl = getSiteUrl();
-const metadataBase = new URL('https://www.abdallaeyeclinic.com');
+const metadataBase = new URL('https://abdallaeyeclinic.com');
 const googleVerification =
   process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
   'CCOzpuU40fiYJh7XR2BnGQmMRPnl_EN9hSaFjWhlP2U';

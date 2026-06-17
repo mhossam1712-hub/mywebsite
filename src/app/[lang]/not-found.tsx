@@ -1,4 +1,4 @@
-const homepageUrl = 'https://www.abdallaeyeclinic.com';
+const homepageUrl = 'https://abdallaeyeclinic.com';
 
 export default function NotFound() {
   return (

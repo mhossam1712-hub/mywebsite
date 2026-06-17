@@ -10,8 +10,7 @@ const withMDX = createMDX({
   extension: /\.mdx?$/,
 });
 
-const canonicalOrigin = 'https://www.abdallaeyeclinic.com';
-const apexHost = 'abdallaeyeclinic.com';
+const canonicalOrigin = 'https://abdallaeyeclinic.com';
 const wwwHost = 'www.abdallaeyeclinic.com';
 
 const unlocalizedLegacyEyeTestSources = [
@@ -74,27 +73,12 @@ function legacyEyeTestRedirects() {
 function canonicalRedirects() {
   return [
     {
-      source: '/:path*',
-      has: [
-        {
-          type: 'host',
-          value: apexHost,
-        },
-      ],
-      destination: `${canonicalOrigin}/:path*`,
-      statusCode: 301,
-    },
-    {
+      // Single-hop: www (http or https) → non-www HTTPS canonical
       source: '/:path*',
       has: [
         {
           type: 'host',
           value: wwwHost,
-        },
-        {
-          type: 'header',
-          key: 'x-forwarded-proto',
-          value: 'http',
         },
       ],
       destination: `${canonicalOrigin}/:path*`,

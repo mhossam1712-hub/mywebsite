@@ -1,4 +1,4 @@
-const productionSiteUrl = 'https://www.abdallaeyeclinic.com';
+const productionSiteUrl = 'https://abdallaeyeclinic.com';
 
 export function getSiteUrl() {
   const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL;
