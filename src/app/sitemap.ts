@@ -4,6 +4,7 @@ import { getBlogPosts } from '@/lib/blog';
 const siteUrl = 'https://abdallaeyeclinic.com';
 const locales = ['en', 'ar'] as const;
 const mainPageChangeFrequency = 'weekly' as const;
+const blogPostChangeFrequency = 'monthly' as const;
 const mainPagePriority = 0.8;
 const blogPostPriority = 0.5;
 
@@ -86,7 +87,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const blogPosts = await getBlogPosts();
   const blogPostPages = blogPosts.map((post) => ({
     path: `/blog/${post.slug}`,
-    changeFrequency: mainPageChangeFrequency,
+    changeFrequency: blogPostChangeFrequency,
     priority: blogPostPriority,
     lastModified: new Date(post.date),
   })) satisfies SitemapPage[];
