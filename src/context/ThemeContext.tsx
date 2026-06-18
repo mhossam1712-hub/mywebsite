@@ -12,35 +12,31 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  // The inline <script> in <head> already applied the correct class before
+  // React hydrates, so we just read back what the DOM already shows.
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === 'undefined') return 'light';
-
-    const storedTheme = localStorage.getItem('theme') as Theme | null;
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    return storedTheme || (prefersDark ? 'dark' : 'light');
+    return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
   });
 
   const applyTheme = useCallback((newTheme: Theme) => {
     const htmlElement = document.documentElement;
-    
     if (newTheme === 'dark') {
       htmlElement.classList.add('dark');
     } else {
       htmlElement.classList.remove('dark');
     }
-    
     localStorage.setItem('theme', newTheme);
   }, []);
 
+  // Single source of truth: DOM update always goes through this effect.
   useEffect(() => {
     applyTheme(theme);
   }, [applyTheme, theme]);
 
+  // Only update state — the effect above handles the DOM write.
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    applyTheme(newTheme);
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   return (

@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import { getSiteUrl } from '@/lib/site-url';
 import { classNames } from '@/utils';
@@ -121,9 +122,9 @@ function buildBreadcrumbSchema(items: BreadcrumbItem[]) {
 
 export function Breadcrumbs() {
   const pathname = usePathname() || '/en';
-  const { locale, items } = getBreadcrumbItems(pathname);
+  const { locale, items } = useMemo(() => getBreadcrumbItems(pathname), [pathname]);
   const isArabic = locale === 'ar';
-  const schema = buildBreadcrumbSchema(items);
+  const schema = useMemo(() => buildBreadcrumbSchema(items), [items]);
 
   return (
     <div className="border-b border-cyan-100 bg-white/90 dark:border-cyan-900/70 dark:bg-slate-950/90">

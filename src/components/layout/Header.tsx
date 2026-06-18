@@ -59,8 +59,9 @@ export const Header = async ({ locale }: HeaderProps) => {
               src="/assets/images/abdalla-eye-emblem-64.png"
               alt={`${clinicName} eye logo`}
               fill
+              priority
               sizes="44px"
-              quality={70}
+              quality={75}
               className="object-contain p-1"
             />
           </div>

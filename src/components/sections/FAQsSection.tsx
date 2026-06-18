@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
 import { getLocalizedFaqs, getSectionText } from '@/utils/localized-content';
@@ -9,7 +8,6 @@ export const FAQsSection = () => {
   const t = useTranslations('faqs');
   const locale = useLocale();
   const faqs = getLocalizedFaqs(locale);
-  const [expandedId, setExpandedId] = useState<string | null>(null);
   const isArabic = locale === 'ar';
   const categoryLabels: Record<string, string> = isArabic
     ? {
@@ -49,30 +47,27 @@ export const FAQsSection = () => {
               </h3>
               <div className="space-y-4">
                 {group.faqs.map((faq) => (
-                  <div
+                  <details
                     key={faq.id}
-                    className="overflow-hidden rounded-lg border border-cyan-100 bg-white/90 shadow-elegant backdrop-blur transition-colors duration-300 dark:border-cyan-900/60 dark:bg-gray-950/60"
+                    className="group overflow-hidden rounded-lg border border-cyan-100 bg-white/90 shadow-elegant backdrop-blur transition-colors duration-300 dark:border-cyan-900/60 dark:bg-gray-950/60"
                   >
-                    <button
-                      onClick={() => setExpandedId(expandedId === faq.id ? null : faq.id)}
-                      className={`flex w-full items-center justify-between gap-4 px-6 py-4 transition-colors duration-200 hover:bg-cyan-50/70 dark:hover:bg-cyan-950/40 ${isArabic ? 'text-right' : 'text-left'}`}
+                    <summary
+                      className={`flex w-full cursor-pointer list-none items-center justify-between gap-4 px-6 py-4 transition-colors duration-200 hover:bg-cyan-50/70 dark:hover:bg-cyan-950/40 ${isArabic ? 'text-right' : 'text-left'}`}
                     >
-                      <span className="text-2xl text-cyan-700 transition-transform duration-200 dark:text-cyan-300">
-                        {expandedId === faq.id ? '−' : '+'}
+                      <span className="text-2xl text-cyan-700 transition-transform duration-200 group-open:rotate-45 dark:text-cyan-300 select-none">
+                        +
                       </span>
                       <h4 className={`flex-1 font-semibold text-slate-950 dark:text-white ${isArabic ? 'text-right' : 'text-left'}`}>{faq.question}</h4>
-                    </button>
-                    {expandedId === faq.id && (
-                      <div className="border-t border-cyan-100 bg-cyan-50/45 dark:border-cyan-900/60 dark:bg-cyan-950/20">
-                        <p className={`px-6 py-4 leading-7 text-slate-700 dark:text-gray-300 ${isArabic ? 'text-right' : 'text-left'}`}>{faq.answer}</p>
-                      </div>
-                    )}
-                  </div>
+                    </summary>
+                    <div className="border-t border-cyan-100 bg-cyan-50/45 dark:border-cyan-900/60 dark:bg-cyan-950/20">
+                      <p className={`px-6 py-4 leading-7 text-slate-700 dark:text-gray-300 ${isArabic ? 'text-right' : 'text-left'}`}>{faq.answer}</p>
+                    </div>
+                  </details>
                 ))}
               </div>
             </div>
           ))}
-                </div>
+        </div>
       </div>
     </section>
   );

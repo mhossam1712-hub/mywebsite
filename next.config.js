@@ -88,17 +88,12 @@ const nextConfig = {
       ...oldBrokenUrlRedirects(),
       ...canonicalRedirects(),
       ...legacyEyeTestRedirects(),
-      {
-        source: '/',
-        destination: `${canonicalOrigin}/en`,
-        statusCode: 301,
-      },
     ];
   },
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 2592000,
-    qualities: [70, 72, 75],
+    qualities: [70, 75, 80, 85],
     unoptimized: false,
   },
   async headers() {

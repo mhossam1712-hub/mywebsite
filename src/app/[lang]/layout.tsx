@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Cairo, Inter } from 'next/font/google';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
@@ -21,16 +22,31 @@ import {
 import { getDirection } from '@/utils';
 import '../../styles/globals.css';
 
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+});
+
+const cairo = Cairo({
+  subsets: ['arabic', 'latin'],
+  display: 'swap',
+  variable: '--font-arabic',
+});
+
 const siteUrl = getSiteUrl();
 const metadataBase = new URL('https://abdallaeyeclinic.com');
 const googleVerification =
   process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
   'CCOzpuU40fiYJh7XR2BnGQmMRPnl_EN9hSaFjWhlP2U';
-// Replace the empty string with your Bing Webmaster Tools code once you
-// retrieve it from bing.com/webmasters → Add site → Verify → XML meta tag.
 const bingVerification =
   process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ||
   'BING_CODE_HERE';
+
+// Inline script applied before React hydration to avoid a dark-mode flash.
+// Must be a plain string with no template-literal interpolation so Next.js
+// can emit it as a static <script> block in the SSR HTML.
+const themeInitScript = `(function(){try{var t=localStorage.getItem('theme');var d=window.matchMedia('(prefers-color-scheme: dark)').matches;if(t==='dark'||(t===null&&d)){document.documentElement.classList.add('dark')}}catch(e){}})()`;
 
 export async function generateMetadata({
   params,
@@ -80,14 +96,23 @@ export default async function RootLayout({
   const direction = getDirection(lang);
   const structuredData = buildMedicalClinicSchema(lang, siteUrl);
 
+  const clarityId = process.env.NEXT_PUBLIC_MICROSOFT_CLARITY_ID;
+
   return (
-    <html lang={lang} dir={direction} suppressHydrationWarning data-scroll-behavior="smooth">
+    <html
+      lang={lang}
+      dir={direction}
+      suppressHydrationWarning
+      data-scroll-behavior="smooth"
+      className={`${inter.variable} ${cairo.variable}`}
+    >
       <head>
+        {/* Blocking theme script — runs before React so no dark-mode flash */}
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         <meta httpEquiv="content-language" content="en, ar" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* next/font handles its own font loading — no Google Fonts preconnect needed */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
-        <link rel="preconnect" href="https://www.clarity.ms" />
+        {clarityId && <link rel="preconnect" href="https://www.clarity.ms" />}
       </head>
       <body className="bg-medical-50 text-slate-900 antialiased transition-colors duration-300 dark:bg-gray-950 dark:text-gray-100">
         <ThemeProvider>

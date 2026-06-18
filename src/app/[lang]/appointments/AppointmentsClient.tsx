@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/common/Button';
@@ -59,9 +59,9 @@ function buildAppointmentUrl(message: string) {
 
 export default function AppointmentsClient({ locale, initialServiceId }: AppointmentsClientProps) {
   const t = useTranslations();
-  const services = getLocalizedServices(locale);
+  const services = useMemo(() => getLocalizedServices(locale), [locale]);
   const selectedServiceId = services.some((service) => service.id === initialServiceId) ? initialServiceId : undefined;
-  const today = new Date().toISOString().slice(0, 10);
+  const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
   const {
     register,
     handleSubmit,
