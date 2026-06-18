@@ -114,6 +114,8 @@ export const Header = async ({ locale }: HeaderProps) => {
         <div className="hidden md:flex gap-4 items-center">
           <ThemeToggle />
           <LanguageToggle locale={locale} className={desktopLanguageToggleClasses} />
+          {/* TODO(meta-pixel): Header is a Server Component. To fire trackEvent('Contact')
+              on this tel: click, extract it into a small 'use client' wrapper. */}
           <a href={`tel:${phone}`} className={`${secondaryActionClasses} px-3 py-1.5 text-sm`}>
             {callLabel}
           </a>

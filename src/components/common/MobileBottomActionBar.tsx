@@ -28,6 +28,10 @@ export async function MobileBottomActionBar({ locale }: MobileBottomActionBarPro
         aria-label={isArabic ? 'إجراءات سريعة للعيادة' : 'Quick clinic actions'}
       >
         <div className="mx-auto flex max-w-md gap-2">
+          {/* TODO(meta-pixel): MobileBottomActionBar is a Server Component so onClick
+              can't be added here directly. To fire trackEvent('Contact') on these
+              taps, extract the tel + WhatsApp anchors into a small 'use client'
+              wrapper component and import it here. */}
           <a
             href={`tel:${phoneHref(CLINIC_INFO.phone)}`}
             className={`${baseButtonClasses} border border-cyan-200 bg-white text-cyan-900 hover:bg-cyan-50 focus:ring-cyan-400 dark:border-cyan-800 dark:bg-cyan-950/60 dark:text-cyan-50 dark:hover:bg-cyan-900/70`}

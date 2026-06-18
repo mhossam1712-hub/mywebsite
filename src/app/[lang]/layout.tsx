@@ -4,6 +4,7 @@ import { getMessages, setRequestLocale } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { ReactNode } from 'react';
 import { Analytics } from '@/components/layout/Analytics';
+import { MetaPixel } from '@/components/layout/MetaPixel';
 import { Analytics as VercelAnalytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Breadcrumbs } from '@/components/layout/Breadcrumbs';
@@ -99,6 +100,7 @@ export default async function RootLayout({
           </NextIntlClientProvider>
         </ThemeProvider>
         <Analytics />
+        <MetaPixel />
         <VercelAnalytics />
         <SpeedInsights />
       </body>

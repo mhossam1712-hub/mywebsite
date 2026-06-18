@@ -11,6 +11,7 @@ import { Input, Select, Textarea } from '@/components/common/Input';
 import { ServiceIcon } from '@/components/common/ServiceIcon';
 import { CLINIC_BRANCHES, CLINIC_INFO } from '@/constants';
 import { branchDirectionsHref, branchDisplayName, phoneHref, whatsAppHref } from '@/lib/clinic';
+import { trackEvent } from '@/lib/meta-pixel';
 import {
   getDedicatedServiceLinks,
   serviceDetailsLabel,
@@ -86,7 +87,7 @@ export default function ContactClient({ locale }: ContactClientProps) {
                   <p className="text-sm font-semibold text-gray-600 dark:text-gray-300">
                     {isArabic ? 'واتساب' : 'WhatsApp'}
                   </p>
-                  <a href={whatsappUrl ?? `mailto:${CLINIC_INFO.email}`} target="_blank" rel="noopener noreferrer" className="text-lg font-semibold text-blue-600 hover:underline">
+                  <a href={whatsappUrl ?? `mailto:${CLINIC_INFO.email}`} target="_blank" rel="noopener noreferrer" className="text-lg font-semibold text-blue-600 hover:underline" onClick={() => trackEvent('Contact')}>
                     {CLINIC_INFO.phone}
                   </a>
                 </div>
@@ -95,7 +96,7 @@ export default function ContactClient({ locale }: ContactClientProps) {
                     <p className="text-sm font-semibold text-gray-600 dark:text-gray-300">
                       {branchDisplayName(branch, locale)}
                     </p>
-                    <a href={`tel:${phoneHref(branch.phone)}`} className="text-lg font-semibold text-blue-600 hover:underline">
+                    <a href={`tel:${phoneHref(branch.phone)}`} className="text-lg font-semibold text-blue-600 hover:underline" onClick={() => trackEvent('Contact')}>
                       {branch.phone}
                     </a>
                   </div>

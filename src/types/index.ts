@@ -145,5 +145,6 @@ export interface PaginatedResponse<T> {
 declare global {
   interface Window {
     gtag: (...args: unknown[]) => void;
+    fbq: (...args: unknown[]) => void;
   }
 }
