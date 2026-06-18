@@ -9,7 +9,6 @@ import { GoogleReviewButton } from '@/components/common/GoogleReviewButton';
 import { Input, Select, Textarea } from '@/components/common/Input';
 import { APPOINTMENT_TIME_SLOTS, CLINIC_BRANCHES } from '@/constants';
 import { appointmentEmailFallbackHref, branchAppointmentName, whatsAppHref } from '@/lib/clinic';
-import { trackEvent } from '@/lib/meta-pixel';
 import { getLocalizedServices } from '@/utils/localized-content';
 
 interface AppointmentsClientProps {
@@ -96,7 +95,11 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
         });
         window.gtag('event', 'conversion', { send_to: `AW-18201356226/${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL ?? '6GE6CJq5-rwcEMLPiudD'}` });
       }
-      trackEvent('Lead');
+      // Fire Meta Lead event at the confirmed-success moment, no extra params so
+      // fbevents.js receives exactly 2 arguments and can't silently drop the call.
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'Lead');
+      }
       setSubmitStatus({
         type: 'success',
         message: t('appointment.success'),

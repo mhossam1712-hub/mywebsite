@@ -14,8 +14,8 @@ function PixelPageViewTracker() {
   const isFirstRun = useRef(true);
 
   useEffect(() => {
-    // Skip the initial mount — the base code in the Script block already fires
-    // fbq('track','PageView') once. Only subsequent soft navigations need it.
+    // Skip the initial mount — the inline Script already fires the first PageView.
+    // Only subsequent soft navigations need another call.
     if (isFirstRun.current) {
       isFirstRun.current = false;
       return;
