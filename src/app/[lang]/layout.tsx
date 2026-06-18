@@ -49,6 +49,9 @@ export async function generateMetadata({
       },
     }),
     metadataBase,
+    other: {
+      'facebook-domain-verification': 'r5ysmgmg2y437ww6ru60d3qgjymm3c',
+    },
   };
 }
 
