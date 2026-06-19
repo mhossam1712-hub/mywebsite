@@ -107,6 +107,14 @@ export const Header = async ({ locale }: HeaderProps) => {
                     {branch.label}
                   </Link>
                 ))}
+                <div className="mt-1 border-t border-cyan-100 pt-1 dark:border-cyan-900/50">
+                  <Link
+                    href={`/${locale}/branches`}
+                    className="block rounded-lg px-3 py-2 text-sm font-bold text-cyan-700 transition-colors hover:bg-cyan-50 hover:text-cyan-900 dark:text-cyan-300 dark:hover:bg-cyan-950"
+                  >
+                    {locale === 'ar' ? 'جميع الفروع ←' : 'All Branches →'}
+                  </Link>
+                </div>
               </div>
             </div>
           </nav>

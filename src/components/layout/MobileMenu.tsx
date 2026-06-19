@@ -156,6 +156,13 @@ export function MobileMenu({
               );
             })}
           </div>
+          <Link
+            href={`/${locale}/branches`}
+            onClick={closeMobileMenu}
+            className="mt-2 block rounded-lg px-3 py-2 text-sm font-bold text-cyan-700 transition-colors hover:bg-cyan-50 dark:text-cyan-300 dark:hover:bg-cyan-950/50"
+          >
+            {locale === 'ar' ? 'جميع الفروع ←' : 'All Branches →'}
+          </Link>
         </div>
         <div className="mt-4 flex flex-col gap-2">
           <div className="mb-4 flex items-center justify-between gap-3">

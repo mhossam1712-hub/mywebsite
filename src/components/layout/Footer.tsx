@@ -46,6 +46,11 @@ export const Footer = async ({ locale }: FooterProps) => {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link href={`/${locale}/branches`} className="text-cyan-50/70 transition-colors hover:text-white">
+                  {isArabic ? 'فروع العيادة' : 'Our Branches'}
+                </Link>
+              </li>
             </ul>
           </div>
 

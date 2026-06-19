@@ -92,6 +92,7 @@ type RouteSeoKey =
   | 'contact'
   | 'appointments'
   | 'faqs'
+  | 'branches'
   | 'privacy'
   | 'terms'
   | 'dashboard';
@@ -265,6 +266,17 @@ const routeSeoText: Record<RouteSeoKey, RouteSeoText> = {
     description: {
       en: 'Answers to common questions about LASIK, cataract surgery, glaucoma, IOL implants, and general eye health from the specialists at Abdalla Eye Clinic, Alexandria.',
       ar: 'اعرف إجابات الأسئلة الشائعة عن فحص العين والليزك والمياه البيضاء والجلوكوما والعدسات المزروعة والأعراض والحجز والمتابعة في عيادة عبد الله للعيون.',
+    },
+    appendBrand: false,
+  },
+  branches: {
+    title: {
+      en: 'Clinic Branches in Alexandria — Smouha & Raml Station | Abdalla Eye Clinic',
+      ar: 'فروع عيادة عبد الله للعيون في الإسكندرية — سموحة ومحطة الرمل',
+    },
+    description: {
+      en: 'Abdalla Eye Clinic has two specialist ophthalmology branches in Alexandria: Smouha (Wataneya Medical Center) and Raml Station. Open Saturday–Wednesday, 12PM–9PM. Book via WhatsApp.',
+      ar: 'تضم عيادة عبد الله للعيون فرعين متخصصَين في الإسكندرية: سموحة (المركز الطبي الوطنية) ومحطة الرمل. مفتوح السبت–الأربعاء من الساعة 12 ظهراً حتى 9 مساءً. احجز عبر واتساب.',
     },
     appendBrand: false,
   },

@@ -23,6 +23,7 @@ const monthlyPagePaths = new Set([
   '/about',
   '/doctors',
   '/faqs',
+  '/branches',
   '/branches/smouha',
   '/branches/raml-station',
 ]);
@@ -44,6 +45,7 @@ const mainPagePaths = [
   '/contact',
   '/appointments',
   '/faqs',
+  '/branches',
   '/branches/smouha',
   '/branches/raml-station',
 ] as const;
