@@ -249,12 +249,12 @@ const routeSeoText: Record<RouteSeoKey, RouteSeoText> = {
   },
   appointments: {
     title: {
-      en: 'Book an Eye Appointment in Alexandria | Abdalla Eye Clinic',
-      ar: 'احجز موعد طبيب عيون في الإسكندرية',
+      en: 'Book an Eye Appointment | Abdalla Eye Clinic',
+      ar: 'احجز موعد كشف عيون | عيادة عبد الله للعيون',
     },
     description: {
-      en: 'Schedule your eye exam or specialist consultation at Abdalla Eye Clinic, Alexandria. Same-week appointments available at Smouha and Raml Station branches.',
-      ar: 'احجز موعداً في عيادة عبد الله للعيون لفحص النظر واستشارات الليزك والمياه البيضاء والجلوكوما والشبكية وجفاف العين وعيون الأطفال في الإسكندرية.',
+      en: 'Book an eye examination at Abdalla Eye Clinic in Alexandria. Choose your branch, service, and preferred appointment date, then confirm by WhatsApp.',
+      ar: 'احجز كشف عيون في عيادة عبد الله للعيون بالإسكندرية. اختر الفرع والخدمة والتاريخ المناسب، ثم أكد الحجز عبر واتساب.',
     },
     appendBrand: false,
   },
@@ -271,12 +271,12 @@ const routeSeoText: Record<RouteSeoKey, RouteSeoText> = {
   },
   branches: {
     title: {
-      en: 'Clinic Branches in Alexandria — Smouha & Raml Station | Abdalla Eye Clinic',
-      ar: 'فروع عيادة عبد الله للعيون في الإسكندرية — سموحة ومحطة الرمل',
+      en: 'Abdalla Eye Clinic Branches in Alexandria',
+      ar: 'فروع عيادة عبد الله للعيون في الإسكندرية',
     },
     description: {
-      en: 'Abdalla Eye Clinic has two specialist ophthalmology branches in Alexandria: Smouha (Wataneya Medical Center) and Raml Station. Open Saturday–Wednesday, 12PM–9PM. Book via WhatsApp.',
-      ar: 'تضم عيادة عبد الله للعيون فرعين متخصصَين في الإسكندرية: سموحة (المركز الطبي الوطنية) ومحطة الرمل. مفتوح السبت–الأربعاء من الساعة 12 ظهراً حتى 9 مساءً. احجز عبر واتساب.',
+      en: 'Find Abdalla Eye Clinic branches in Smouha and Raml Station, Alexandria. Choose the nearest branch, view details, and book your eye appointment.',
+      ar: 'تعرف على فروع عيادة عبد الله للعيون في سموحة ومحطة الرمل بالإسكندرية، واختر الفرع الأقرب لك لحجز كشف العيون بسهولة.',
     },
     appendBrand: false,
   },

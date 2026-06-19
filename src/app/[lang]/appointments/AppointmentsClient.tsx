@@ -118,7 +118,7 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
 
   if (submitStatus.type === 'success') {
     return (
-      <div className="py-12 md:py-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+      <div className="pb-12 md:pb-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
         <div className="max-w-2xl mx-auto px-4">
           <Card>
             <CardBody>
@@ -173,14 +173,8 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
   }
 
   return (
-    <div className="py-12 md:py-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-      <div className="max-w-2xl mx-auto px-4">
-        <h1 className="mb-6 text-3xl font-bold text-slate-950 dark:text-white md:text-4xl">
-          {isArabic
-            ? 'احجز موعدك في عيادة عبد الله للعيون'
-            : 'Book an Appointment at Abdalla Eye Clinic'}
-        </h1>
-
+    <div className="pb-12 md:pb-24 bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+      <div className="max-w-2xl mx-auto px-4 pt-6">
         {/* Trust signals */}
         <div className="mb-6 rounded-lg border border-cyan-100 bg-cyan-50/80 px-4 py-3 dark:border-cyan-900/60 dark:bg-cyan-950/20">
           <p className="text-sm font-medium text-cyan-900 dark:text-cyan-100">

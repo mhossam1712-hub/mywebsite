@@ -110,7 +110,7 @@ export default async function RootLayout({
       <head>
         {/* Blocking theme script — runs before React so no dark-mode flash */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
-        <meta httpEquiv="content-language" content="en, ar" />
+        <meta httpEquiv="content-language" content={lang} />
         {/* next/font handles its own font loading — no Google Fonts preconnect needed */}
         <link rel="preconnect" href="https://www.googletagmanager.com" />
         {clarityId && <link rel="preconnect" href="https://www.clarity.ms" />}
