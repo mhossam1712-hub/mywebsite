@@ -99,6 +99,7 @@ export interface ClinicInfo {
   postalCode: string;
   country: string;
   countryAr: string;
+  countryCode: string;
   workingHours: WorkingHours;
   socialMedia: SocialLinks;
 }

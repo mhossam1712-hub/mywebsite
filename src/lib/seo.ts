@@ -337,12 +337,6 @@ function localizedOptionalText(text: LocalizedText | string | undefined, lang: s
 export function canonicalUrl(lang: string, path = '') {
   const localizedPath = localizedPathname(path);
 
-  // The /en page IS the homepage — its canonical points to the root URL so
-  // link equity consolidates at / rather than being split between / and /en.
-  if (normalizeLocale(lang) === 'en' && localizedPath === '') {
-    return '/';
-  }
-
   return `/${normalizeLocale(lang)}${localizedPath}`;
 }
 
@@ -814,10 +808,9 @@ export function buildMedicalClinicSchema(locale: string, siteUrl: string): Struc
         streetAddress: isArabic ? branch.addressAr : branch.address,
         addressLocality: CLINIC_INFO.city,
         postalCode: CLINIC_INFO.postalCode,
-        addressCountry: CLINIC_INFO.country,
+        addressCountry: CLINIC_INFO.countryCode,
       },
       ...(geo ? { geo } : {}),
-      openingHours,
       openingHoursSpecification: openingHours,
       medicalSpecialty: 'Ophthalmology',
       availableService: availableService.map((service) => ({ '@id': service['@id'] })),
@@ -856,10 +849,10 @@ export function buildMedicalClinicSchema(locale: string, siteUrl: string): Struc
         hasMap: branchNodes.map((branch) => branch.hasMap).filter(Boolean),
         address: {
           '@type': 'PostalAddress',
-          streetAddress: CLINIC_INFO.address,
+          streetAddress: CLINIC_BRANCHES[0].address,
           addressLocality: CLINIC_INFO.city,
           postalCode: CLINIC_INFO.postalCode,
-          addressCountry: CLINIC_INFO.country,
+          addressCountry: CLINIC_INFO.countryCode,
         },
         areaServed: [
           { '@type': 'City', name: 'Alexandria' },

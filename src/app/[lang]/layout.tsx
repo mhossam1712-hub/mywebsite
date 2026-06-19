@@ -40,8 +40,7 @@ const googleVerification =
   process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
   'CCOzpuU40fiYJh7XR2BnGQmMRPnl_EN9hSaFjWhlP2U';
 const bingVerification =
-  process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ||
-  'BING_CODE_HERE';
+  process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION ?? '';
 
 // Inline script applied before React hydration to avoid a dark-mode flash.
 // Must be a plain string with no template-literal interpolation so Next.js
@@ -54,18 +53,20 @@ export async function generateMetadata({
   params: Promise<{ lang: string }>;
 }): Promise<Metadata> {
   const { lang } = await params;
+  const base = createRootMetadata({
+    lang,
+    siteUrl,
+    verification: {
+      google: googleVerification,
+      bing: bingVerification,
+    },
+  });
 
   return {
-    ...createRootMetadata({
-      lang,
-      siteUrl,
-      verification: {
-        google: googleVerification,
-        bing: bingVerification,
-      },
-    }),
+    ...base,
     metadataBase,
     other: {
+      ...(base.other as Record<string, string> | undefined),
       'facebook-domain-verification': 'r5ysmgmg2y437ww6ru60d3qgjymm3c',
     },
   };

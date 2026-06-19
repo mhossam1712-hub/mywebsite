@@ -52,7 +52,7 @@ export default async function DoctorsPage({ params }: PageProps) {
                     className="h-full w-full object-cover object-top"
                   />
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{doctor.name}</h3>
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{doctor.name}</h2>
                 <p className="text-sm text-blue-600 font-medium mt-1">{doctor.specialty}</p>
               </CardHeader>
               <CardBody>

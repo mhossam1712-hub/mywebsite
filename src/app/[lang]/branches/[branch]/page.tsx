@@ -70,7 +70,6 @@ const localizedText = {
     hoursValue: 'Saturday - Wednesday, 12:00 PM - 9:00 PM',
     closed: 'Thursday and Friday: Closed',
     mapTitle: 'Map',
-    mapPlaceholder: 'Map embed placeholder',
     openMap: 'Open in Google Maps',
     landmarks: 'Nearby landmarks',
     services: 'Services at this branch',
@@ -88,7 +87,6 @@ const localizedText = {
     hoursValue: 'السبت - الأربعاء، 12:00 ظهراً - 9:00 مساءً',
     closed: 'الخميس والجمعة: مغلق',
     mapTitle: 'الخريطة',
-    mapPlaceholder: 'مكان تضمين الخريطة',
     openMap: 'افتح في خرائط Google',
     landmarks: 'معالم قريبة',
     services: 'الخدمات في هذا الفرع',
@@ -261,19 +259,27 @@ export default async function BranchLandingPage({ params }: PageProps) {
             <Card>
               <CardBody>
                 <h2 className="text-2xl font-bold text-gray-950 dark:text-white">{text.mapTitle}</h2>
-                <div className="mt-4 flex min-h-72 items-center justify-center rounded-lg border border-dashed border-cyan-300 bg-cyan-50 text-center text-sm font-semibold text-cyan-900 dark:border-cyan-800 dark:bg-cyan-950/40 dark:text-cyan-100">
-                  <div>
-                    <p>{text.mapPlaceholder}</p>
-                    <a
-                      href={directionsHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="mt-3 inline-flex rounded-lg bg-cyan-700 px-4 py-2 text-white transition-colors hover:bg-cyan-800"
-                    >
-                      {text.openMap}
-                    </a>
-                  </div>
+                <div className="mt-4 overflow-hidden rounded-lg">
+                  <iframe
+                    src={`https://www.google.com/maps?q=${encodeURIComponent(`${branch.address}, Alexandria, Egypt`)}&output=embed`}
+                    width="100%"
+                    height="288"
+                    style={{ border: 0 }}
+                    loading="lazy"
+                    allowFullScreen
+                    referrerPolicy="no-referrer-when-downgrade"
+                    title={`${text.mapTitle} — ${branch.name}`}
+                    className="min-h-72 w-full"
+                  />
                 </div>
+                <a
+                  href={directionsHref}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex min-h-10 items-center justify-center rounded-lg bg-cyan-700 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-cyan-800"
+                >
+                  {text.openMap}
+                </a>
               </CardBody>
             </Card>
 

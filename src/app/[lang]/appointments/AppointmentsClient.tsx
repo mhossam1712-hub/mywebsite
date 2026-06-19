@@ -22,7 +22,7 @@ interface AppointmentFormData {
   branch: string;
   serviceId: string;
   date: string;
-  time: string;
+  time?: string;
   message?: string;
 }
 
@@ -36,7 +36,7 @@ function buildAppointmentMessage(data: AppointmentFormData, branchName: string, 
         `الفرع: ${branchName}`,
         `الخدمة: ${serviceName}`,
         `التاريخ المفضل: ${data.date}`,
-        `الوقت المفضل: ${data.time}`,
+        data.time ? `الوقت المفضل: ${data.time}` : null,
         data.message ? `الرسالة: ${data.message}` : null,
       ]
     : [
@@ -46,7 +46,7 @@ function buildAppointmentMessage(data: AppointmentFormData, branchName: string, 
         `Branch: ${branchName}`,
         `Service: ${serviceName}`,
         `Preferred date: ${data.date}`,
-        `Preferred time: ${data.time}`,
+        data.time ? `Preferred time: ${data.time}` : null,
         data.message ? `Message: ${data.message}` : null,
       ];
 
@@ -76,6 +76,7 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
   const [submitStatus, setSubmitStatus] = useState<{
     type: 'success' | 'error' | null;
     message: string;
+    appointmentUrl?: string;
   }>({ type: null, message: '' });
 
   const onSubmit = (data: AppointmentFormData) => {
@@ -95,14 +96,13 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
         });
         window.gtag('event', 'conversion', { send_to: `AW-18201356226/${process.env.NEXT_PUBLIC_GOOGLE_ADS_CONVERSION_LABEL ?? '6GE6CJq5-rwcEMLPiudD'}` });
       }
-      // Fire Meta Lead event at the confirmed-success moment, no extra params so
-      // fbevents.js receives exactly 2 arguments and can't silently drop the call.
       if (typeof window !== 'undefined' && window.fbq) {
         window.fbq('track', 'Lead');
       }
       setSubmitStatus({
         type: 'success',
         message: t('appointment.success'),
+        appointmentUrl,
       });
       reset();
       window.open(appointmentUrl, '_blank', 'noopener,noreferrer');
@@ -136,6 +136,26 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
                     {submitStatus.message}
                   </p>
                 </div>
+
+                {/* WhatsApp next-step instruction */}
+                <div className="w-full rounded-lg border border-emerald-200 bg-emerald-50 p-4 text-start dark:border-emerald-900/60 dark:bg-emerald-950/20">
+                  <p className="text-sm font-semibold text-emerald-900 dark:text-emerald-200">
+                    {isArabic
+                      ? 'الخطوة التالية: افتح نافذة واتساب التي فُتحت للتو وأرسل الرسالة الجاهزة لتأكيد موعدك.'
+                      : 'Next step: open the WhatsApp tab that just launched and send the pre-filled message to confirm your appointment.'}
+                  </p>
+                  {submitStatus.appointmentUrl && (
+                    <a
+                      href={submitStatus.appointmentUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-flex min-h-9 items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-emerald-700"
+                    >
+                      {isArabic ? 'إعادة فتح واتساب' : 'Re-open WhatsApp'}
+                    </a>
+                  )}
+                </div>
+
                 <div className="w-full rounded-lg border border-cyan-100 bg-cyan-50/60 p-5 dark:border-cyan-900/60 dark:bg-cyan-950/20">
                   <p className="mb-4 text-sm font-semibold text-slate-800 dark:text-slate-200">
                     {isArabic
@@ -160,6 +180,16 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
             ? 'احجز موعدك في عيادة عبد الله للعيون'
             : 'Book an Appointment at Abdalla Eye Clinic'}
         </h1>
+
+        {/* Trust signals */}
+        <div className="mb-6 rounded-lg border border-cyan-100 bg-cyan-50/80 px-4 py-3 dark:border-cyan-900/60 dark:bg-cyan-950/20">
+          <p className="text-sm font-medium text-cyan-900 dark:text-cyan-100">
+            {isArabic
+              ? 'مفتوح السبت–الأربعاء، ١٢ ظهرًا – ٩ مساءً · فرعان في الإسكندرية (سموحة ومحطة الرمل) · تأكيد الحجز عبر واتساب'
+              : 'Open Sat–Wed, 12PM–9PM · Two branches in Alexandria (Smouha & Raml Station) · Booking confirmed via WhatsApp'}
+          </p>
+        </div>
+
         <Card>
           <CardHeader
             subtitle={t('appointment.form_subtitle')}
@@ -229,14 +259,12 @@ export default function AppointmentsClient({ locale, initialServiceId }: Appoint
               />
 
               <Select
-                label={t('appointment.time')}
-                options={APPOINTMENT_TIME_SLOTS.map((time) => ({
-                  value: time,
-                  label: time,
-                }))}
-                {...register('time', {
-                  required: t('validation.time_required'),
-                })}
+                label={`${t('appointment.time')} ${isArabic ? '(اختياري)' : '(optional)'}`}
+                options={[
+                  { value: '', label: isArabic ? 'أي وقت متاح' : 'Any available time' },
+                  ...APPOINTMENT_TIME_SLOTS.map((time) => ({ value: time, label: time })),
+                ]}
+                {...register('time')}
                 error={errors.time?.message}
               />
 

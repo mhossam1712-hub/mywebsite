@@ -5,8 +5,8 @@ export const CLINIC_INFO: ClinicInfo = {
   nameAr: 'عيادة عبد الله للعيون',
   legalName: 'Abdalla Eye Clinic',
   legalNameAr: 'عيادة عبد الله للعيون',
-  description: 'Leading ophthalmology clinic providing comprehensive eye care services in Alexandria, Egypt',
-  descriptionAr: 'عيادة عيون متخصصة في الإسكندرية تقدم رعاية شاملة للعين وخدمات تشخيص وعلاج متقدمة.',
+  description: 'Abdalla Eye Clinic is a specialist ophthalmology practice in Alexandria, Egypt, offering LASIK surgery, cataract and IOL procedures, glaucoma management, retinal care, dry eye treatment, pediatric eye care, and comprehensive vision examinations at branches in Smouha and Raml Station.',
+  descriptionAr: 'عيادة عبد الله للعيون عيادة عيون متخصصة في الإسكندرية تقدم الليزك وجراحة المياه البيضاء وزراعة العدسات وعلاج الجلوكوما والشبكية وجفاف العين ورعاية عيون الأطفال وفحوصات النظر الشاملة في فرعَي سموحة ومحطة الرمل.',
   phone: '+201276637774',
   email: 'm.hossam1712@gmail.com',
   address: 'Smouha & Raml Station',
@@ -16,6 +16,7 @@ export const CLINIC_INFO: ClinicInfo = {
   postalCode: '21514',
   country: 'Egypt',
   countryAr: 'مصر',
+  countryCode: 'EG',
   workingHours: {
     monday: { open: '12:00', close: '21:00', isClosed: false },
     tuesday: { open: '12:00', close: '21:00', isClosed: false },
@@ -41,7 +42,7 @@ export const DOCTORS: Doctor[] = [
     qualification: 'Professor of Ophthalmology',
     experience: 0,
     image: '/assets/images/prof-ahmed-hossam-abdalla-card.webp',
-    bio: 'Providing expert ophthalmology care at Abdalla Eye Clinic.',
+    bio: 'Professor of Ophthalmology with extensive experience in cataract surgery, IOL selection, glaucoma diagnosis and management, LASIK candidacy assessment, and medical retinal care. Founder of Abdalla Eye Clinic, bringing subspecialty-level ophthalmology to patients across Alexandria, Egypt.',
     languages: ['Arabic', 'English'],
   },
   {
@@ -51,7 +52,7 @@ export const DOCTORS: Doctor[] = [
     qualification: 'Ophthalmologist',
     experience: 0,
     image: '/assets/images/dr-mohamed-hossam-abdalla-card.webp',
-    bio: 'Providing comprehensive eye care at Abdalla Eye Clinic.',
+    bio: 'Ophthalmologist at Abdalla Eye Clinic specialising in cataract surgery, refractive procedures, dry eye diagnosis and treatment, glaucoma monitoring, and paediatric eye care. Focused on accurate diagnosis and personalised treatment plans for patients of all ages in Alexandria.',
     languages: ['Arabic', 'English'],
   },
 ];
