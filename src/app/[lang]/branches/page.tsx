@@ -1,10 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { MobileBottomActionBar } from '@/components/common/MobileBottomActionBar';
-import { Card, CardBody } from '@/components/common/Card';
 import { CLINIC_BRANCHES, CLINIC_INFO } from '@/constants';
 import { LOCALES } from '@/i18n/config';
-import { branchAreaName, branchDirectionsHref } from '@/lib/clinic';
+import { branchAreaName, branchDirectionsHref, branchEmbedUrl } from '@/lib/clinic';
 import { getSiteUrl } from '@/lib/site-url';
 import {
   absoluteUrl,
@@ -251,8 +250,25 @@ export default async function BranchesListingPage({ params }: PageProps) {
                 const directionsUrl = branchDirectionsHref(branch);
 
                 return (
-                  <Card key={branch.slug} variant="elevated">
-                    <CardBody>
+                  <div
+                    key={branch.slug}
+                    className="overflow-hidden rounded-xl border border-cyan-100 bg-white shadow-md dark:border-cyan-900/60 dark:bg-gray-950/80"
+                  >
+                    {/* Map embed */}
+                    <div className="relative aspect-[16/9] w-full bg-slate-100 dark:bg-slate-800">
+                      <iframe
+                        src={branchEmbedUrl(branch)}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0, position: 'absolute', inset: 0 }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                        title={`${isArabic ? `فرع ${areaName}` : `${areaName} Branch`} — Google Maps`}
+                      />
+                    </div>
+                    {/* Branch info */}
+                    <div className="p-5 sm:p-6">
                       <h2 className="text-xl font-bold text-gray-950 dark:text-white">
                         {isArabic
                           ? `فرع ${areaName}`
@@ -305,8 +321,8 @@ export default async function BranchesListingPage({ params }: PageProps) {
                           {t.directionsLabel}
                         </a>
                       </div>
-                    </CardBody>
-                  </Card>
+                    </div>
+                  </div>
                 );
               })}
             </div>
