@@ -800,6 +800,7 @@ export function buildMedicalClinicSchema(locale: string, siteUrl: string): Struc
   const sameAs = [
     validSocialProfileUrl(CLINIC_INFO.socialMedia.facebook),
     validSocialProfileUrl(CLINIC_INFO.socialMedia.instagram),
+    CLINIC_INFO.socialMedia.googleBusiness ?? null,
   ].filter((url): url is string => Boolean(url));
   const openingHours = openingHoursSpecification();
   const availableService = buildAvailableServices(services, siteUrl);
@@ -811,7 +812,7 @@ export function buildMedicalClinicSchema(locale: string, siteUrl: string): Struc
       '@id': `${siteUrl}/#branch-${index + 1}`,
       name: branchDisplayName(branch, locale),
       parentOrganization: { '@id': `${siteUrl}/#clinic` },
-      url: absoluteUrl(siteUrl, canonicalUrl(locale, '/contact')),
+      url: absoluteUrl(siteUrl, canonicalUrl(locale, `/branches/${branch.slug}`)),
       telephone: branch.phone,
       priceRange: '$$',
       hasMap: branchMapUrl(branch),

@@ -71,3 +71,16 @@ export function whatsAppHref(message?: string) {
 export function appointmentEmailFallbackHref(message: string) {
   return `mailto:${CLINIC_INFO.email}?subject=${encodeURIComponent('Appointment request')}&body=${encodeURIComponent(message)}`;
 }
+
+export function branchEmbedUrl(branch: {
+  googleMapsPlaceId: string | null;
+  embedUrl: string;
+}): string {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_EMBED_KEY;
+
+  if (apiKey && branch.googleMapsPlaceId) {
+    return `https://www.google.com/maps/embed/v1/place?key=${apiKey}&q=place_id:${branch.googleMapsPlaceId}`;
+  }
+
+  return branch.embedUrl;
+}

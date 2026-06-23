@@ -6,7 +6,7 @@ import { MobileBottomActionBar } from '@/components/common/MobileBottomActionBar
 import { ServiceIcon } from '@/components/common/ServiceIcon';
 import { BRANCH_FAQS, CLINIC_BRANCHES, CLINIC_INFO } from '@/constants';
 import { LOCALES } from '@/i18n/config';
-import { branchAreaName, branchDirectionsHref, clinicLocation, phoneHref, whatsAppHref } from '@/lib/clinic';
+import { branchAreaName, branchDirectionsHref, branchEmbedUrl, clinicLocation, phoneHref, whatsAppHref } from '@/lib/clinic';
 import {
   allServicesLabel,
   getDedicatedServiceLinks,
@@ -261,14 +261,14 @@ export default async function BranchLandingPage({ params }: PageProps) {
                 <h2 className="text-2xl font-bold text-gray-950 dark:text-white">{text.mapTitle}</h2>
                 <div className="mt-4 overflow-hidden rounded-lg">
                   <iframe
-                    src={`https://www.google.com/maps?q=${encodeURIComponent(`${branch.address}, Alexandria, Egypt`)}&output=embed`}
+                    src={branchEmbedUrl(branch)}
                     width="100%"
                     height="288"
                     style={{ border: 0 }}
                     loading="lazy"
                     allowFullScreen
                     referrerPolicy="no-referrer-when-downgrade"
-                    title={`${text.mapTitle} — ${branch.name}`}
+                    title={`${areaName} branch — Google Maps`}
                     className="min-h-72 w-full"
                   />
                 </div>

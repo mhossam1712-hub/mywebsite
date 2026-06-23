@@ -1,19 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { CLINIC_BRANCHES, CLINIC_INFO } from '@/constants';
-import { branchAreaName, branchDirectionsHref } from '@/lib/clinic';
+import { branchAreaName, branchDirectionsHref, branchEmbedUrl } from '@/lib/clinic';
 
 type Props = { locale: string };
-
-// Address-query embed URLs — no API key required.
-// If Google shows a "For development purposes only" banner, switch to the
-// Maps Embed API (maps.google.com/maps/embed/v1/place) with an API key.
-const EMBED_URLS: Record<string, string> = {
-  smouha:
-    'https://maps.google.com/maps?q=Wataneya+Medical+Center+14th+May+Street+Smouha+Alexandria+Egypt&output=embed&z=15',
-  'raml-station':
-    'https://maps.google.com/maps?q=22+Al-Ghorfa+Al-Togareya+Street+Raml+Station+Alexandria+Egypt&output=embed&z=15',
-};
 
 const ui = {
   en: {
@@ -68,7 +58,7 @@ export function LocationsSection({ locale }: Props) {
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {CLINIC_BRANCHES.map((branch) => {
             const areaName = branchAreaName(branch, locale);
-            const embedUrl = EMBED_URLS[branch.slug];
+            const embedUrl = branchEmbedUrl(branch);
             const directionsUrl = branchDirectionsHref(branch);
             const branchAddress = isArabic ? branch.addressAr : branch.address;
 

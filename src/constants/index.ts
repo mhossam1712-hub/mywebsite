@@ -31,6 +31,7 @@ export const CLINIC_INFO: ClinicInfo = {
     instagram: 'https://www.instagram.com/dr_m_hossam_abdalla/',
     whatsapp: '+201276637774',
     googleReview: 'https://g.page/r/CYTId-ZSu7-hEBM/review',
+    googleBusiness: 'https://g.page/r/CYTId-ZSu7-hEBM',
   },
 };
 
@@ -663,8 +664,9 @@ export const CLINIC_BRANCHES = [
       'https://www.google.com/maps/search/?api=1&query=Abdalla%20Eye%20Clinic%20Wataneya%20Medical%20Center%2014th%20May%20Street%20Smouha%20Alexandria%20Egypt',
     googleMapsDirectionsUrl:
       'https://www.google.com/maps/dir/?api=1&destination=Abdalla%20Eye%20Clinic%20Wataneya%20Medical%20Center%2014th%20May%20Street%20Smouha%20Alexandria%20Egypt',
-    // TODO: Replace with the verified Google Maps Place ID when the branch profile is available.
-    googleMapsPlaceId: null,
+    embedUrl:
+      'https://maps.google.com/maps?q=Wataneya+Medical+Center+14th+May+Street+Smouha+Alexandria+Egypt&output=embed&z=15',
+    googleMapsPlaceId: 'ChIJf72_O-TF9RQRofkbugoiOog',
     // TODO: Replace null values with verified branch-level coordinates from Google Business Profile or Google Maps.
     geo: {
       latitude: null,
@@ -686,8 +688,9 @@ export const CLINIC_BRANCHES = [
       'https://www.google.com/maps/search/?api=1&query=Abdalla%20Eye%20Clinic%2022%20Al-Ghorfa%20Al-Togareya%20Street%20Raml%20Station%20Alexandria%20Egypt',
     googleMapsDirectionsUrl:
       'https://www.google.com/maps/dir/?api=1&destination=Abdalla%20Eye%20Clinic%2022%20Al-Ghorfa%20Al-Togareya%20Street%20Raml%20Station%20Alexandria%20Egypt',
-    // TODO: Replace with the verified Google Maps Place ID when the branch profile is available.
-    googleMapsPlaceId: null,
+    embedUrl:
+      'https://maps.google.com/maps?q=22+Al-Ghorfa+Al-Togareya+Street+Raml+Station+Alexandria+Egypt&output=embed&z=15',
+    googleMapsPlaceId: 'ChIJnfsrstrD9RQRhMh35lK7v6E',
     // TODO: Replace null values with verified branch-level coordinates from Google Business Profile or Google Maps.
     geo: {
       latitude: null,

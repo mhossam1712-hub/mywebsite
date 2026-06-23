@@ -125,6 +125,7 @@ export interface SocialLinks {
   instagram?: string;
   whatsapp?: string;
   googleReview?: string;
+  googleBusiness?: string;
 }
 
 export interface ApiResponse<T> {
